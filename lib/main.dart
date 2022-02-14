@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
           primaryColorBrightness: Brightness.light,
           accentColor: Colors.deepPurpleAccent,
           accentColorBrightness: Brightness.light,
+          backgroundColor: Colors.black87,
+          scaffoldBackgroundColor: Colors.black87,
         ),
         home: BottomNavBar()
     );
