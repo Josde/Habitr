@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/enum/ActivityType.dart';
 import 'package:habitr_tfg/models/routine.dart';
+import 'package:habitr_tfg/screens/editroutinescreen.dart';
 import '../utils/io.dart';
 import 'dart:io';
 
@@ -13,7 +14,7 @@ class RoutineScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Routine",
+          "Routines",
           style: TextStyle(
             color: Colors.white,
           ),
@@ -33,7 +34,7 @@ class RoutineScreen extends StatelessWidget {
                     child: Center(child: Text('${rutinasTest[index].name}', style: TextStyle(color: Colors.white)))
                 ),
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(index.toString())));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const EditRoutineScreen()));
                 }
               );
             },
