@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/enum/ActivityType.dart';
 import 'package:habitr_tfg/models/routine.dart';
+import 'package:habitr_tfg/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/editroutinescreen.dart';
 import '../utils/io.dart';
 import 'dart:io';
 
 class RoutineScreen extends StatelessWidget {
-
+  RoutineSingleton rs = RoutineSingleton();
   @override
   Widget build(BuildContext context)  {
-    final List<Routine> rutinasTest = [Routine('Agua', 180, ActivityType.Instant), Routine('Ejercicio', 180, ActivityType.Timer), Routine('Estudiar', 240, ActivityType.Stopwatch)];
+    final List<Routine> rutinasTest = rs.listaRutinas;
 
     return Scaffold(
       appBar: AppBar(

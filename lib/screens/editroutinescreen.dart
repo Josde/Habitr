@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../enum/ActivityType.dart';
 
 class EditRoutineScreen extends StatefulWidget {
   const EditRoutineScreen({Key? key}) : super(key: key);
@@ -9,6 +9,9 @@ class EditRoutineScreen extends StatefulWidget {
 }
 
 class _EditRoutineScreenState extends State<EditRoutineScreen> {
+
+  ActivityType _currentType = ActivityType.Instant;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

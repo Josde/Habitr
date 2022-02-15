@@ -1,9 +1,41 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:habitr_tfg/utils/io.dart';
+import 'models/routine.dart';
+import 'models/routinesingleton.dart';
 import 'widgets/bottom_nav_bar.dart';
-void main() {
-  runApp(MyApp());
-}
+Future<void> main() async {
+  try {
+    bool routinesInitialized = await initRoutines();
+    if (routinesInitialized) {
+      runApp(MyApp());
+    } else {
+      print('routines not initialized...');
+    }
 
+  } catch (error, stacktrace) {
+    print('Exception: ' + error.toString());
+    print('Stacktrace: ' + stacktrace.toString());
+  }
+}
+Future<bool> initRoutines() async {
+  RoutineSingleton rs = RoutineSingleton();
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await rootBundle.loadString('/assets/json/routine/exercise.json')
+                    .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+    await rootBundle.loadString('/assets/json/routine/water.json')
+                    .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+    return true;
+  } catch (error, stacktrace) {
+    print('Exception: ' + error.toString());
+    print('Stacktrace: ' + stacktrace.toString());
+    return false;
+  }
+}
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
