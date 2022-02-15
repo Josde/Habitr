@@ -10,8 +10,9 @@ class RoutineScreen extends StatelessWidget {
   RoutineSingleton rs = RoutineSingleton();
   @override
   Widget build(BuildContext context)  {
-    final List<Routine> rutinasTest = rs.listaRutinas;
-
+    //final List<Routine> rutinasTest = rs.listaRutinas;
+    final List<Routine> rutinasTest = [Routine('Agua', 180, ActivityType.Instant), Routine('Exercise', 180, ActivityType.Timer)];
+    rs.listaRutinas = rutinasTest;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -35,7 +36,7 @@ class RoutineScreen extends StatelessWidget {
                     child: Center(child: Text('${rutinasTest[index].name}', style: TextStyle(color: Colors.white)))
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const EditRoutineScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditRoutineScreen(index: index)));
                 }
               );
             },
@@ -43,7 +44,7 @@ class RoutineScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Add your onPressed code here!
+            Navigator.push(context, MaterialPageRoute(builder: (context) => EditRoutineScreen(index: 0, createRoutine: true)));
           },
           backgroundColor: Colors.purple[300],
           child: const Icon(Icons.add),

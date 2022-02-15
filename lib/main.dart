@@ -9,10 +9,13 @@ import 'models/routinesingleton.dart';
 import 'widgets/bottom_nav_bar.dart';
 Future<void> main() async {
   try {
-    bool routinesInitialized = await initRoutines();
+    //TODO: Implement routine parsing from JSON.
+    //bool routinesInitialized = await initRoutines();
+    bool routinesInitialized = true;
     if (routinesInitialized) {
       runApp(MyApp());
     } else {
+      runApp(MyApp());
       print('routines not initialized...');
     }
 
