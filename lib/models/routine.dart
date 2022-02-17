@@ -9,8 +9,8 @@ class Routine {
 
   Routine.fromJson(Map<String,dynamic> json) {
     this.name = json['name'];
-    this.delayBetweenNotis = json['delayBetweenNotis'];
-    this.type = ActivityType.values.elementAt(json['type']);
+    this.delayBetweenNotis = int.parse(json['delayBetweenNotis']);
+    this.type = ActivityType.values.elementAt(int.parse(json['type']));
   }
 
   Map<String, dynamic> toJson() {

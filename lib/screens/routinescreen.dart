@@ -6,13 +6,18 @@ import 'package:habitr_tfg/screens/editroutinescreen.dart';
 import '../utils/io.dart';
 import 'dart:io';
 
-class RoutineScreen extends StatelessWidget {
+class RoutineScreen extends StatefulWidget {
+  @override
+  _RoutineScreenState createState() => _RoutineScreenState();
+}
+
+class _RoutineScreenState extends State<RoutineScreen> {
   RoutineSingleton rs = RoutineSingleton();
+
   @override
   Widget build(BuildContext context)  {
-    //final List<Routine> rutinasTest = rs.listaRutinas;
-    final List<Routine> rutinasTest = [Routine('Agua', 180, ActivityType.Instant), Routine('Exercise', 180, ActivityType.Timer)];
-    rs.listaRutinas = rutinasTest;
+    final List<Routine> rutinasTest = rs.listaRutinas;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -33,10 +38,19 @@ class RoutineScreen extends StatelessWidget {
                 child: Container(
                     height: 50,
                     color: Colors.white24,
-                    child: Center(child: Text('${rutinasTest[index].name}', style: TextStyle(color: Colors.white)))
+                    child: Row(children: [Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${rutinasTest[index].name}', style: TextStyle(color: Colors.white))),
+                                          Spacer(),
+                                          IconButton(onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditRoutineScreen(index: index))).then((_) => setState(() {}));
+                                            },
+                                            icon: Icon(Icons.edit),
+                                          ),]
+                    ),
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditRoutineScreen(index: index)));
+
                 }
               );
             },
@@ -44,7 +58,7 @@ class RoutineScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => EditRoutineScreen(index: 0, createRoutine: true)));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => EditRoutineScreen(index: 0, createRoutine: true))).then((_) => setState(() {}));
           },
           backgroundColor: Colors.purple[300],
           child: const Icon(Icons.add),

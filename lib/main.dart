@@ -4,14 +4,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:habitr_tfg/utils/io.dart';
-import 'models/routine.dart';
-import 'models/routinesingleton.dart';
-import 'widgets/bottom_nav_bar.dart';
+import 'package:habitr_tfg/models/routine.dart';
+import 'package:habitr_tfg/models/routinesingleton.dart';
+import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
 Future<void> main() async {
   try {
     //TODO: Implement routine parsing from JSON.
-    //bool routinesInitialized = await initRoutines();
-    bool routinesInitialized = true;
+    bool routinesInitialized = await initRoutines();
     if (routinesInitialized) {
       runApp(MyApp());
     } else {
@@ -28,9 +27,9 @@ Future<bool> initRoutines() async {
   RoutineSingleton rs = RoutineSingleton();
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await rootBundle.loadString('/assets/json/routine/exercise.json')
+    await rootBundle.loadString('assets/json/routine/exercise.json')
                     .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
-    await rootBundle.loadString('/assets/json/routine/water.json')
+    await rootBundle.loadString('assets/json/routine/water.json')
                     .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
     return true;
   } catch (error, stacktrace) {
