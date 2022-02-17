@@ -6,7 +6,7 @@ class Routine {
   ActivityType type = ActivityType.Instant;
 
   Routine(this.name, this.delayBetweenNotis, this.type);
-
+  Routine.empty();
   Routine.fromJson(Map<String,dynamic> json) {
     this.name = json['name'];
     this.delayBetweenNotis = int.parse(json['delayBetweenNotis']);

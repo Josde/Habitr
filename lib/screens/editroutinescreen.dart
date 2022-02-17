@@ -70,7 +70,6 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "Activity name",
-                    hintStyle: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -89,7 +88,6 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                     border: OutlineInputBorder(),
                     labelText: "Notification frequency",
                     suffixText: 'min',
-                    hintStyle: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
