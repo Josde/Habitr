@@ -3,6 +3,7 @@ import 'package:habitr_tfg/enum/ActivityType.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/editroutinescreen.dart';
+import 'package:habitr_tfg/screens/routinedetailscreen.dart';
 import '../utils/io.dart';
 import 'dart:io';
 
@@ -46,11 +47,12 @@ class _RoutineScreenState extends State<RoutineScreen> {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => EditRoutineScreen(index: index))).then((_) => setState(() {}));
                                             },
                                             icon: Icon(Icons.edit),
+                                            color: Colors.grey,
                                           ),]
                     ),
                 ),
                 onTap: () {
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RoutineDetailScreen(index: index)));
                 }
               );
             },
