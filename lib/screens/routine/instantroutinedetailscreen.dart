@@ -4,8 +4,8 @@ import 'package:habitr_tfg/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/loadingbutton.dart';
 
 class InstantRoutineDetailScreen extends StatelessWidget {
-  int index = 0;
-  InstantRoutineDetailScreen({required this.index});
+  final int index;
+  const InstantRoutineDetailScreen({Key? key, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -2,17 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoadingButton extends StatefulWidget {
-  Function onComplete;
-  LoadingButton({required this.onComplete});
+  final Function onComplete;
+  const LoadingButton({Key? key, required this.onComplete}) : super(key: key);
   @override
-  _LoadingButtonState createState() => _LoadingButtonState(onComplete: this.onComplete);
+  _LoadingButtonState createState() => _LoadingButtonState();
 }
 
 class _LoadingButtonState extends State<LoadingButton> with SingleTickerProviderStateMixin {
   //https://stackoverflow.com/questions/53424764/circular-progress-button-based-on-hold-flutter
   late AnimationController controller;
-  Function onComplete;
-  _LoadingButtonState({required this.onComplete});
 
   @override initState() {
     super.initState();
@@ -30,7 +28,7 @@ class _LoadingButtonState extends State<LoadingButton> with SingleTickerProvider
         if (controller.status == AnimationStatus.forward) {
         controller.reverse();
         } else if (controller.status == AnimationStatus.completed) {
-          onComplete();
+          widget.onComplete();
         }
       },
       child: Stack(

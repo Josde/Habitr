@@ -5,8 +5,8 @@ import 'package:habitr_tfg/widgets/loadingbutton.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
 
 class StopwatchRoutineDetailScreen extends StatelessWidget {
-  int index = 0;
-  StopwatchRoutineDetailScreen({required this.index});
+  final int index;
+  const StopwatchRoutineDetailScreen({Key? key, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

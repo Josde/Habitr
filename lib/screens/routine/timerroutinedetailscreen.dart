@@ -5,9 +5,8 @@ import 'package:habitr_tfg/widgets/loadingbutton.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
 
 class TimerRoutineDetailScreen extends StatefulWidget {
-  int index = 0;
-  TimerRoutineDetailScreen({required this.index});
-
+  final int index;
+  const TimerRoutineDetailScreen({Key? key, required this.index}) : super(key: key);
   @override
   _TimerRoutineDetailScreenState createState() => _TimerRoutineDetailScreenState();
 }
@@ -18,9 +17,8 @@ class _TimerRoutineDetailScreenState extends State<TimerRoutineDetailScreen> {
     Navigator.pop(context, true);
   }
   void onTimerComplete() {
-    setState() {
-      _isButtonEnabled = true;
-    }
+    _isButtonEnabled = true;
+    setState(() {}); // Calling this earlier, or updating the bool inside it makes the button state not update.
     print('timer complete');
   }
   @override

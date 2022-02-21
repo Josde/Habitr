@@ -31,6 +31,8 @@ Future<bool> initRoutines() async {
                     .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
     await rootBundle.loadString('assets/json/routine/water.json')
                     .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+    await rootBundle.loadString('assets/json/routine/study.json')
+        .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
     return true;
   } catch (error, stacktrace) {
     print('Exception: ' + error.toString());

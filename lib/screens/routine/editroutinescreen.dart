@@ -1,36 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
+import 'package:habitr_tfg/utils/validator.dart';
 import '../../enum/ActivityType.dart';
 
 class EditRoutineScreen extends StatefulWidget {
   final int index;
   final bool? createRoutine;
-  EditRoutineScreen({required this.index, this.createRoutine});
+
+  const EditRoutineScreen({Key? key, required this.index, this.createRoutine}) : super(key: key);
+
 
   @override
-  _EditRoutineScreenState createState() => _EditRoutineScreenState(index: index, createRoutine: createRoutine);
+  _EditRoutineScreenState createState() => _EditRoutineScreenState();
 }
 
 class _EditRoutineScreenState extends State<EditRoutineScreen> {
-  final int index;
-  final bool? createRoutine;
   ActivityType _currentType = ActivityType.Instant;
   String nombreRutina = "";
   String title = 'Create routine';
   int freqNotificaciones = 180;
+  int timerLength = 0;
   Routine? rutinaActual = null;
-  _EditRoutineScreenState({required this.index, this.createRoutine});
   List<String> dropdownValues = ['Instant', 'Timer', 'Stopwatch'];
   String chosenDropdownValue = 'Instant';
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    if (this.createRoutine == null || this.createRoutine != true) {
-      rutinaActual = RoutineSingleton().listaRutinas[index];
+    if (widget.createRoutine == null || widget.createRoutine != true) {
+      rutinaActual = RoutineSingleton().listaRutinas[widget.index];
       nombreRutina = rutinaActual!.name;
       freqNotificaciones = rutinaActual!.delayBetweenNotis;
       _currentType = rutinaActual!.type;
+      timerLength = rutinaActual!.timerLength;
       chosenDropdownValue = dropdownValues[_currentType.index];
       title = 'Edit routine';
     }
@@ -60,12 +62,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   initialValue: '$nombreRutina',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
+                  validator: (value) {textNotEmptyValidator(value);},
                   onSaved: (value) {this.nombreRutina = value ?? '';},
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -77,12 +74,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   initialValue: '${freqNotificaciones.toString()}',
-                  validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                    }
-                  return null;
-                  },
+                  validator: (value) {numericInputValidator(value);},
                   onSaved: (value) {this.freqNotificaciones = (value == null ? 180 : int.parse(value));},
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -102,12 +94,28 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                   }).toList(),
                   value: chosenDropdownValue,
                   onChanged: (String? newValue) {
-                      setState(() {
-                      this.chosenDropdownValue = newValue!;
-                      });
+                      chosenDropdownValue = newValue!;
+                      print('ChosenDropdownValue = $chosenDropdownValue');
+                      setState(() {});
                   },
                   onSaved: (String? value) {this._currentType = ActivityType.values[this.dropdownValues.indexOf(value!)];},
                 ),
+              ),
+              Visibility(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    initialValue: '${timerLength.toString()}',
+                    validator: (value) {numericInputValidator(value);},
+                    onSaved: (value) {this.timerLength = (value == null ? 10 : int.parse(value) * 60);},
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: chosenDropdownValue == 'Timer' ? 'Activity length' : 'Duration goal',
+                      suffixText: 'min',
+                    ),
+                  ),
+                ),
+                visible: (chosenDropdownValue == 'Timer' || chosenDropdownValue == 'Stopwatch') ? true : false,
               ),
               Spacer(),
               Padding(
@@ -122,9 +130,9 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                     }
                     _formKey.currentState!.save();
                     Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType);
-                    if (this.createRoutine == null || this.createRoutine != true) {
+                    if (this.widget.createRoutine == null || this.widget.createRoutine != true) {
                       setState(() {
-                        RoutineSingleton().listaRutinas[index] = nuevaRutina;
+                        RoutineSingleton().listaRutinas[widget.index] = nuevaRutina;
                       });
                       Navigator.pop(context);
                     } else {
