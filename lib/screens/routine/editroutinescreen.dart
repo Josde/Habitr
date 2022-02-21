@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
+import 'package:habitr_tfg/utils/debug.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import '../../enum/ActivityType.dart';
 
@@ -22,11 +23,13 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
   int freqNotificaciones = 180;
   int timerLength = 0;
   Routine? rutinaActual = null;
+  bool showLength = false;
   List<String> dropdownValues = ['Instant', 'Timer', 'Stopwatch'];
   String chosenDropdownValue = 'Instant';
   final _formKey = GlobalKey<FormState>();
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     if (widget.createRoutine == null || widget.createRoutine != true) {
       rutinaActual = RoutineSingleton().listaRutinas[widget.index];
       nombreRutina = rutinaActual!.name;
@@ -35,8 +38,15 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
       timerLength = rutinaActual!.timerLength;
       chosenDropdownValue = dropdownValues[_currentType.index];
       title = 'Edit routine';
+      if (_currentType == ActivityType.Stopwatch || _currentType == ActivityType.Timer) {
+        showLength = true;
+      } else {
+        showLength = false;
+      }
     }
-    //TODO: Use a Form + validation + submit saving data
+  }
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -58,11 +68,11 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Padding(
+              Padding( // Name
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   initialValue: '$nombreRutina',
-                  validator: (value) {textNotEmptyValidator(value);},
+                  validator: (value) {return textNotEmptyValidator(value);},
                   onSaved: (value) {this.nombreRutina = value ?? '';},
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -70,11 +80,11 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                   ),
                 ),
               ),
-              Padding(
+              Padding( // Notification frequency
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   initialValue: '${freqNotificaciones.toString()}',
-                  validator: (value) {numericInputValidator(value);},
+                  validator: (value) {return numericInputValidator(value);},
                   onSaved: (value) {this.freqNotificaciones = (value == null ? 180 : int.parse(value));},
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -83,7 +93,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                   ),
                 ),
               ),
-              Padding(
+              Padding( // Activity dropdown
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButtonFormField(
                   items: dropdownValues.map<DropdownMenuItem<String>>((String value) {
@@ -94,28 +104,35 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                   }).toList(),
                   value: chosenDropdownValue,
                   onChanged: (String? newValue) {
-                      chosenDropdownValue = newValue!;
-                      print('ChosenDropdownValue = $chosenDropdownValue');
-                      setState(() {});
+                      setState(() {
+                        chosenDropdownValue = newValue!;
+                        if (chosenDropdownValue == 'Stopwatch' || chosenDropdownValue == 'Timer') {
+                          showLength = true;
+                        } else {
+                          showLength = false;
+                        }
+                    });
+
                   },
+                  autovalidateMode: AutovalidateMode.always,
                   onSaved: (String? value) {this._currentType = ActivityType.values[this.dropdownValues.indexOf(value!)];},
                 ),
               ),
               Visibility(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    initialValue: '${timerLength.toString()}',
-                    validator: (value) {numericInputValidator(value);},
-                    onSaved: (value) {this.timerLength = (value == null ? 10 : int.parse(value) * 60);},
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: chosenDropdownValue == 'Timer' ? 'Activity length' : 'Duration goal',
-                      suffixText: 'min',
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      initialValue: '${(timerLength / 60).toInt().toString()}', //TODO: Fix this being so ugly (or add support for float times)
+                      validator: (value) {return numericInputValidator(value);},
+                      onSaved: (value) {timerLength = (value == null ? 10 : int.parse(value) * 60);},
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: chosenDropdownValue == 'Timer' ? 'Activity length' : 'Duration goal',
+                        suffixText: 'min',
+                      ),
                     ),
                   ),
-                ),
-                visible: (chosenDropdownValue == 'Timer' || chosenDropdownValue == 'Stopwatch') ? true : false,
+                visible: showLength,
               ),
               Spacer(),
               Padding(
@@ -129,7 +146,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                       return;
                     }
                     _formKey.currentState!.save();
-                    Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType);
+                    Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType, this.timerLength);
                     if (this.widget.createRoutine == null || this.widget.createRoutine != true) {
                       setState(() {
                         RoutineSingleton().listaRutinas[widget.index] = nuevaRutina;

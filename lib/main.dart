@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
+import 'package:habitr_tfg/screens/routine/routinedetailscreen.dart';
+import 'package:habitr_tfg/screens/routine/routinescreen.dart';
 import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
@@ -62,7 +65,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black87,
           scaffoldBackgroundColor: Colors.black87,
         ),
-        home: BottomNavBar()
+        home: BottomNavBar(),
     );
   }
 }
