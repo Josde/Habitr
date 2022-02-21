@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
-import '../enum/ActivityType.dart';
+import '../../enum/ActivityType.dart';
 
 class EditRoutineScreen extends StatefulWidget {
   final int index;

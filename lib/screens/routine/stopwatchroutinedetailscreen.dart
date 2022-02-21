@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/loadingbutton.dart';
+import 'package:habitr_tfg/widgets/timer.dart';
 
 class StopwatchRoutineDetailScreen extends StatelessWidget {
   int index = 0;
@@ -31,6 +32,7 @@ class StopwatchRoutineDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
+            TimerWidget(countsUp: true, onComplete: (){}, lengthInSeconds: 0,),
             Spacer(),
             Container(
                 height: 80,

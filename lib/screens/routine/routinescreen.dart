@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:habitr_tfg/enum/ActivityType.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
-import 'package:habitr_tfg/screens/editroutinescreen.dart';
-import 'package:habitr_tfg/screens/instantroutinedetailscreen.dart';
-import 'package:habitr_tfg/screens/routinedetailscreen.dart';
-import '../utils/io.dart';
+import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
+import 'package:habitr_tfg/screens/routine/instantroutinedetailscreen.dart';
+import 'package:habitr_tfg/screens/routine/routinedetailscreen.dart';
+import '../../utils/io.dart';
 import 'dart:io';
 
 class RoutineScreen extends StatefulWidget {
