@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../enum/ActivityType.dart';
-import 'routine.dart';
+import '../../enum/ActivityType.dart';
+import '../classes/routine.dart';
 
 class RoutineSingleton {
   static final RoutineSingleton _singleton = RoutineSingleton._internal();

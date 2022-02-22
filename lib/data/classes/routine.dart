@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../enum/ActivityType.dart';
+import '../../enum/ActivityType.dart';
 class Routine {
   String name = "";
   int delayBetweenNotis = 180;

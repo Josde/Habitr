@@ -7,8 +7,8 @@ import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
 import 'package:habitr_tfg/screens/routine/routinedetailscreen.dart';
 import 'package:habitr_tfg/screens/routine/routinescreen.dart';
 import 'package:habitr_tfg/utils/io.dart';
-import 'package:habitr_tfg/models/routine.dart';
-import 'package:habitr_tfg/models/routinesingleton.dart';
+import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -45,7 +45,7 @@ Future<bool> initRoutines() async {
     } else {
         List<FileSystemEntity> files = await dirContents(routineDir);
         for (FileSystemEntity f in files) {
-          if (f is File) {
+          if (f is File && f.path.endsWith('.json')) {
             await (f as File).readAsString()
                 .then((String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
           }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/enum/ActivityType.dart';
-import 'package:habitr_tfg/models/routine.dart';
-import 'package:habitr_tfg/models/routinesingleton.dart';
+import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
 import 'package:habitr_tfg/screens/routine/instantroutinedetailscreen.dart';
 import 'package:habitr_tfg/screens/routine/routinedetailscreen.dart';
@@ -18,7 +18,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   @override
   Widget build(BuildContext context)  {
-    final List<Routine> rutinasTest = rs.listaRutinas;
+    final List rutinasTest = rs.listaRutinas;
 
     return Scaffold(
       appBar: AppBar(
