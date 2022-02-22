@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../screens/homescreen.dart';
-import '../screens/routinescreen.dart';
-import '../screens/settingsscreen.dart';
+import '../screens/misc/homescreen.dart';
+import '../screens/routine/routinescreen.dart';
+import '../screens/misc/settingsscreen.dart';
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
