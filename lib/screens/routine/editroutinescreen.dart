@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
-import 'package:habitr_tfg/utils/debug.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import '../../enum/ActivityType.dart';
 

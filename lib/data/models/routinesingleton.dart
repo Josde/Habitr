@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import '../../enum/ActivityType.dart';
 import '../classes/routine.dart';
 
 class RoutineSingleton {

@@ -3,10 +3,7 @@ import 'package:habitr_tfg/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
-import 'package:habitr_tfg/screens/routine/instantroutinedetailscreen.dart';
 import 'package:habitr_tfg/screens/routine/routinedetailscreen.dart';
-import '../../utils/io.dart';
-import 'dart:io';
 
 class RoutineScreen extends StatefulWidget {
   @override

@@ -3,9 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
-import 'package:habitr_tfg/screens/routine/routinedetailscreen.dart';
-import 'package:habitr_tfg/screens/routine/routinescreen.dart';
 import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
@@ -98,7 +95,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // is not restarted.
           primarySwatch: Colors.deepPurple,
           brightness: Brightness.dark,
-          accentColor: Colors.deepPurpleAccent,
           backgroundColor: Colors.black87,
           scaffoldBackgroundColor: Colors.black87,
         ),
