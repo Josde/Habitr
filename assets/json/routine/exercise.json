@@ -1,5 +1,5 @@
 {
   "name": "Exercise",
-  "delayBetweenNotis": "180",
-  "type": "1"
+  "delayBetweenNotis": 180,
+  "type": 1
 }

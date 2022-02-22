@@ -1,5 +1,5 @@
 {
   "name": "Study",
-  "delayBetweenNotis": "180",
-  "type": "2"
+  "delayBetweenNotis": 180,
+  "type": 2
 }

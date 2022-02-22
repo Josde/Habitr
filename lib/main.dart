@@ -10,7 +10,10 @@ import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/models/routine.dart';
 import 'package:habitr_tfg/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   try {
     //TODO: Implement routine parsing from JSON.
     bool routinesInitialized = await initRoutines();
@@ -28,14 +31,27 @@ Future<void> main() async {
 }
 Future<bool> initRoutines() async {
   RoutineSingleton rs = RoutineSingleton();
-  WidgetsFlutterBinding.ensureInitialized();
+  var documentsDir = await getApplicationDocumentsDirectory();
+  Directory routineDir = Directory(p.join(documentsDir.path, 'routines'));
+  bool DEBUG_OR_FIRST_TIME = !(await routineDir.exists());
   try {
-    await rootBundle.loadString('assets/json/routine/exercise.json')
-                    .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
-    await rootBundle.loadString('assets/json/routine/water.json')
-                    .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
-    await rootBundle.loadString('assets/json/routine/study.json')
-        .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+    if (DEBUG_OR_FIRST_TIME) {
+      await rootBundle.loadString('assets/json/routine/exercise.json')
+                      .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+      await rootBundle.loadString('assets/json/routine/water.json')
+                      .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+      await rootBundle.loadString('assets/json/routine/study.json')
+          .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+    } else {
+        List<FileSystemEntity> files = await dirContents(routineDir);
+        for (FileSystemEntity f in files) {
+          if (f is File) {
+            await (f as File).readAsString()
+                .then((String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+          }
+        }
+      }
+
     return true;
   } catch (error, stacktrace) {
     print('Exception: ' + error.toString());
@@ -43,8 +59,29 @@ Future<bool> initRoutines() async {
     return false;
   }
 }
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget{
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(LifecycleEventHandler());
+
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(LifecycleEventHandler());
+    super.dispose();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -70,6 +107,30 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  late Directory documentsDir;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    var documentsDir = await getApplicationDocumentsDirectory();
+    Directory routineDir = Directory(p.join(documentsDir.path, 'routines'));
+    if(state == AppLifecycleState.inactive) {
+      await routineDir.create();
+      for (Routine r in RoutineSingleton().listaRutinas) {
+        File routineFile = File(p.join(routineDir.path, '${r.name}.json'));
+        await routineFile.create();
+        print('Written to routine file ${routineFile.path}');
+        routineFile.writeAsString(json.encode(r));
+
+      }
+    }
+    if(state == AppLifecycleState.resumed) {
+      print('AppLifecycleState state: Resumed app');
+    }
+    print('AppLifecycleState state:  $state');
+  }
+}
 
 
 

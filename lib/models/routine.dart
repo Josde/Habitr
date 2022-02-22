@@ -10,11 +10,12 @@ class Routine {
   Routine.empty();
   
   Routine.fromJson(Map<String,dynamic> json) {
+    //TODO: Add error handling
     this.name = json['name'];
-    this.delayBetweenNotis = int.tryParse(json['delayBetweenNotis']) ?? 180;
-    this.type = ActivityType.values.elementAt(int.parse(json['type']));
+    this.delayBetweenNotis = json['delayBetweenNotis'];
+    this.type = ActivityType.values.elementAt(json['type']);
     if (json.containsKey('timerLength')) {
-      this.timerLength = int.tryParse(json['timerLength']) ?? 0;
+      this.timerLength = json['timerLength'];
     } else {
       this.timerLength = 10; // TODO: CHANGE THIS
     }
