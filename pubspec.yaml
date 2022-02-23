@@ -37,9 +37,11 @@ dependencies:
   flutter_bloc: ^8.0.1
   bloc: ^8.0.2
   equatable: ^2.0.3
+  uuid: ^3.0.6
 
 
 dev_dependencies:
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
 
