@@ -1,4 +1,4 @@
-import '../../enum/ActivityType.dart';
+import 'package:habitr_tfg/data/enum/ActivityType.dart';
 class Routine {
   String name = "";
   int delayBetweenNotis = 180;

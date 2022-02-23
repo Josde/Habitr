@@ -34,6 +34,10 @@ dependencies:
   flutter_native_splash: ^1.2.3
   path_provider: ^2.0.9
   path: ^1.8.0
+  flutter_bloc: ^8.0.1
+  bloc: ^8.0.2
+  equatable: ^2.0.3
+
 
 dev_dependencies:
   flutter_test:

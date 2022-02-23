@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habitr_tfg/enum/ActivityType.dart';
+import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
