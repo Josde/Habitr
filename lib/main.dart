@@ -114,7 +114,7 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
     if(state == AppLifecycleState.inactive) {
       await routineDir.create();
       for (Routine r in RoutineSingleton().listaRutinas) {
-        File routineFile = File(p.join(routineDir.path, '${r.name}.json'));
+        File routineFile = File(p.join(routineDir.path, '${r.id}.json'));
         await routineFile.create();
         print('Written to routine file ${routineFile.path}');
         routineFile.writeAsString(json.encode(r));

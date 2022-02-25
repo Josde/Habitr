@@ -6,7 +6,8 @@ class Routine {
   ActivityType type = ActivityType.Instant;
   int timerLength = 0;
   late String id;
-
+  var uuid = Uuid();
+  Routine.withId(this.name, this.delayBetweenNotis, this.type, this.timerLength, this.uuid);
   Routine(this.name, this.delayBetweenNotis, this.type, this.timerLength) {
     this.id = uuid.v4();
   }
@@ -16,8 +17,12 @@ class Routine {
     //TODO: Add error handling
     this.name = json['name'];
     this.delayBetweenNotis = json['delayBetweenNotis'];
-    this.id = json['id'];
     this.type = ActivityType.values.elementAt(json['type']);
+    if (json.containsKey('id')) {
+      this.id = json['id'];
+    } else {
+      this.id = uuid.v4();
+    }
     if (json.containsKey('timerLength')) {
       this.timerLength = json['timerLength'];
     } else {
