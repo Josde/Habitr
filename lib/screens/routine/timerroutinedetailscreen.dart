@@ -4,8 +4,8 @@ import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
 
 class TimerRoutineDetailScreen extends StatefulWidget {
-  final int index;
-  const TimerRoutineDetailScreen({Key? key, required this.index}) : super(key: key);
+  final Routine routine;
+  const TimerRoutineDetailScreen({Key? key, required this.routine}) : super(key: key);
   @override
   _TimerRoutineDetailScreenState createState() => _TimerRoutineDetailScreenState();
 }
@@ -22,8 +22,6 @@ class _TimerRoutineDetailScreenState extends State<TimerRoutineDetailScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    Routine rutina = RoutineSingleton().listaRutinas[this.widget.index];
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -35,7 +33,7 @@ class _TimerRoutineDetailScreenState extends State<TimerRoutineDetailScreen> {
               padding: const EdgeInsets.all(80.0),
               child: Center(
                 child: Text(
-                    '${rutina.name}',
+                    '${widget.routine.name}',
                     style: TextStyle(
                       fontFamily: 'Roboto Mono',
                       fontWeight: FontWeight.w200,
@@ -44,7 +42,7 @@ class _TimerRoutineDetailScreenState extends State<TimerRoutineDetailScreen> {
                 ),
               ),
             ),
-            TimerWidget(lengthInSeconds: rutina.timerLength,
+            TimerWidget(lengthInSeconds: widget.routine.timerLength,
                         onComplete: () => onTimerComplete(),
                         countsUp: false,
             ),

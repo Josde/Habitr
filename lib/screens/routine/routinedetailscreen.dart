@@ -7,19 +7,18 @@ import 'package:habitr_tfg/screens/routine/stopwatchroutinedetailscreen.dart';
 import 'package:habitr_tfg/screens/routine/timerroutinedetailscreen.dart';
 
 class RoutineDetailScreen extends StatelessWidget {
-  int index = 0;
-  RoutineDetailScreen({required this.index});
+  Routine routine;
+  RoutineDetailScreen({required this.routine});
 
   @override
   Widget build(BuildContext context) {
-    Routine rutina = RoutineSingleton().listaRutinas[index];
-    switch(rutina.type) {
+    switch(routine.type) {
       case ActivityType.Instant:
-        return InstantRoutineDetailScreen(index: index);
+        return InstantRoutineDetailScreen(routine: routine);
       case ActivityType.Timer:
-        return TimerRoutineDetailScreen(index: index);
+        return TimerRoutineDetailScreen(routine: routine);
       case ActivityType.Stopwatch:
-        return StopwatchRoutineDetailScreen(index: index);
+        return StopwatchRoutineDetailScreen(routine: routine);
       }
   }
 }

@@ -4,12 +4,11 @@ import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/loadingbutton.dart';
 
 class InstantRoutineDetailScreen extends StatelessWidget {
-  final int index;
-  const InstantRoutineDetailScreen({Key? key, required this.index}) : super(key: key);
+  final Routine routine;
+  const InstantRoutineDetailScreen({Key? key, required this.routine}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Routine rutina = RoutineSingleton().listaRutinas[this.index];
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -21,7 +20,7 @@ class InstantRoutineDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.all(80.0),
               child: Center(
                 child: Text(
-                    '${rutina.name}',
+                    '${routine.name}',
                     style: TextStyle(
                       fontFamily: 'Roboto Mono',
                       fontWeight: FontWeight.w200,

@@ -5,13 +5,12 @@ import 'package:habitr_tfg/widgets/loadingbutton.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
 
 class StopwatchRoutineDetailScreen extends StatelessWidget {
-  final int index;
-  const StopwatchRoutineDetailScreen({Key? key, required this.index}) : super(key: key);
+  final Routine routine;
+  const StopwatchRoutineDetailScreen({Key? key, required this.routine}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    Routine rutina = RoutineSingleton().listaRutinas[this.index];
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -23,7 +22,7 @@ class StopwatchRoutineDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.all(80.0),
               child: Center(
                 child: Text(
-                    '${rutina.name}',
+                    '${routine.name}',
                     style: TextStyle(
                       fontFamily: 'Roboto Mono',
                       fontWeight: FontWeight.w200,

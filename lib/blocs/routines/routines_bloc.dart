@@ -14,7 +14,16 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     on<CreateRoutine>(_onAddRoutine);
     on<UpdateRoutine>(_onUpdateRoutine);
     on<DeleteRoutine>(_onDeleteRoutine);
+    //on<ReadRoutine>(_onReadRoutine);
 
+
+  }
+  // TODO: Delete this, lazy hack
+  @override
+  Future<void> close() async {
+    //cancel streams
+    this.stream.drain();
+    super.close();
   }
 
   void _onLoadRoutines(LoadRoutines event, Emitter<RoutinesState> emit) {
@@ -25,7 +34,10 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
   void _onAddRoutine(CreateRoutine event, Emitter<RoutinesState> emit) {
     final state = this.state;
     if (state is RoutinesLoaded) {
-      emit(RoutinesLoaded(routines: List.from(state.routines)..add(event.routine)));
+      List<Routine> newRoutines = List.from(state.routines)..add(event.routine);
+      emit(RoutinesLoaded(routines: newRoutines));
+      RoutineSingleton().listaRutinas = newRoutines; // FIXME: These are a temporal fix for not saving and nothing else.
+                                                        // Proper handling includes doing JSON operations on add / update / remove.
     }
   }
 
@@ -34,22 +46,26 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     if (state is RoutinesLoaded) {
       List<Routine> newRoutines = state.routines;
       int index = state.routines.indexWhere((Routine r) {return r.id == event.routine.id;});
-      if (index == -1) {
+      if (index == -1) { // FAILSAFE
         newRoutines.add(event.routine);
       } else {
         newRoutines[index] = event.routine;
       }
       emit(RoutinesLoaded(routines: newRoutines));
+      RoutineSingleton().listaRutinas = newRoutines;
     }
   }
 
   void _onDeleteRoutine(DeleteRoutine event, Emitter<RoutinesState> emit) {
+    // FIXME: No estamos borrando el archivo, asi que en el proximo inicio volvera a existir.
     final state = this.state;
     if (state is RoutinesLoaded) {
       List<Routine> newRoutines = state.routines.where((routine) {
-        return routine.name != event.routine.name;
+        return routine.id != event.routine.id;
       }).toList();
       emit(RoutinesLoaded(routines: newRoutines));
+      RoutineSingleton().listaRutinas = newRoutines;
     }
+
   }
 }
