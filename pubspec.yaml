@@ -38,6 +38,8 @@ dependencies:
   bloc: ^8.0.2
   equatable: ^2.0.3
   uuid: ^3.0.6
+  supabase_flutter: ^0.2.12
+
 
 
 dev_dependencies:
