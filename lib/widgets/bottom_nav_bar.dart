@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habitr_tfg/screens/users/profilescreen.dart';
 import '../screens/misc/homescreen.dart';
 import '../screens/routine/routinescreen.dart';
 import '../screens/misc/settingsscreen.dart';
@@ -15,7 +16,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     RoutineScreen(),
-    SettingsScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -41,8 +42,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
               label: 'Routine',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
+              icon: Icon(Icons.person),
+              label: 'Profile',
             )],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.deepPurple[300],

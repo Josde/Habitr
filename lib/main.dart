@@ -11,10 +11,16 @@ import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final String myUrl = 'https://tzkauycpwctgufjkoeds.supabase.co';
+  final String myAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6a2F1eWNwd2N0Z3VmamtvZWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDY5MDkyNTUsImV4cCI6MTk2MjQ4NTI1NX0.UBRmXGqk9oqmvL8JMoyJLEnywzsLrn1CtxQlFiGoemw';
+
   try {
     //TODO: Implement routine parsing from JSON.
+    await Supabase.initialize(url: myUrl, anonKey: myAnonKey);
     bool routinesInitialized = await initRoutines();
     if (routinesInitialized) {
       runApp(MyApp());

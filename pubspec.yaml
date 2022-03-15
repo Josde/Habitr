@@ -39,6 +39,7 @@ dependencies:
   equatable: ^2.0.3
   uuid: ^3.0.6
   supabase_flutter: ^0.2.12
+  country_picker: ^2.0.12
 
 
 
