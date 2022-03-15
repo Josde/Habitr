@@ -5,8 +5,8 @@ import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
-import 'package:habitr_tfg/screens/routine/editroutinescreen.dart';
-import 'package:habitr_tfg/screens/routine/routinedetailscreen.dart';
+import 'package:habitr_tfg/screens/routine/edit_routine_screen.dart';
+import 'package:habitr_tfg/screens/routine/routine_detail_screen.dart';
 
 class RoutineScreen extends StatefulWidget {
   @override

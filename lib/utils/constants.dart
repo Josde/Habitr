@@ -5,7 +5,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 // es decir, no lo podemos importar hasta que se llame a main() pero si en ficheros que se importen despues de main.
 
 final supabase = Supabase.instance.client;
-
 extension ShowSnackBar on BuildContext {
   void showSnackBar({
     required String message,

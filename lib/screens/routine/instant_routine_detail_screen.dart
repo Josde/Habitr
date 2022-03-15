@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
-import 'package:habitr_tfg/widgets/loadingbutton.dart';
+import 'package:habitr_tfg/widgets/loading_button.dart';
 
 class InstantRoutineDetailScreen extends StatelessWidget {
   final Routine routine;

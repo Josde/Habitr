@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:habitr_tfg/screens/users/profilescreen.dart';
-import '../screens/misc/homescreen.dart';
-import '../screens/routine/routinescreen.dart';
-import '../screens/misc/settingsscreen.dart';
+import 'package:habitr_tfg/screens/users/profile_screen.dart';
+import '../screens/misc/home_screen.dart';
+import '../screens/routine/routine_screen.dart';
+import '../screens/misc/settings_screen.dart';
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 

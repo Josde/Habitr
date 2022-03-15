@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
-import 'package:habitr_tfg/screens/routine/instantroutinedetailscreen.dart';
-import 'package:habitr_tfg/screens/routine/stopwatchroutinedetailscreen.dart';
-import 'package:habitr_tfg/screens/routine/timerroutinedetailscreen.dart';
+import 'package:habitr_tfg/screens/routine/instant_routine_detail_screen.dart';
+import 'package:habitr_tfg/screens/routine/stopwatch_routine_detail_screen.dart';
+import 'package:habitr_tfg/screens/routine/timer_routine_detail_screen.dart';
 
 class RoutineDetailScreen extends StatelessWidget {
   Routine routine;
