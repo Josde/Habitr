@@ -40,6 +40,8 @@ dependencies:
   uuid: ^3.0.6
   supabase_flutter: ^0.2.12
   country_picker: ^2.0.12
+  jdenticon_dart: ^2.0.0
+  flutter_svg: ^1.0.3
 
 
 
