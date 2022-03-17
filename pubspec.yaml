@@ -31,7 +31,6 @@ dependencies:
   health: ^3.4.3
   #flutter_unity_widget: ^4.2.5+1
   flutter_local_notifications: ^9.2.0
-  flutter_native_splash: ^1.2.3
   path_provider: ^2.0.9
   path: ^1.8.0
   flutter_bloc: ^8.0.1
@@ -42,6 +41,7 @@ dependencies:
   country_picker: ^2.0.12
   jdenticon_dart: ^2.0.0
   flutter_svg: ^1.0.3
+  flutter_native_splash: ^2.1.1
 
 
 
@@ -63,6 +63,7 @@ flutter:
 
   assets:
     - assets/json/routine/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

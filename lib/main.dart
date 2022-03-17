@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
+import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
@@ -12,24 +13,22 @@ import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:supabase_flutter/supabase_flutter.dart';
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:habitr_tfg/utils/constants.dart';
 
+Future<void> main() async {
+  WidgetsBinding wb = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: wb);
   final String myUrl = 'https://tzkauycpwctgufjkoeds.supabase.co';
   final String myAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6a2F1eWNwd2N0Z3VmamtvZWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDY5MDkyNTUsImV4cCI6MTk2MjQ4NTI1NX0.UBRmXGqk9oqmvL8JMoyJLEnywzsLrn1CtxQlFiGoemw';
-
+  runApp(MyApp());
   try {
     //TODO: Implement routine parsing from JSON.
     await Supabase.initialize(url: myUrl, anonKey: myAnonKey);
     bool routinesInitialized = await initRoutines();
-    if (routinesInitialized) {
-      runApp(MyApp());
-    } else {
-      runApp(MyApp());
-      print('routines not initialized...');
+    FlutterNativeSplash.remove();
     }
-
-  } catch (error, stacktrace) {
+    catch (error, stacktrace) {
     print('Exception: ' + error.toString());
     print('Stacktrace: ' + stacktrace.toString());
   }
@@ -71,11 +70,19 @@ class MyApp extends StatefulWidget{
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  Widget? childScreen;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(LifecycleEventHandler());
+    final user = supabase.auth.user();
+    FlutterNativeSplash.remove();
+    if (user == null) {
+      childScreen = LogInScreen();
+    } else {
+      childScreen = BottomNavBar();
+    }
 
   }
 
@@ -94,23 +101,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(create: (_) => RoutinesBloc())
       ],
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Habitr',
           theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
             primarySwatch: Colors.deepPurple,
             brightness: Brightness.dark,
             backgroundColor: Colors.black87,
             scaffoldBackgroundColor: Colors.black87,
           ),
-          home: BottomNavBar(),
+          home: childScreen!,
       ),
     );
   }
