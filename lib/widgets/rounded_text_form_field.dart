@@ -23,10 +23,9 @@ class RoundedTextFormField extends StatelessWidget {
           borderRadius: BorderRadius.circular(30.0)
         ),
         hintStyle: TextStyle(
-          color: Colors.white60,
           fontWeight: FontWeight.bold,
        ),
-        fillColor: Colors.white12,
+        fillColor: Theme.of(context).primaryColorDark,
         filled: true,
       ),
 

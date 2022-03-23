@@ -16,6 +16,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 
+import 'blocs/theme/theme_cubit.dart';
+
 Future<void> main() async {
   WidgetsBinding wb = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: wb);
@@ -98,16 +100,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => RoutinesBloc())
+        BlocProvider(create: (context) => RoutinesBloc()),
+        BlocProvider(create: (context) => ThemeCubit()),
       ],
       child: MaterialApp(
           title: 'Habitr',
-          theme: ThemeData(
-            primarySwatch: Colors.deepPurple,
-            brightness: Brightness.dark,
-            backgroundColor: Colors.black87,
-            scaffoldBackgroundColor: Colors.black87,
-          ),
+          theme: lightTheme, // Change this to be related to BLoC on startup.
           home: childScreen!,
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FriendsScreen extends StatefulWidget {
-  const FriendsScreen({Key key}) : super(key: key);
+  const FriendsScreen({Key? key}) : super(key: key);
 
   @override
   _FriendsScreenState createState() => _FriendsScreenState();

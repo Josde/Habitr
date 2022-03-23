@@ -60,7 +60,7 @@ class _ProfilescreenState extends State<ProfileScreen>
             ],
           ),
           Divider(
-            color: Colors.white,
+            color: Theme.of(context).primaryColorLight,
           ),
           IntrinsicHeight(
             child: Row( //Stadistics and friends button
@@ -72,8 +72,8 @@ class _ProfilescreenState extends State<ProfileScreen>
                       onTap: (){print('Tapped stadistics');},
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white12,
-                          border: Border.all(color: Colors.white24),
+                          color: Theme.of(context).primaryColorLight,
+                          border: Border.all(color: Theme.of(context).primaryColorDark),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -87,8 +87,8 @@ class _ProfilescreenState extends State<ProfileScreen>
                       onTap: (){print('Tapped friends');},
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white12,
-                          border: Border.all(color: Colors.white24),
+                          color: Theme.of(context).primaryColorLight,
+                          border: Border.all(color: Theme.of(context).primaryColorDark),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -108,7 +108,7 @@ class _ProfilescreenState extends State<ProfileScreen>
             ),
           ),
           Divider(
-            color: Colors.white,
+            color: Theme.of(context).primaryColorLight,
           ),
           Column( // TODO: Feed
 

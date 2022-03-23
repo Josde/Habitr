@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  const StatisticsScreen({Key key}) : super(key: key);
+  const StatisticsScreen({Key? key}) : super(key: key);
 
   @override
   _StatisticsScreenState createState() => _StatisticsScreenState();

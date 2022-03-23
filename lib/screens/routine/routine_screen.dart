@@ -40,7 +40,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                 return GestureDetector(
                   child: Container(
                       height: 50,
-                      color: Colors.white24,
+                      color: Theme.of(context).primaryColorDark,
                       child: Row(children: [Padding(
                                               padding: const EdgeInsets.all(8.0),
                                               child: Text('${state.routines[index].name}', style: TextStyle(color: Colors.white))),
@@ -54,12 +54,13 @@ class _RoutineScreenState extends State<RoutineScreen> {
                                               }));
                                             },
                                               icon: Icon(Icons.edit),
-                                              color: Colors.grey,
+                                              color: Theme.of(context).iconTheme.color,
                                             ),
                                             IconButton(onPressed: () { // Delete button
                                               BlocProvider.of<RoutinesBloc>(context)
                                                   .add(DeleteRoutine(routine: state.routines[index]));
                                             },
+                                              color: Theme.of(context).iconTheme.color,
                                               icon: Icon(Icons.delete),
                                             )]
                       ),
@@ -85,7 +86,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       );
                       }));
             },
-            backgroundColor: Colors.purple[300],
+            backgroundColor: Theme.of(context).iconTheme.color,
             child: const Icon(Icons.add),
           )
         );

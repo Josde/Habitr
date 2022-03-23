@@ -54,33 +54,34 @@ class _LogInScreenState extends State<LogInScreen> {
               Spacer(),
               Padding(
                 padding: const EdgeInsets.all(32.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-
-                  text: TextSpan(
-                  children: <TextSpan>[
+                child: Text.rich(
+                  TextSpan(
+                      children: <TextSpan>[
                       TextSpan(text: "Don't have an account yet? "),
                       TextSpan(text: "Sign up",
+                              style: TextStyle(fontWeight: FontWeight.bold),
                               recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
                                 print('Clicked sign up');
                               },
-                              style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    TextSpan(text: "\nOr "),
+                    TextSpan(text: "\nOr ",
+                    ),
+
                     TextSpan(text: "continue as a guest",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 print('Clicked guest');
                               },
-                      style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ]
+                  ),
+                textAlign: TextAlign.center,
                 ),
 
                 ),
-              )
             ],
         ),
       ),
