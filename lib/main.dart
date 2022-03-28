@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
+import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
+import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
@@ -102,6 +104,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       providers: [
         BlocProvider(create: (context) => RoutinesBloc()),
         BlocProvider(create: (context) => ThemeCubit()),
+        BlocProvider(create: (context) => SelfBloc()),
+        BlocProvider(create: (context) => FriendsBloc())
       ],
       child: MaterialApp(
           title: 'Habitr',

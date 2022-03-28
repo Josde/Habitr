@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/classes/user.dart';
+import 'friends_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -36,9 +37,6 @@ class _ProfilescreenState extends State<ProfileScreen>
             appBar: AppBar(
                title: Text(
                 "Profile",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
               ),
               backgroundColor: Colors.deepPurple,
             ),
@@ -84,7 +82,7 @@ class _ProfilescreenState extends State<ProfileScreen>
                   ),
                   Expanded( // Friends
                     child: GestureDetector(
-                      onTap: (){print('Tapped friends');},
+                      onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsScreen()));},
                       child: Container(
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColorLight,

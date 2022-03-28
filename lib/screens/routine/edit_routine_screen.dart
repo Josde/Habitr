@@ -54,9 +54,6 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
       appBar: AppBar(
         title: Text(
           "$title",
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
         backgroundColor: Colors.deepPurple,
       ),

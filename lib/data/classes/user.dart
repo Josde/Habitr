@@ -18,6 +18,10 @@ class User {
     this.id = uuid.v4();
   }
 
+  User.debug(this.name) {
+    this.id = uuid.v4();
+  }
+
   User(this.name, this.country, this.createdAt, this.xp, this.currentStreak, this.maxStreak, this. friendCount, this.isAdmin) {
     this.id = uuid.v4();
   }

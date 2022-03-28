@@ -25,9 +25,6 @@ class _RoutineScreenState extends State<RoutineScreen> {
         appBar: AppBar(
           title: Text(
             "Routines",
-            style: TextStyle(
-              color: Colors.white,
-            ),
           ),
           backgroundColor: Colors.deepPurple,
 
