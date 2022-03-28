@@ -6,7 +6,9 @@ import '../../data/classes/user.dart';
 import 'friends_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final User user;
+  final bool isSelfProfile;
+  const ProfileScreen({Key? key, required this.user, this.isSelfProfile = false}) : super(key: key);
 
   @override
   _ProfilescreenState createState() => _ProfilescreenState();
@@ -15,14 +17,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfilescreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  var uuid = Uuid();
-  User u = User.empty();
   String? avatarSvg = '';
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    avatarSvg = Jdenticon.toSvg(u.name);
+    avatarSvg = Jdenticon.toSvg(widget.user.id);
   }
 
   @override
@@ -50,9 +50,9 @@ class _ProfilescreenState extends State<ProfileScreen>
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${u.name}'),
-                  Text('${u.country.displayName}'),
-                  Text('${u.xp}xp'), //TODO: Add rank when the functionality is done.
+                  Text('${widget.user.name}'),
+                  Text('${widget.user.country.displayName}'),
+                  Text('${widget.user.xp}xp'), //TODO: Add rank when the functionality is done.
                 ],
               )
             ],
@@ -94,7 +94,7 @@ class _ProfilescreenState extends State<ProfileScreen>
                             child: Column(
                               children: [
                                 Text('Friends'),
-                                Text('${u.friendCount}')
+                                Text('${widget.user.friendCount}')
                               ],
                             ),
                           ),

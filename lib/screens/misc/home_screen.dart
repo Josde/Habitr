@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'feed_screen.dart';
+import 'game_screen.dart';
 
+class HomeScreen extends StatefulWidget {
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Widget? child;
+  final GameScreen game = GameScreen();
+  final FeedScreen feed = FeedScreen();
+  @override
+  void initState() {
+    child = game;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,18 +29,21 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.deepPurple,
-
       ),
       body: Center(
-        child: Text(
-            "hello world!",
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.w300,
-              letterSpacing: 2.0,
-              color: Colors.grey,
-            )
-        ),
+        child: GestureDetector(
+          onHorizontalDragEnd: (DragEndDetails details) {
+            setState(() {
+              if (child == game) {
+                child = feed;
+              } else {
+                child = game;
+              }
+            }
+            );
+          },
+          child: child
+        )
       ),
     );
   }

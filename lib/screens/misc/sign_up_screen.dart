@@ -52,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return;
                     }
                     _formKey.currentState!.save();
-                  Navigator.push(context, MaterialPageRoute( //temp fix, reformat to bloc later
+                  Navigator.pushReplacement(context, MaterialPageRoute( //temp fix, reformat to bloc later
                       builder: (BuildContext context) { return BottomNavBar(); }));
                 },
               ),

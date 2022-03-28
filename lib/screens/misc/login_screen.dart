@@ -47,7 +47,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       return;
                     }
                     _formKey.currentState!.save();
-                  Navigator.push(context, MaterialPageRoute( //temp fix, reformat to bloc later
+                  Navigator.pushReplacement(context, MaterialPageRoute( //temp fix, reformat to bloc later
                       builder: (BuildContext context) { return BottomNavBar(); }));
                 },
               ),
@@ -62,7 +62,7 @@ class _LogInScreenState extends State<LogInScreen> {
                               style: TextStyle(fontWeight: FontWeight.bold),
                               recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
                                 print('Clicked sign up');
                               },
                       ),

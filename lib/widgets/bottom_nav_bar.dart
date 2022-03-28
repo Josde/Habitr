@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
+import '../data/classes/user.dart';
 import '../screens/misc/home_screen.dart';
 import '../screens/routine/routine_screen.dart';
 import '../screens/misc/settings_screen.dart';
@@ -16,7 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     RoutineScreen(),
-    ProfileScreen(),
+    ProfileScreen(user: User.empty(), isSelfProfile: true), //TODO: Update this to use Self from the Bloc when we start using the database.
   ];
 
   void _onItemTapped(int index) {
@@ -27,28 +28,31 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Routine',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            )],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.deepPurple[300],
-          onTap: _onItemTapped,
-        )
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+          body: Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                label: 'Routine',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              )],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.deepPurple[300],
+            onTap: _onItemTapped,
+          )
+      ),
     );
   }
 }

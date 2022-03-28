@@ -1,4 +1,6 @@
 //TODO: Implement this BLOC. Currently it is only constant values for debugging.
+// FIXME: as it stands, this bloc currently means that every single user has the same friends
+// so it should probably be refactored into a map of userID to list of friends
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
