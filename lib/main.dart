@@ -28,7 +28,7 @@ Future<void> main() async {
   runApp(MyApp());
   try {
     //TODO: Implement routine parsing from JSON.
-    await Supabase.initialize(url: myUrl, anonKey: myAnonKey);
+    await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: true);
     bool routinesInitialized = await initRoutines();
     FlutterNativeSplash.remove();
     }
@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(LifecycleEventHandler());
-    final user = supabase.auth.user();
+    final user = Supabase.instance.client.auth.user();
     FlutterNativeSplash.remove();
     if (user == null) {
       childScreen = LogInScreen();

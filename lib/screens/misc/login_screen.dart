@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:habitr_tfg/screens/misc/sign_up_screen.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 
-import '../../widgets/bottom_nav_bar.dart';
+import 'package:habitr_tfg/utils/constants.dart';
+import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 class LogInScreen extends StatefulWidget {
   const LogInScreen({Key? key}) : super(key: key);
 
@@ -13,6 +15,7 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormState>();
+  String? _email, _password;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,28 +31,47 @@ class _LogInScreenState extends State<LogInScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: RoundedTextFormField(
                   hintText: 'E-mail',
+                  onSaved: (String? value) {this._email = value!;},
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RoundedTextFormField(
                   hintText: 'Password',
+                  obscureText: true,
                   suffixIcon: Icons.visibility,
+                  onSaved: (String? value) {this._password = value!;},
                 ),
               ),
               ElevatedButton(
                 child: Text('Login'),
-                onPressed: (){
-                  if (!_formKey.currentState!.validate()) {
+                onPressed: () async {
+                  if (!_formKey.currentState!.validate()) { //TODO: Add validators to both this and signup. This can currently crash due to null strings if empty.
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Data is not correct.')),
                       );
                       return;
                     }
                     _formKey.currentState!.save();
-                  Navigator.pushReplacement(context, MaterialPageRoute( //temp fix, reformat to bloc later
-                      builder: (BuildContext context) { return BottomNavBar(); }));
+                    final result = await supabase.auth.signIn(email: _email, password: _password);
+                    if (result.error == null) {
+                    Navigator.pushReplacement(context, MaterialPageRoute( //temp fix, reformat to bloc later
+                        builder: (BuildContext context) { return BottomNavBar(); }));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${result.error!.message}')),
+                      );
+                    }
                 },
+              ),
+              ElevatedButton( //FIXME: Currently not working (see: https://github.com/supabase-community/gotrue-dart/issues/27)
+                onPressed: () async {
+                  await supabase.auth.signInWithProvider(Provider.google, options: AuthOptions(redirectTo: 'https://tzkauycpwctgufjkoeds.supabase.co/auth/v1/callback'));
+                  },
+                child: Text('G'),
+                style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                ),
               ),
               Spacer(),
               Padding(

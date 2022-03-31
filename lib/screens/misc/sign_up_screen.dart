@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 
 import '../../widgets/bottom_nav_bar.dart';
@@ -12,6 +13,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
+  String? _displayName, _email, _password;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,34 +29,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: RoundedTextFormField(
                   hintText: 'Display name',
+                  onSaved: (String? value) {this._displayName = value!;},
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RoundedTextFormField(
                   hintText: 'E-mail',
+                  onSaved: (String? value) {this._email = value!;},
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RoundedTextFormField(
                   hintText: 'Password',
+                  obscureText: true,
                   suffixIcon: Icons.visibility,
+                  onSaved: (String? value) {this._password = value!;},
                 ),
               ),
               ElevatedButton(
                 child: Text('Register'),
-                onPressed: (){
-                  if (!_formKey.currentState!.validate()) {
+                onPressed: () async {
+                    if (!_formKey.currentState!.validate()) { //TODO: Add validators to both this and signin
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Data is not correct.')),
                       );
                       return;
                     }
-                    _formKey.currentState!.save();
-                  Navigator.pushReplacement(context, MaterialPageRoute( //temp fix, reformat to bloc later
-                      builder: (BuildContext context) { return BottomNavBar(); }));
-                },
+                  _formKey.currentState!.save();
+                    //TODO: Use redirect to prevent users from being redirected to localhost
+                  final result = await supabase.auth.signUp(_email!, _password!);
+                    if (result.error == null) {
+                    Navigator.pushReplacement(context, MaterialPageRoute( //temp fix, reformat to bloc later
+                        builder: (BuildContext context) { return BottomNavBar(); }));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${result.error!.message}')),);
+                   }
+                }
               ),
             ],
         ),

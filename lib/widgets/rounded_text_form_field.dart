@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 class RoundedTextFormField extends StatelessWidget {
 
-  const RoundedTextFormField({Key? key, this.hintText, this.validator, this.onSaved, this.suffixIcon}) : super(key: key);
+  const RoundedTextFormField({Key? key, this.hintText, this.validator, this.onSaved, this.suffixIcon, this.obscureText = false}) : super(key: key);
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
   final String? hintText;
   final IconData? suffixIcon;
+  final bool? obscureText;
   //FIXME: Suffix Icon makes everything look off-center as it takes space up
   @override
   Widget build(BuildContext context) {
@@ -14,9 +15,10 @@ class RoundedTextFormField extends StatelessWidget {
       validator: validator,
       textAlign: TextAlign.center,
       onSaved: onSaved,
+      obscureText: obscureText!,
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: Icon(null), //FIXME: Delete this ffs
+        prefixIcon: Icon(null), //FIXME: Delete this, ffs
         suffixIcon: Icon(suffixIcon),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
