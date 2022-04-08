@@ -12,6 +12,7 @@ import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -28,7 +29,7 @@ Future<void> main() async {
   runApp(MyApp());
   try {
     //TODO: Implement routine parsing from JSON.
-    await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: true);
+    await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: true, localStorage: HiveLocalStorage());
     bool routinesInitialized = await initRoutines();
     FlutterNativeSplash.remove();
     }
@@ -75,14 +76,19 @@ class MyApp extends StatefulWidget{
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget? childScreen;
-
+  Future<bool> getLoggedInState() async {
+    var supabaseBox = await Hive.openBox('supabase_authentication');
+    final bool hasLoggedIn = supabaseBox.get('hasAccessToken');
+    return hasLoggedIn;
+  }
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     WidgetsBinding.instance!.addObserver(LifecycleEventHandler());
     final user = Supabase.instance.client.auth.user();
     FlutterNativeSplash.remove();
-    if (user == null) {
+    var hasLoggedIn = getLoggedInState(); // This has to be a function because initState cannot be async.
+    if (hasLoggedIn == false) {
       childScreen = LogInScreen();
     } else {
       childScreen = BottomNavBar();
