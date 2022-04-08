@@ -5,6 +5,6 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Container(child: Text('Game screen (WIP)')));
+    return Container(child: Text('Game screen (WIP)'));
   }
 }

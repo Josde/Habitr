@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 
 import 'blocs/theme/theme_cubit.dart';
@@ -29,7 +31,10 @@ Future<void> main() async {
   runApp(MyApp());
   try {
     //TODO: Implement routine parsing from JSON.
-    await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: true, localStorage: HiveLocalStorage());
+
+    Hive.initFlutter('supabase_auth');
+    await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: false, localStorage: HiveLocalStorage());
+    await Settings.init(cacheProvider: SharePreferenceCache());
     bool routinesInitialized = await initRoutines();
     FlutterNativeSplash.remove();
     }
@@ -77,7 +82,7 @@ class MyApp extends StatefulWidget{
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget? childScreen;
   Future<bool> getLoggedInState() async {
-    var supabaseBox = await Hive.openBox('supabase_authentication');
+    var supabaseBox = await Hive.openBox('supabase_authentication'); // TODO: Implementar un backend de SharedPreferences.
     final bool hasLoggedIn = supabaseBox.get('hasAccessToken');
     return hasLoggedIn;
   }

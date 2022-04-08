@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:habitr_tfg/blocs/theme/theme_cubit.dart';
 class SettingsScreen extends StatelessWidget {
 
   @override
@@ -15,17 +17,25 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
 
       ),
-      body: Center(
-        child: Text(
-            "Settings Screen",
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.w300,
-              letterSpacing: 2.0,
-              color: Colors.grey,
-            )
+      body: SafeArea(
+        child: ListView(
+          children: [
+            SettingsGroup(title: 'General', children: [
+              buildDarkMode(context)
+            ]
+            ),
+
+          ],
         ),
-      ),
+      )
     );
+  }
+
+  Widget buildDarkMode(BuildContext context) {
+    bool value = BlocProvider.of<ThemeCubit>(context).state is ThemeDark? true : false;
+    return SwitchSettingsTile(title: 'Dark mode',
+                              settingKey: 'dark-mode',
+                              defaultValue: value,
+                              leading: Icon(Icons.dark_mode));
   }
 }

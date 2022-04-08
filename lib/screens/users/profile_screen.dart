@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habitr_tfg/screens/misc/settings_screen.dart';
 import 'package:uuid/uuid.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,6 +39,15 @@ class _ProfilescreenState extends State<ProfileScreen>
                title: Text(
                 "Profile",
               ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    child: Icon(Icons.settings, color: Theme.of(context).primaryColor),
+                    onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));},
+                  ),
+                )
+              ],
               backgroundColor: Colors.deepPurple,
             ),
       body: Column(
