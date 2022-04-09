@@ -4,3 +4,9 @@ part of 'feed_bloc.dart';
 abstract class FeedState {}
 
 class FeedInitial extends FeedState {}
+
+class FeedLoading extends FeedState {}
+
+class FeedLoaded extends FeedState {}
+
+class FeedError extends FeedState {}

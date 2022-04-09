@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,7 @@ import 'package:habitr_tfg/utils/constants.dart';
 import 'blocs/theme/theme_cubit.dart';
 
 Future<void> main() async {
+  DartPluginRegistrant.ensureInitialized(); // Prevents a error with flutter_settings. Requires Dart master branch (not stable) right now
   WidgetsBinding wb = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: wb);
   final String myUrl = 'https://tzkauycpwctgufjkoeds.supabase.co';
@@ -31,7 +33,6 @@ Future<void> main() async {
   runApp(MyApp());
   try {
     //TODO: Implement routine parsing from JSON.
-
     Hive.initFlutter('supabase_auth');
     await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: false, localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
@@ -114,18 +115,23 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => RoutinesBloc()),
-        BlocProvider(create: (context) => ThemeCubit()),
+        BlocProvider(create: (context) => ThemeCubit(), lazy: false),
         BlocProvider(create: (context) => SelfBloc()),
         BlocProvider(create: (context) => FriendsBloc())
       ],
-      child: MaterialApp(
-          title: 'Habitr',
-          theme: lightTheme, // Change this to be related to BLoC on startup.
-          home: childScreen!,
+      child: Builder( // Para evitar problemas de contexto con el cubit de tema
+        builder: (context) {
+          return MaterialApp(
+              title: 'Habitr',
+              theme: BlocProvider.of<ThemeCubit>(context).state.theme!, // Change this to be related to BLoC on startup.
+              home: childScreen!,);
+        }
       ),
     );
   }
 }
+
+
 
 
 class LifecycleEventHandler extends WidgetsBindingObserver {
