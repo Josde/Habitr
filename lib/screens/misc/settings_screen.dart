@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:habitr_tfg/blocs/theme/theme_cubit.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
+import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 class SettingsScreen extends StatelessWidget {
-
+  final ThemeSingleton myTheme = ThemeSingleton();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,14 +57,13 @@ class SettingsScreen extends StatelessWidget {
                                               },);
   }
   Widget buildDarkMode(BuildContext context) {
-    var darkModeBloc = BlocProvider.of<ThemeCubit>(context);
-    bool defValue = darkModeBloc.state is ThemeDark? true : false;
+    bool defValue = myTheme.isDark;
     return SwitchSettingsTile(title: 'Dark mode',
                               settingKey: 'dark-mode',
                               defaultValue: defValue,
                               leading: Icon(Icons.dark_mode),
                               onChange: (value) {
-                                      darkModeBloc.switchTheme();
-                                      Settings.setValue('dark-mode', darkModeBloc.state == ThemeDark ? true : false);},);
+                                      myTheme.switchTheme();
+                                      Settings.setValue('dark-mode', myTheme.isDark);},);
   }
 }

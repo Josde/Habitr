@@ -9,6 +9,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
+import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
@@ -21,7 +22,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/utils/constants.dart';
-
+import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'blocs/theme/theme_cubit.dart';
 
 Future<void> main() async {
@@ -30,7 +31,6 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: wb);
   final String myUrl = 'https://tzkauycpwctgufjkoeds.supabase.co';
   final String myAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6a2F1eWNwd2N0Z3VmamtvZWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDY5MDkyNTUsImV4cCI6MTk2MjQ4NTI1NX0.UBRmXGqk9oqmvL8JMoyJLEnywzsLrn1CtxQlFiGoemw';
-  runApp(MyApp());
   try {
     //TODO: Implement routine parsing from JSON.
     Hive.initFlutter('supabase_auth');
@@ -43,6 +43,7 @@ Future<void> main() async {
     print('Exception: ' + error.toString());
     print('Stacktrace: ' + stacktrace.toString());
   }
+   runApp(MyApp());
 }
 Future<bool> initRoutines() async {
   RoutineSingleton rs = RoutineSingleton();
@@ -82,6 +83,7 @@ class MyApp extends StatefulWidget{
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget? childScreen;
+  final ThemeSingleton myTheme = ThemeSingleton();
   Future<bool> getLoggedInState() async {
     var supabaseBox = await Hive.openBox('supabase_authentication'); // TODO: Implementar un backend de SharedPreferences.
     final bool hasLoggedIn = supabaseBox.get('hasAccessToken');
@@ -90,6 +92,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState()  {
     super.initState();
+    myTheme.addListener(() {setState(() {});});
     WidgetsBinding.instance!.addObserver(LifecycleEventHandler());
     final user = Supabase.instance.client.auth.user();
     FlutterNativeSplash.remove();
@@ -121,10 +124,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ],
       child: Builder( // Para evitar problemas de contexto con el cubit de tema
         builder: (context) {
-          return MaterialApp(
-              title: 'Habitr',
-              theme: BlocProvider.of<ThemeCubit>(context).state.theme!, // Change this to be related to BLoC on startup.
-              home: childScreen!,);
+            return MaterialApp(
+                        title: 'Habitr',
+                        themeMode: myTheme.currentTheme(),
+                        theme: lightTheme,
+                        darkTheme: darkTheme,
+                        home: childScreen!,);
         }
       ),
     );
