@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/utils/constants.dart';
+import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 
 import '../../widgets/bottom_nav_bar.dart';
@@ -30,6 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: RoundedTextFormField(
                   hintText: 'Display name',
                   onSaved: (String? value) {this._displayName = value!;},
+                  validator: (value) { return textNotEmptyValidator(value);}
                 ),
               ),
               Padding(
@@ -37,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: RoundedTextFormField(
                   hintText: 'E-mail',
                   onSaved: (String? value) {this._email = value!;},
+                  validator: (value) { return emailValidator(value);},
                 ),
               ),
               Padding(
@@ -46,12 +49,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   obscureText: true,
                   suffixIcon: Icons.visibility,
                   onSaved: (String? value) {this._password = value!;},
+                  validator: (value) { return passwordValidator(value);}
                 ),
               ),
               ElevatedButton(
                 child: Text('Register'),
                 onPressed: () async {
-                    if (!_formKey.currentState!.validate()) { //TODO: Add validators to both this and signin
+                    if (!_formKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Data is not correct.')),
                       );

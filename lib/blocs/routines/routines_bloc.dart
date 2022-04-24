@@ -18,13 +18,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
 
 
   }
-  // TODO: Delete this, lazy hack
-  @override
-  Future<void> close() async {
-    //cancel streams
-    this.stream.drain();
-    super.close();
-  }
 
   void _onLoadRoutines(LoadRoutines event, Emitter<RoutinesState> emit) {
     emit(RoutinesLoaded(routines: event.routines));

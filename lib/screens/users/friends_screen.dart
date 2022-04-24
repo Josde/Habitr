@@ -30,7 +30,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(user: u)));},
                   child: Container(
                     color: Theme.of(context).primaryColorDark,
-                    child: Row( //TODO: Add identicon to this
+                    child: Row(
                       children: [SvgPicture.string(Jdenticon.toSvg(u.id)),
                         Text('${u.name}')]
                       ),

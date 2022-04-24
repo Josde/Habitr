@@ -23,7 +23,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
-import 'blocs/theme/theme_cubit.dart';
 
 Future<void> main() async {
   DartPluginRegistrant.ensureInitialized(); // Prevents a error with flutter_settings. Requires Dart master branch (not stable) right now
@@ -32,7 +31,6 @@ Future<void> main() async {
   final String myUrl = 'https://tzkauycpwctgufjkoeds.supabase.co';
   final String myAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6a2F1eWNwd2N0Z3VmamtvZWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDY5MDkyNTUsImV4cCI6MTk2MjQ4NTI1NX0.UBRmXGqk9oqmvL8JMoyJLEnywzsLrn1CtxQlFiGoemw';
   try {
-    //TODO: Implement routine parsing from JSON.
     Hive.initFlutter('supabase_auth');
     await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: false, localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
@@ -84,9 +82,9 @@ class MyApp extends StatefulWidget{
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget? childScreen;
   final ThemeSingleton myTheme = ThemeSingleton();
-  Future<bool> getLoggedInState() async {
-    var supabaseBox = await Hive.openBox('supabase_authentication'); // TODO: Implementar un backend de SharedPreferences.
-    final bool hasLoggedIn = supabaseBox.get('hasAccessToken');
+  Future<bool?> getLoggedInState() async {
+    var supabaseBox = await Hive.openBox('supabase_authentication');
+    final bool? hasLoggedIn = supabaseBox.get('hasAccessToken'); // TODO: Test this
     return hasLoggedIn;
   }
   @override
@@ -97,7 +95,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final user = Supabase.instance.client.auth.user();
     FlutterNativeSplash.remove();
     var hasLoggedIn = getLoggedInState(); // This has to be a function because initState cannot be async.
-    if (hasLoggedIn == false) {
+    if (hasLoggedIn == null || hasLoggedIn == false) {
       childScreen = LogInScreen();
     } else {
       childScreen = BottomNavBar();
@@ -118,7 +116,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => RoutinesBloc()),
-        BlocProvider(create: (context) => ThemeCubit(), lazy: false),
         BlocProvider(create: (context) => SelfBloc()),
         BlocProvider(create: (context) => FriendsBloc())
       ],

@@ -18,6 +18,7 @@ class RoundedTextFormField extends StatelessWidget {
       obscureText: obscureText!,
       decoration: InputDecoration(
         hintText: hintText,
+        errorMaxLines: 3,
         prefixIcon: Icon(null), //FIXME: Delete this, ffs
         suffixIcon: Icon(suffixIcon),
         border: OutlineInputBorder(

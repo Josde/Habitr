@@ -26,7 +26,7 @@ class Routine {
     if (json.containsKey('timerLength')) {
       this.timerLength = json['timerLength'];
     } else {
-      this.timerLength = 10; // TODO: CHANGE THIS
+      this.timerLength = 60; // TODO: CHANGE THIS
     }
   }
 

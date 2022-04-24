@@ -122,7 +122,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: '${(timerLength ~/ 60).toString()}', //TODO: Fix this being so ugly (or add support for float times)
+                      initialValue: '${(timerLength ~/ 60).toString()}',
                       validator: (value) {return numericInputValidator(value);},
                       onSaved: (value) {timerLength = (value == null ? 10 : int.parse(value) * 60);},
                       decoration: InputDecoration(
