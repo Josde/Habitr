@@ -6,6 +6,7 @@ import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/routine/edit_routine_screen.dart';
+import 'package:habitr_tfg/screens/routine/new_create_routine_screen.dart';
 import 'package:habitr_tfg/screens/routine/routine_detail_screen.dart';
 
 class RoutineScreen extends StatefulWidget {
@@ -79,7 +80,8 @@ class _RoutineScreenState extends State<RoutineScreen> {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return BlocProvider.value(
                             value: BlocProvider.of<RoutinesBloc>(context),
-                            child: EditRoutineScreen(routine: null),
+                            //child: EditRoutineScreen(routine: null),
+                            child: NewCreateRoutineScreen(),
                       );
                       }));
             },
