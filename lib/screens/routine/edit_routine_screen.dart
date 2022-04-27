@@ -36,7 +36,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
     if (createRoutine == null || createRoutine != true) {
       rutinaActual = widget.routine;
       nombreRutina = rutinaActual!.name;
-      freqNotificaciones = rutinaActual!.delayBetweenNotis;
+      //freqNotificaciones = rutinaActual!.;
       _currentType = rutinaActual!.type;
       timerLength = rutinaActual!.timerLength;
       chosenDropdownValue = dropdownValues[_currentType.index];
@@ -146,17 +146,17 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                       return;
                     }
                     _formKey.currentState!.save();
-                    Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType, this.timerLength);
+                    //Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType, this.timerLength);
                     bool hasEventBeenAdded = false;
                     if (widget.routine != null) {
-                      nuevaRutina.id = widget.routine!.id;
-                      BlocProvider.of<RoutinesBloc>(context, listen: false)
-                          .add(UpdateRoutine(routine: nuevaRutina));
+                      //nuevaRutina.id = widget.routine!.id;
+                      //BlocProvider.of<RoutinesBloc>(context, listen: false)
+                      //    .add(UpdateRoutine(routine: nuevaRutina));
                         Navigator.pop(context);
 
                     } else {
-                       BlocProvider.of<RoutinesBloc>(context, listen: false)
-                          .add(CreateRoutine(routine: nuevaRutina));
+                       //BlocProvider.of<RoutinesBloc>(context, listen: false)
+                       //   .add(CreateRoutine(routine: nuevaRutina));
                         Navigator.pop(context);
                     }
                   },

@@ -1,26 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 
-class NewCreateRoutineScreen extends StatefulWidget {
-  const NewCreateRoutineScreen({Key? key}) : super(key: key);
+import '../../blocs/routines/routines_bloc.dart';
 
+class NewCreateRoutineScreen extends StatefulWidget {
+  const NewCreateRoutineScreen({Key? key, this.routine}) : super(key: key);
+  final Routine? routine;
   @override
   State<NewCreateRoutineScreen> createState() => _NewCreateRoutineScreenState();
 }
 
 class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
   int _index = 0;
-  Routine? _routine;
-  ActivityType? _currentType = null;
-  String nombreRutina = "";
-  int freqNotificaciones = 3;
-  int timerLength = 0;
-  Routine? rutinaActual = null;
-  TimeOfDay? notificationStartTime = TimeOfDay.now();
-  bool notificationEnabled = true;
+  ActivityType? _currentType;
+  String _routineName = "";
+  int _numberOfNotifications = 3;
+  int _timerLength = 0;
+  TimeOfDay? _notificationStartTime = TimeOfDay.now();
+  bool _notificationsEnabled = true;
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    if (widget.routine != null) { // modo de edición de rutina
+      Routine r = widget.routine!;
+      _index = 1;
+      _routineName = r.name;
+      _currentType = r.type;
+      _notificationsEnabled = r.notificationsEnabled;
+      _numberOfNotifications = r.numberOfNotifications;
+      _timerLength = r.timerLength;
+      _notificationStartTime = r.notificationStartTime;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,27 +44,8 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
           currentStep: _index,
           type: StepperType.horizontal,
           steps: getSteps(),
-          controlsBuilder: (BuildContext context, ControlsDetails details) {
-            return Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: onStepContinue,
-                    child: _currentType == null? Text('CONTINUE', style: TextStyle(color: Theme.of(context).primaryColorDark)) : Text('CONTINUE'),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () => setState(() => _index == 0? Navigator.pop(context) : _index -= 1),
-                    child: Text('CANCEL'),
-
-                  ),
-                )
-              ],
-            );
-          },
+          onStepContinue: _currentType == null? null : onStepContinue,
+          onStepCancel: () => (setState(() => _index == 0? Navigator.pop(context) : _index -= 1) )
         ),
       ),
     );
@@ -57,8 +53,21 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
     void onStepContinue() {
     if (_index != getSteps().length - 1 && _currentType != null) {
       setState( () => _index += 1);
-    } else if (_index == getSteps().length - 1) {
-      Navigator.pop(context);
+    } else if (_index == getSteps().length - 1) { // Add null checks here to prevent crashing due to ! operator
+      if (this._formKey.currentState!.validate()) {
+        this._formKey.currentState!.save();
+        Routine nuevaRutina = Routine(_routineName, _numberOfNotifications, _notificationStartTime!, _notificationsEnabled, _currentType!, _timerLength);
+        if (widget.routine != null) { // Modo de edición
+                      nuevaRutina.id = widget.routine!.id;
+                      BlocProvider.of<RoutinesBloc>(context, listen: false)
+                          .add(UpdateRoutine(routine: nuevaRutina));
+
+        } else {
+           BlocProvider.of<RoutinesBloc>(context, listen: false)
+              .add(CreateRoutine(routine: nuevaRutina));
+        }
+        Navigator.pop(context);
+      }
     }
   }
   List<Step> getSteps() {
@@ -173,14 +182,16 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
 
   Widget buildRoutineDataScreen(BuildContext context) {
     return Form(
+      key: this._formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
           children: [
             Padding( // Name
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    initialValue: '$nombreRutina',
+                    initialValue: '$_routineName',
                     validator: (value) {return textNotEmptyValidator(value);},
-                    onSaved: (value) {this.nombreRutina = value ?? '';},
+                    onSaved: (value) {this._routineName = value ?? '';},
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Activity name",
@@ -191,9 +202,9 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        initialValue: '${(timerLength ~/ 60).toString()}',
+                        initialValue: '${(_timerLength ~/ 60).toString()}',
                         validator: (value) {return numericInputValidator(value);},
-                        onSaved: (value) {timerLength = (value == null ? 10 : int.parse(value) * 60);},
+                        onSaved: (value) {this._timerLength = (value == null ? 10 : int.parse(value) * 60);},
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: _currentType == ActivityType.Timer ? 'Activity length' : 'Duration goal',
@@ -214,13 +225,13 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                       Checkbox(
                         activeColor: Theme.of(context).iconTheme.color,
                         onChanged: (
-                        bool? value) { setState(() => notificationEnabled = value!); },
-                        value: notificationEnabled,),
+                        bool? value) { setState(() => this._notificationsEnabled = value!); },
+                        value: this._notificationsEnabled,),
                     ]
                   ),
               ),
               Visibility(
-                visible: notificationEnabled,
+                visible: _notificationsEnabled,
                 maintainState: true,
                 child: Padding(padding: const EdgeInsets.all(8.0),
                   child: Row(children: [
@@ -228,21 +239,20 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                     Spacer(),
                     ElevatedButton(child: Icon(Icons.access_alarm),
                       onPressed: () async => {
-                        notificationStartTime = await showTimePicker(context: context, initialTime: TimeOfDay.now())},)
+                        this._notificationStartTime = await showTimePicker(context: context, initialTime: TimeOfDay.now())},)
 
                   ],)
                 ),
               ),
               Visibility(
-                visible: notificationEnabled,
+                visible: _notificationsEnabled,
                 maintainState: true,
                 child: Padding( // Number of notifications
-                  //TODO: Rework routine to actually use a number of notifications each 5 minutes
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: '${freqNotificaciones.toString()}',
+                      initialValue: '${_numberOfNotifications.toString()}',
                       validator: (value) {return numericInputValidator(value);},
-                      onSaved: (value) {this.freqNotificaciones = (value == null ? 180 : int.parse(value));},
+                      onSaved: (value) {this._numberOfNotifications = (value == null ? 180 : int.parse(value));},
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Number of notifications",

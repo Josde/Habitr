@@ -41,13 +41,13 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       color: Theme.of(context).primaryColorDark,
                       child: Row(children: [Padding(
                                               padding: const EdgeInsets.all(8.0),
-                                              child: Text('${state.routines[index].name}', style: TextStyle(color: Colors.white))),
+                                              child: Text('${state.routines[index].name}')),
                                             Spacer(),
                                             IconButton(onPressed: () { // Edit button
                                               Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                 return BlocProvider.value(
                                                     value: BlocProvider.of<RoutinesBloc>(context),
-                                                    child: EditRoutineScreen(routine: state.routines[index]),
+                                                    child: NewCreateRoutineScreen(routine: state.routines[index]),
                                               );
                                               }));
                                             },
@@ -67,7 +67,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) { //TODO: Change all instances of this into the new routine screen.
                         return BlocProvider.value(
                             value: BlocProvider.of<RoutinesBloc>(context),
-                            child: RoutineDetailScreen(routine: state.routines[index]),
+                            child: NewCreateRoutineScreen(routine: state.routines[index]),
                       );
                       }));
                   }
@@ -80,8 +80,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return BlocProvider.value(
                             value: BlocProvider.of<RoutinesBloc>(context),
-                            //child: EditRoutineScreen(routine: null),
-                            child: NewCreateRoutineScreen(),
+                            child: NewCreateRoutineScreen(routine: null),
                       );
                       }));
             },

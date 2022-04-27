@@ -43,7 +43,7 @@ class _ProfilescreenState extends State<ProfileScreen>
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                    child: Icon(Icons.settings, color: Theme.of(context).primaryColor),
+                    child: Icon(Icons.settings),
                     onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));},
                   ),
                 )
@@ -80,8 +80,7 @@ class _ProfilescreenState extends State<ProfileScreen>
                       onTap: (){print('Tapped stadistics');},
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          border: Border.all(color: Theme.of(context).primaryColorDark),
+                          color: Theme.of(context).primaryColorDark
                         ),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -95,8 +94,7 @@ class _ProfilescreenState extends State<ProfileScreen>
                       onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsScreen()));},
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          border: Border.all(color: Theme.of(context).primaryColorDark),
+                          color: Theme.of(context).primaryColorDark,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),

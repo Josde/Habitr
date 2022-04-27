@@ -8,7 +8,8 @@ final supabase = Supabase.instance.client;
 ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   primaryColor: Colors.white,
-  primaryColorDark: Colors.grey,
+  primaryColorDark: Colors.black12,
+  disabledColor: Colors.grey,
   colorScheme: ColorScheme.light(),
   iconTheme: IconThemeData(color: Colors.purple),
 );
@@ -16,7 +17,8 @@ ThemeData lightTheme = ThemeData(
 ThemeData? darkTheme = ThemeData(
   scaffoldBackgroundColor: Colors.grey.shade900,
   primaryColor: Colors.black,
-  primaryColorDark: Colors.grey,
+  primaryColorDark: Colors.white12,
+  disabledColor: Colors.grey,
   colorScheme: ColorScheme.dark(),
   iconTheme: IconThemeData(color: Colors.purple),
 );

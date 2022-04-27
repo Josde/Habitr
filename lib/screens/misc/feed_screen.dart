@@ -42,34 +42,36 @@ class _FeedScreenState extends State<FeedScreen> {
          child: ClipRRect( //TODO: Using padding makes ClipRRect show as rectangle instead of rounded rectangle? weird
             borderRadius: BorderRadius.circular(30.0),
             child: Container(
-              margin: EdgeInsets.all(8.0),
               color: Theme.of(context).primaryColorDark,
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(user: u)));},
-                    child: Row(
-                      children: [
-                        SvgPicture.string(Jdenticon.toSvg(u.id), width: 32, height: 32),
-                        Text(u.name),
-                      ]
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(user: u)));},
+                      child: Row(
+                        children: [
+                          SvgPicture.string(Jdenticon.toSvg(u.id), width: 32, height: 32),
+                          Text(u.name),
+                        ]
+                      ),
                     ),
-                  ),
-                  Text(p.text!),
-                  Row( //TODO: Make buttons clickable
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
-                        child: Icon(Icons.favorite),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-                        child: Icon(Icons.share),
-                      ),
-                      ]
-                  )
-                ]
+                    Text(p.text!),
+                    Row( //TODO: Make buttons clickable
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
+                          child: Icon(Icons.favorite),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
+                          child: Icon(Icons.share),
+                        ),
+                        ]
+                    )
+                  ]
+                ),
               ),
             ),
 
