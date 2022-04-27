@@ -64,7 +64,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       ),
                   ),
                   onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) { //TODO: Change all instances of this into the new routine screen.
                         return BlocProvider.value(
                             value: BlocProvider.of<RoutinesBloc>(context),
                             child: RoutineDetailScreen(routine: state.routines[index]),
