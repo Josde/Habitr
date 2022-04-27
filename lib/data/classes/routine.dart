@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:uuid/uuid.dart';
 class Routine {
+  //TODO: Somehow add the possibility to only get notifications on certains day of the week.
   String name = "";
   int numberOfNotifications = 3;
   TimeOfDay notificationStartTime = TimeOfDay.fromDateTime(DateTime(2022));
