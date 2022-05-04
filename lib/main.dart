@@ -5,12 +5,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:habitr_tfg/screens/misc/login_screen.dart';
+import 'package:habitr_tfg/screens/routine/routine_screen.dart';
 import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
@@ -23,6 +25,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 Future<void> main() async {
   DartPluginRegistrant.ensureInitialized(); // Prevents a error with flutter_settings. Requires Dart master branch (not stable) right now
@@ -34,6 +38,17 @@ Future<void> main() async {
     Hive.initFlutter('supabase_auth');
     await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: false, localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
+    tz.initializeTimeZones();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    InitializationSettings initializationSettings = InitializationSettings(
+        android: AndroidInitializationSettings('app_icon'),
+        iOS: IOSInitializationSettings(requestSoundPermission: true,
+                                      requestBadgePermission: true,
+                                      requestAlertPermission: true,));
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    //await flutterLocalNotificationsPlugin.zonedSchedule( // El ultimo parametro es lo que hace que se repita
+    //    0, 'Prueba', 'Prueba2',tz.TZDateTime.now(tz.local).add(Duration(seconds: 60)),platformChannelSpecifics,
+    //    payload: 'item x', androidAllowWhileIdle: true, uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime, matchDateTimeComponents: DateTimeComponents.time);
     bool routinesInitialized = await initRoutines();
     FlutterNativeSplash.remove();
     }
@@ -159,6 +174,5 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
     print('AppLifecycleState state:  $state');
   }
 }
-
 
 

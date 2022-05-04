@@ -10,6 +10,8 @@ import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import 'package:habitr_tfg/widgets/rounded_container.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
+import '../../utils/constants.dart';
+
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
 
@@ -23,7 +25,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     final _random = new Random();
-    friends = BlocProvider.of<FriendsBloc>(context).state.friends!;
+    friends = BlocProvider.of<FriendsBloc>(context).state.friends![debugUser]!;
     for (int i = 0; i < 10; i++) {
       User u = friends[_random.nextInt(friends.length)];
       Post newPost = Post(u.id, i.toString());

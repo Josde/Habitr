@@ -7,6 +7,8 @@ import 'package:bloc/bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:meta/meta.dart';
 
+import '../../../utils/constants.dart';
+
 part 'friends_event.dart';
 part 'friends_state.dart';
 
