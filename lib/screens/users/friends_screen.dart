@@ -6,6 +6,7 @@ import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
 import '../../blocs/users/friends/friends_bloc.dart';
+import '../../utils/constants.dart';
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({Key? key}) : super(key: key);
@@ -43,9 +44,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
             ),
             Flexible(
               child: ListView.builder(
-                itemCount: BlocProvider.of<FriendsBloc>(context).state.friends!.length,
+                itemCount: BlocProvider.of<FriendsBloc>(context).state.friends![debugUser]!.length,
                 itemBuilder: (BuildContext context, int index) {
-                        User u = BlocProvider.of<FriendsBloc>(context).state.friends![index];
+                        User u = BlocProvider.of<FriendsBloc>(context).state.friends![debugUser]![index];
                         return GestureDetector(
                           onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(user: u)));},
                           child: Container(

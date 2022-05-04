@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:uuid/uuid.dart';
+int lastId = 0;
 class Routine {
   //TODO: Somehow add the possibility to only get notifications on certains day of the week.
   String name = "";
@@ -9,11 +10,10 @@ class Routine {
   ActivityType type = ActivityType.Instant;
   int timerLength = 0;
   bool notificationsEnabled = false;
-  late String id;
-  var uuid = Uuid();
-  Routine.withId(this.name, this.numberOfNotifications, this.notificationStartTime, this.notificationsEnabled, this.type, this.timerLength, this.uuid);
+  late int? id;
+  Routine.withId(this.name, this.numberOfNotifications, this.notificationStartTime, this.notificationsEnabled, this.type, this.timerLength, this.id);
   Routine(this.name, this.numberOfNotifications, this.notificationStartTime, this.notificationsEnabled, this.type, this.timerLength) {
-    this.id = uuid.v4();
+    this.id = lastId++;
   }
   Routine.empty();
   
@@ -33,8 +33,9 @@ class Routine {
     }
     if (json.containsKey('id')) {
       this.id = json['id'];
+      lastId = this.id! > lastId? this.id! : lastId;
     } else {
-      this.id = uuid.v4();
+      this.id = lastId++;
     }
     if (json.containsKey('notificationsEnabled')) {
       this.notificationsEnabled = json['notificationsEnabled'];

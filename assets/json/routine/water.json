@@ -1,5 +1,6 @@
 {
   "name": "Water",
   "delayBetweenNotis": 180,
-  "type": 0
+  "type": 0,
+  "id": 2
 }

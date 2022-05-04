@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:habitr_tfg/blocs/routines/completion/routine_completion_cubit.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
@@ -46,6 +47,7 @@ Future<void> main() async {
                                       requestBadgePermission: true,
                                       requestAlertPermission: true,));
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    //TODO: Borrar esto
     //await flutterLocalNotificationsPlugin.zonedSchedule( // El ultimo parametro es lo que hace que se repita
     //    0, 'Prueba', 'Prueba2',tz.TZDateTime.now(tz.local).add(Duration(seconds: 60)),platformChannelSpecifics,
     //    payload: 'item x', androidAllowWhileIdle: true, uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime, matchDateTimeComponents: DateTimeComponents.time);
@@ -132,7 +134,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       providers: [
         BlocProvider(create: (context) => RoutinesBloc()),
         BlocProvider(create: (context) => SelfBloc()),
-        BlocProvider(create: (context) => FriendsBloc())
+        BlocProvider(create: (context) => FriendsBloc()),
+        BlocProvider(create: (context) => RoutineCompletionCubit())
       ],
       child: Builder( // Para evitar problemas de contexto con el cubit de tema
         builder: (context) {

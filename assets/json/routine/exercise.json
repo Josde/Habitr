@@ -1,5 +1,6 @@
 {
   "name": "Exercise",
   "delayBetweenNotis": 180,
-  "type": 1
+  "type": 1,
+  "id": 0
 }

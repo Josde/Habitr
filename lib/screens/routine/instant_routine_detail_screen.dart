@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habitr_tfg/blocs/routines/completion/routine_completion_cubit.dart';
+import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/classes/routinecompletion.dart';
+import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/loading_button.dart';
+
+import '../../utils/constants.dart';
 
 class InstantRoutineDetailScreen extends StatelessWidget {
   final Routine routine;
@@ -32,7 +39,12 @@ class InstantRoutineDetailScreen extends StatelessWidget {
             Spacer(),
             Container(
                 height: 80,
-                child: LoadingButton(onComplete: () {Navigator.pop(context, true);})
+                child: LoadingButton(onComplete: () {
+                  //User self = BlocProvider.of<SelfBloc>().state.self;
+                  RoutineCompletion rc = RoutineCompletion.now(debugUser.id, routine.id!);
+                  BlocProvider.of<RoutineCompletionCubit>(context).add(rc);
+                  Navigator.pop(context, true);
+                })
             )],
 
         )
