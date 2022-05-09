@@ -1,6 +1,7 @@
 {
   "name": "Exercise",
-  "delayBetweenNotis": 180,
+  "numberOfNotifications" : 3,
+  "notificationStartTime" : "12,10",
   "type": 1,
   "id": 0
 }

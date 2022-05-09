@@ -1,6 +1,7 @@
 {
   "name": "Study",
-  "delayBetweenNotis": 180,
+  "numberOfNotifications" : 3,
+  "notificationStartTime" : "12,05",
   "type": 2,
   "id": 1
 }

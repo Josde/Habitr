@@ -1,6 +1,7 @@
 {
   "name": "Water",
-  "delayBetweenNotis": 180,
+  "numberOfNotifications" : 3,
+  "notificationStartTime" : "12,36",
   "type": 0,
   "id": 2
 }

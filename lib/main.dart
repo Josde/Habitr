@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/blocs/routines/completion/routine_completion_cubit.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
@@ -39,7 +40,10 @@ Future<void> main() async {
     Hive.initFlutter('supabase_auth');
     await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: false, localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
+    await initRoutines();
     tz.initializeTimeZones();
+    String localTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(localTimeZone));
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     InitializationSettings initializationSettings = InitializationSettings(
         android: AndroidInitializationSettings('app_icon'),
@@ -47,11 +51,7 @@ Future<void> main() async {
                                       requestBadgePermission: true,
                                       requestAlertPermission: true,));
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    //TODO: Borrar esto
-    //await flutterLocalNotificationsPlugin.zonedSchedule( // El ultimo parametro es lo que hace que se repita
-    //    0, 'Prueba', 'Prueba2',tz.TZDateTime.now(tz.local).add(Duration(seconds: 60)),platformChannelSpecifics,
-    //    payload: 'item x', androidAllowWhileIdle: true, uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime, matchDateTimeComponents: DateTimeComponents.time);
-    bool routinesInitialized = await initRoutines();
+    scheduleAllRoutineNotifications(flutterLocalNotificationsPlugin);
     FlutterNativeSplash.remove();
     }
     catch (error, stacktrace) {
@@ -60,11 +60,33 @@ Future<void> main() async {
   }
    runApp(MyApp());
 }
+
+void scheduleAllRoutineNotifications(FlutterLocalNotificationsPlugin flnp) async {
+  RoutineSingleton rs = RoutineSingleton();
+  int counter = 0; // For notificaation IDs
+  for (Routine r in rs.listaRutinas) {
+    for (int i = 0; i < r.numberOfNotifications; i++) {
+      DateTime now = DateTime.now();
+      tz.TZDateTime finalDateTime = tz.TZDateTime.local(now.year, now.month, now.day, r.notificationStartTime.hour, r.notificationStartTime.minute +  * 5, 0); //TODO: Change this to i*5
+      print("Scheduling ${r.name} for ${finalDateTime.hour}:${finalDateTime.minute}");
+      await flnp.zonedSchedule(counter++,
+            r.name,
+            'The hour to do ${r.name} has begun!',
+            finalDateTime,
+            platformChannelSpecifics,
+            uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+            androidAllowWhileIdle: true,
+            payload: r.name,
+            matchDateTimeComponents: DateTimeComponents.time,
+      );
+    }
+  }
+}
 Future<bool> initRoutines() async {
   RoutineSingleton rs = RoutineSingleton();
   var documentsDir = await getApplicationDocumentsDirectory();
   Directory routineDir = Directory(p.join(documentsDir.path, 'routines'));
-  bool DEBUG_OR_FIRST_TIME = !(await routineDir.exists());
+  bool DEBUG_OR_FIRST_TIME = true; // TODO: Change this
   try {
     if (DEBUG_OR_FIRST_TIME) {
       await rootBundle.loadString('assets/json/routine/exercise.json')
