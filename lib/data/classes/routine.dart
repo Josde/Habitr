@@ -26,7 +26,7 @@ class Routine {
     }
     if (json.containsKey('notificationStartTime')) {
       List<String> time = json['notificationStartTime'].split(',');
-      if (time.length == 2) { // TODO: Add proper error handling to this.
+      if (time.length == 2) {
         this.notificationStartTime = TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
       }
 

@@ -1,5 +1,3 @@
-// TODO: Implement this
-
 class Post {
   String? posterId;
   String? text;

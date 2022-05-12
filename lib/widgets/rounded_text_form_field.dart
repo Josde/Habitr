@@ -19,7 +19,7 @@ class RoundedTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         errorMaxLines: 3,
-        prefixIcon: Icon(null), //FIXME: Delete this, ffs
+        prefixIcon: Icon(null), //FIXME: Delete this, ffs // used for centering I think?
         suffixIcon: Icon(suffixIcon),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,

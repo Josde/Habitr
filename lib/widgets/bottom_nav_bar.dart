@@ -103,7 +103,7 @@ void scheduleAllRoutineNotifications(FlutterLocalNotificationsPlugin flnp, Build
     if (r.notificationsEnabled) {
        for (int i = 0; i < r.numberOfNotifications; i++) {
       DateTime now = DateTime.now();
-      tz.TZDateTime finalDateTime = tz.TZDateTime.local(now.year, now.month, now.day, r.notificationStartTime.hour, r.notificationStartTime.minute + i * 5, 0); //TODO: Change this to i*5
+      tz.TZDateTime finalDateTime = tz.TZDateTime.local(now.year, now.month, now.day, r.notificationStartTime.hour, r.notificationStartTime.minute + i * 5, 0);
       print("Scheduling ${r.name} for ${finalDateTime.hour}:${finalDateTime.minute}");
       await flnp.zonedSchedule(counter++,
             r.name,

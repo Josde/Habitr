@@ -5,7 +5,7 @@ class RoutineCompletion {
   late DateTime time;
   RoutineCompletion(this.userId, this.routineId, this.time);
   RoutineCompletion.now(this.userId, this.routineId) {
-    this.time = DateTime.now(); // TODO: This probably creates problems with timezones? idk tbh
+    this.time = DateTime.now(); // FIXME: This probably creates problems with timezones? idk tbh
   }
 
   RoutineCompletion.fromJson(Map<String,dynamic> json) {
@@ -20,7 +20,6 @@ class RoutineCompletion {
     json['userId'] = this.userId;
     json['routineId'] = this.routineId;
     json['time'] = time.toString();
-    print(json);
     return json;
   }
 }

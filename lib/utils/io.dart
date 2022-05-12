@@ -116,7 +116,7 @@ Future<bool> saveRoutineCompletions(BuildContext context) async {
       File routineCompletionFile = File(
           p.join(completionDir.path, '${rc.userId}-${rc.routineId}-${rc.time.millisecondsSinceEpoch}.json'));
       await routineCompletionFile.create();
-      print('Written to routine file ${routineCompletionFile.path}');
+      print('Written to completion file ${routineCompletionFile.path}');
       routineCompletionFile.writeAsString(json.encode(rc));
     }
     return true;
