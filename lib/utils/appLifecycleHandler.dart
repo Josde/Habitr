@@ -9,37 +9,18 @@ import '../blocs/routines/completion/routine_completion_cubit.dart';
 import '../blocs/routines/routines_bloc.dart';
 import '../data/classes/routine.dart';
 import '../data/classes/routinecompletion.dart';
+import 'io.dart';
 
 class LifecycleEventHandler extends WidgetsBindingObserver {
   late Directory documentsDir;
-  BuildContext context; // TODO: Recheck this, search for more BLoC info because this is very janky.
+  BuildContext context; // TODO: Recheck this, search for more BLoC info because this is kinda janky.
   LifecycleEventHandler({required this.context});
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     // This function executes every time we minimize or close the app.
-    var documentsDir = await getApplicationDocumentsDirectory();
-    Directory routineDir = Directory(p.join(documentsDir.path, 'routines'));
-    Directory completionDir = Directory(p.join(documentsDir.path, 'routineCompletions'));
     if (state == AppLifecycleState.inactive) {
-      await routineDir.create();
-      await completionDir.create();
-      for (Routine r in BlocProvider.of<RoutinesBloc>(context).state.routines) {
-        File routineFile = File(p.join(routineDir.path, '${r.id}.json'));
-        await routineFile.create();
-        print('Written to routine file ${routineFile.path}');
-        routineFile.writeAsString(json.encode(r));
-      }
-      for (RoutineCompletion rc in BlocProvider
-          .of<RoutineCompletionCubit>(context)
-          .state
-          .routineCompletions) {
-        File routineCompletionFile = File(
-            p.join(completionDir.path, '${rc.userId}-${rc.routineId}-${rc.time.millisecondsSinceEpoch}.json'));
-        await routineCompletionFile.create();
-        print('Written to routine file ${routineCompletionFile.path}');
-        routineCompletionFile.writeAsString(json.encode(rc));
-      }
+      await saveAll(context);
     }
     if (state == AppLifecycleState.resumed) {
       print('AppLifecycleState state: Resumed app');

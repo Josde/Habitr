@@ -11,9 +11,10 @@ import '../screens/routine/routine_screen.dart';
 import '../screens/misc/settings_screen.dart';
 import '../utils/appLifecycleHandler.dart';
 import '../utils/constants.dart';
-import '../utils/initFunctions.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+
+import '../utils/io.dart';
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
@@ -38,8 +39,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   void initStateAsyncPart() async {
-    await initRoutines(context);
-    await initRoutineCompletions(context);
+    await initAll(context);
     tz.initializeTimeZones();
     String localTimeZone = await FlutterNativeTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
