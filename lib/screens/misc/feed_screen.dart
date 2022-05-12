@@ -7,9 +7,10 @@ import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/data/classes/post.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
+import 'package:habitr_tfg/widgets/like_button.dart';
 import 'package:habitr_tfg/widgets/rounded_container.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
-
+import 'package:share_plus/share_plus.dart';
 import '../../utils/constants.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -22,10 +23,14 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   late List<Post> posts = List.empty(growable: true);
   late List<User> friends;
+  bool isHeartAnimating = true;
+  bool isLiked = true;
+  late LikeButton lb;
   @override
   void initState() {
     final _random = new Random();
     friends = BlocProvider.of<FriendsBloc>(context).state.friends![debugUser]!;
+    lb = LikeButton(isAnimating: isHeartAnimating, isLiked: isLiked, duration: Duration(milliseconds: 400));
     for (int i = 0; i < 10; i++) {
       User u = friends[_random.nextInt(friends.length)];
       Post newPost = Post(u.id, i.toString());
@@ -41,7 +46,7 @@ class _FeedScreenState extends State<FeedScreen> {
         User u = friends.firstWhere((element) => element.id == p.posterId);
        return Padding(
          padding: const EdgeInsets.all(8.0),
-         child: ClipRRect( //TODO: Using padding makes ClipRRect show as rectangle instead of rounded rectangle? weird
+         child: ClipRRect(
             borderRadius: BorderRadius.circular(30.0),
             child: Container(
               color: Theme.of(context).primaryColorDark,
@@ -62,13 +67,26 @@ class _FeedScreenState extends State<FeedScreen> {
                     Row( //TODO: Make buttons clickable
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
-                          child: Icon(Icons.favorite),
+                        GestureDetector(
+                            child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
+                              child: lb,
+                            ),
+                             onTap: () {
+                            // TODO: Add supabase like here
+                               print('Tapped heart');
+                            setState( () {
+                               isLiked = !isLiked;
+                              isHeartAnimating = true;
+                            });
+                          }
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-                          child: Icon(Icons.share),
+                          child: GestureDetector(
+                            child: Icon(Icons.share),
+                            onTap: () => (Share.share(p.text!)) //TODO: More effort on this
+                          )
                         ),
                         ]
                     )
