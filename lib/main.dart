@@ -17,7 +17,6 @@ import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/screens/routine/routine_screen.dart';
 import 'package:habitr_tfg/utils/io.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
-import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,18 +41,6 @@ Future<void> main() async {
     Hive.initFlutter('supabase_auth');
     await Supabase.initialize(url: myUrl, anonKey: myAnonKey, debug: false, localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
-    await initRoutines();
-    tz.initializeTimeZones();
-    String localTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    InitializationSettings initializationSettings = InitializationSettings(
-        android: AndroidInitializationSettings('app_icon'),
-        iOS: IOSInitializationSettings(requestSoundPermission: true,
-                                      requestBadgePermission: true,
-                                      requestAlertPermission: true,));
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    scheduleAllRoutineNotifications(flutterLocalNotificationsPlugin);
     FlutterNativeSplash.remove();
     }
     catch (error, stacktrace) {
@@ -63,70 +50,6 @@ Future<void> main() async {
    runApp(MyApp());
 }
 
-void scheduleAllRoutineNotifications(FlutterLocalNotificationsPlugin flnp) async {
-  RoutineSingleton rs = RoutineSingleton();
-  int counter = 0; // For notificaation IDs
-  for (Routine r in rs.listaRutinas) {
-    if (r.notificationsEnabled) {
-       for (int i = 0; i < r.numberOfNotifications; i++) {
-      DateTime now = DateTime.now();
-      tz.TZDateTime finalDateTime = tz.TZDateTime.local(now.year, now.month, now.day, r.notificationStartTime.hour, r.notificationStartTime.minute + i * 5, 0); //TODO: Change this to i*5
-      print("Scheduling ${r.name} for ${finalDateTime.hour}:${finalDateTime.minute}");
-      await flnp.zonedSchedule(counter++,
-            r.name,
-            'The hour to do ${r.name} has begun!',
-            finalDateTime,
-            platformChannelSpecifics,
-            uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-            androidAllowWhileIdle: true,
-            payload: r.name,
-            matchDateTimeComponents: DateTimeComponents.time,
-      );
-      }
-    }
-  }
-}
-// TODO: Move these to bottom_nav_bar so I can use BLoC instead of Singletons
-Future<bool> initRoutines() async {
-  RoutineSingleton rs = RoutineSingleton();
-  var documentsDir = await getApplicationDocumentsDirectory();
-  Directory routineDir = Directory(p.join(documentsDir.path, 'routines')); // TODO: Move these to constants
-  Directory routineCompletionDir = Directory(p.join(documentsDir.path, 'routineCompletions'));
-  bool DEBUG_OR_FIRST_TIME = !(await routineDir.exists());
-  try {
-    if (DEBUG_OR_FIRST_TIME) {
-      await rootBundle.loadString('assets/json/routine/exercise.json')
-                      .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
-      await rootBundle.loadString('assets/json/routine/water.json')
-                      .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
-      await rootBundle.loadString('assets/json/routine/study.json')
-          .then( (String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
-    } else {
-        List<FileSystemEntity> files = await dirContents(routineDir);
-        for (FileSystemEntity f in files) {
-          if (f is File && f.path.endsWith('.json')) {
-            await (f as File).readAsString()
-                .then((String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
-          }
-        }
-         files = await dirContents(routineCompletionDir);
-        for (FileSystemEntity f in files) {
-          if (f is File && f.path.endsWith('.json')) {
-            // FIXME: I can't add these because I can't access BLoCs from here.
-            //await (f as File).readAsString()
-            //    .then((String val) => rs.listaRutinas.add(RoutineCompletion.fromJson(json.decode(val))));
-            print(f.path);
-          }
-        }
-      }
-
-    return true;
-  } catch (error, stacktrace) {
-    print('Exception: ' + error.toString());
-    print('Stacktrace: ' + stacktrace.toString());
-    return false;
-  }
-}
 class MyApp extends StatefulWidget{
   // This widget is the root of your application.
   @override
@@ -156,12 +79,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
 
 
   @override

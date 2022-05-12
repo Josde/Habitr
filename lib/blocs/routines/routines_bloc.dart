@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
-import 'package:habitr_tfg/data/models/routinesingleton.dart';
 
 part 'routines_event.dart';
 part 'routines_state.dart';
 
 class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
-  RoutinesBloc() : super(RoutinesLoaded(routines: RoutineSingleton().listaRutinas)) {
+  RoutinesBloc() : super(RoutinesLoaded(routines: [])) {
     on<LoadRoutines>(_onLoadRoutines);
     on<CreateRoutine>(_onAddRoutine);
     on<UpdateRoutine>(_onUpdateRoutine);
@@ -29,8 +28,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     if (state is RoutinesLoaded) {
       List<Routine> newRoutines = List.from(state.routines)..add(event.routine);
       emit(RoutinesLoaded(routines: newRoutines));
-      RoutineSingleton().listaRutinas = newRoutines; // FIXME: These are a temporal fix for not saving and nothing else.
-                                                        // Proper handling includes doing JSON operations on add / update / remove.
     }
   }
 
@@ -45,7 +42,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         newRoutines[index] = event.routine;
       }
       emit(RoutinesLoaded(routines: newRoutines));
-      RoutineSingleton().listaRutinas = newRoutines;
     }
   }
 
@@ -57,7 +53,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         return routine.id != event.routine.id;
       }).toList();
       emit(RoutinesLoaded(routines: newRoutines));
-      RoutineSingleton().listaRutinas = newRoutines;
     }
 
   }

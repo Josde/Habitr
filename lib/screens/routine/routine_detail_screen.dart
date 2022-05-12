@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
-import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/routine/instant_routine_detail_screen.dart';
 import 'package:habitr_tfg/screens/routine/stopwatch_routine_detail_screen.dart';
 import 'package:habitr_tfg/screens/routine/timer_routine_detail_screen.dart';

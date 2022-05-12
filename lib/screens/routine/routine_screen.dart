@@ -4,7 +4,6 @@ import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
-import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/screens/routine/edit_routine_screen.dart';
 import 'package:habitr_tfg/screens/routine/new_create_routine_screen.dart';
 import 'package:habitr_tfg/screens/routine/routine_detail_screen.dart';
@@ -15,7 +14,6 @@ class RoutineScreen extends StatefulWidget {
 }
 
 class _RoutineScreenState extends State<RoutineScreen> {
-  RoutineSingleton rs = RoutineSingleton();
 
   @override
   Widget build(BuildContext context)  {

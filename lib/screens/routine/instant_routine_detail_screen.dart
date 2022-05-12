@@ -5,7 +5,6 @@ import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
-import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/widgets/loading_button.dart';
 
 import '../../utils/constants.dart';

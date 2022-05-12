@@ -52,3 +52,4 @@ const NotificationDetails platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
 u.User debugUser = u.User.debug('Debug');
+

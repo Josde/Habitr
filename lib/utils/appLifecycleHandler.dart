@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../blocs/routines/completion/routine_completion_cubit.dart';
+import '../blocs/routines/routines_bloc.dart';
 import '../data/classes/routine.dart';
 import '../data/classes/routinecompletion.dart';
-import '../data/models/routinesingleton.dart';
 
 class LifecycleEventHandler extends WidgetsBindingObserver {
   late Directory documentsDir;
@@ -24,7 +24,7 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
     if (state == AppLifecycleState.inactive) {
       await routineDir.create();
       await completionDir.create();
-      for (Routine r in RoutineSingleton().listaRutinas) {
+      for (Routine r in BlocProvider.of<RoutinesBloc>(context).state.routines) {
         File routineFile = File(p.join(routineDir.path, '${r.id}.json'));
         await routineFile.create();
         print('Written to routine file ${routineFile.path}');

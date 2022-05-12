@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
-import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 
