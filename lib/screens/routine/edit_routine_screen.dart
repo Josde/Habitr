@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
-import 'package:habitr_tfg/data/models/routinesingleton.dart';
 import 'package:habitr_tfg/utils/validator.dart';
-import '../../enum/ActivityType.dart';
+import 'package:habitr_tfg/data/enum/ActivityType.dart';
 
 class EditRoutineScreen extends StatefulWidget {
-  final int index;
-  final bool? createRoutine;
+  final Routine? routine;
 
-  const EditRoutineScreen({Key? key, required this.index, this.createRoutine}) : super(key: key);
+
+  const EditRoutineScreen({Key? key, this.routine}) : super(key: key);
 
 
   @override
@@ -16,6 +17,7 @@ class EditRoutineScreen extends StatefulWidget {
 }
 
 class _EditRoutineScreenState extends State<EditRoutineScreen> {
+
   ActivityType _currentType = ActivityType.Instant;
   String nombreRutina = "";
   String title = 'Create routine';
@@ -29,10 +31,11 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.createRoutine == null || widget.createRoutine != true) {
-      rutinaActual = RoutineSingleton().listaRutinas[widget.index];
+    bool createRoutine = (widget.routine == null);
+    if (createRoutine == null || createRoutine != true) {
+      rutinaActual = widget.routine;
       nombreRutina = rutinaActual!.name;
-      freqNotificaciones = rutinaActual!.delayBetweenNotis;
+      //freqNotificaciones = rutinaActual!.;
       _currentType = rutinaActual!.type;
       timerLength = rutinaActual!.timerLength;
       chosenDropdownValue = dropdownValues[_currentType.index];
@@ -50,9 +53,6 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
       appBar: AppBar(
         title: Text(
           "$title",
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
         backgroundColor: Colors.deepPurple,
       ),
@@ -121,7 +121,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: '${(timerLength / 60).toInt().toString()}', //TODO: Fix this being so ugly (or add support for float times)
+                      initialValue: '${(timerLength ~/ 60).toString()}',
                       validator: (value) {return numericInputValidator(value);},
                       onSaved: (value) {timerLength = (value == null ? 10 : int.parse(value) * 60);},
                       decoration: InputDecoration(
@@ -145,17 +145,18 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                       return;
                     }
                     _formKey.currentState!.save();
-                    Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType, this.timerLength);
-                    if (this.widget.createRoutine == null || this.widget.createRoutine != true) {
-                      setState(() {
-                        RoutineSingleton().listaRutinas[widget.index] = nuevaRutina;
-                      });
-                      Navigator.pop(context);
+                    //Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType, this.timerLength);
+                    bool hasEventBeenAdded = false;
+                    if (widget.routine != null) {
+                      //nuevaRutina.id = widget.routine!.id;
+                      //BlocProvider.of<RoutinesBloc>(context, listen: false)
+                      //    .add(UpdateRoutine(routine: nuevaRutina));
+                        Navigator.pop(context);
+
                     } else {
-                      setState(() {
-                        RoutineSingleton().listaRutinas.add(nuevaRutina);
-                      });
-                      Navigator.pop(context);
+                       //BlocProvider.of<RoutinesBloc>(context, listen: false)
+                       //   .add(CreateRoutine(routine: nuevaRutina));
+                        Navigator.pop(context);
                     }
                   },
                   backgroundColor: Colors.purple[300],
