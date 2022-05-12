@@ -1,6 +1,7 @@
 {
   "name": "Exercise",
   "numberOfNotifications" : 3,
+  "notificationsEnabled" : false,
   "notificationStartTime" : "12,10",
   "type": 1,
   "id": 0

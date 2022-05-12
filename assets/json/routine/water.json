@@ -1,6 +1,7 @@
 {
   "name": "Water",
   "numberOfNotifications" : 3,
+  "notificationsEnabled" : false,
   "notificationStartTime" : "12,36",
   "type": 0,
   "id": 2
