@@ -30,6 +30,8 @@ import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'data/classes/routinecompletion.dart';
+
 Future<void> main() async {
   DartPluginRegistrant.ensureInitialized(); // Prevents a error with flutter_settings. Requires Dart master branch (not stable) right now
   WidgetsBinding wb = WidgetsFlutterBinding.ensureInitialized();
@@ -84,11 +86,13 @@ void scheduleAllRoutineNotifications(FlutterLocalNotificationsPlugin flnp) async
     }
   }
 }
+// TODO: Move these to bottom_nav_bar so I can use BLoC instead of Singletons
 Future<bool> initRoutines() async {
   RoutineSingleton rs = RoutineSingleton();
   var documentsDir = await getApplicationDocumentsDirectory();
-  Directory routineDir = Directory(p.join(documentsDir.path, 'routines'));
-  bool DEBUG_OR_FIRST_TIME = true; // TODO: Change this
+  Directory routineDir = Directory(p.join(documentsDir.path, 'routines')); // TODO: Move these to constants
+  Directory routineCompletionDir = Directory(p.join(documentsDir.path, 'routineCompletions'));
+  bool DEBUG_OR_FIRST_TIME = !(await routineDir.exists());
   try {
     if (DEBUG_OR_FIRST_TIME) {
       await rootBundle.loadString('assets/json/routine/exercise.json')
@@ -103,6 +107,15 @@ Future<bool> initRoutines() async {
           if (f is File && f.path.endsWith('.json')) {
             await (f as File).readAsString()
                 .then((String val) => rs.listaRutinas.add(Routine.fromJson(json.decode(val))));
+          }
+        }
+         files = await dirContents(routineCompletionDir);
+        for (FileSystemEntity f in files) {
+          if (f is File && f.path.endsWith('.json')) {
+            // FIXME: I can't add these because I can't access BLoCs from here.
+            //await (f as File).readAsString()
+            //    .then((String val) => rs.listaRutinas.add(RoutineCompletion.fromJson(json.decode(val))));
+            print(f.path);
           }
         }
       }
@@ -123,6 +136,7 @@ class MyApp extends StatefulWidget{
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget? childScreen;
   final ThemeSingleton myTheme = ThemeSingleton();
+
   Future<bool?> getLoggedInState() async {
     var supabaseBox = await Hive.openBox('supabase_authentication');
     final bool? hasLoggedIn = supabaseBox.get('hasAccessToken'); // TODO: Test this
@@ -131,8 +145,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState()  {
     super.initState();
-    myTheme.addListener(() {setState(() {});});
-    WidgetsBinding.instance!.addObserver(LifecycleEventHandler());
+    myTheme.addListener(() {setState(() {});}); // To make theme reload on startup
     final user = Supabase.instance.client.auth.user();
     FlutterNativeSplash.remove();
     var hasLoggedIn = getLoggedInState(); // This has to be a function because initState cannot be async.
@@ -146,7 +159,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(LifecycleEventHandler());
     super.dispose();
   }
 
@@ -175,31 +187,5 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 }
 
-
-
-
-class LifecycleEventHandler extends WidgetsBindingObserver {
-  late Directory documentsDir;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    var documentsDir = await getApplicationDocumentsDirectory();
-    Directory routineDir = Directory(p.join(documentsDir.path, 'routines'));
-    if(state == AppLifecycleState.inactive) {
-      await routineDir.create();
-      for (Routine r in RoutineSingleton().listaRutinas) {
-        File routineFile = File(p.join(routineDir.path, '${r.id}.json'));
-        await routineFile.create();
-        print('Written to routine file ${routineFile.path}');
-        routineFile.writeAsString(json.encode(r));
-
-      }
-    }
-    if(state == AppLifecycleState.resumed) {
-      print('AppLifecycleState state: Resumed app');
-    }
-    print('AppLifecycleState state:  $state');
-  }
-}
 
 

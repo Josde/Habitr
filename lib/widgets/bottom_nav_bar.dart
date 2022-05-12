@@ -4,6 +4,7 @@ import '../data/classes/user.dart';
 import '../screens/misc/home_screen.dart';
 import '../screens/routine/routine_screen.dart';
 import '../screens/misc/settings_screen.dart';
+import '../utils/appLifecycleHandler.dart';
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
@@ -14,6 +15,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
+  late LifecycleEventHandler leh;
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     RoutineScreen(),
@@ -24,6 +26,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    leh = LifecycleEventHandler(context: context);
+    WidgetsBinding.instance.addObserver(leh);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(leh);
+    super.dispose();
   }
 
   @override
