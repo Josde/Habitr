@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/screens/misc/settings_screen.dart';
+import 'package:habitr_tfg/screens/users/statistics_screen.dart';
 import 'package:uuid/uuid.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +10,9 @@ import 'friends_screen.dart';
 class ProfileScreen extends StatefulWidget {
   final User user;
   final bool isSelfProfile;
-  const ProfileScreen({Key? key, required this.user, this.isSelfProfile = false}) : super(key: key);
+  const ProfileScreen(
+      {Key? key, required this.user, this.isSelfProfile = false})
+      : super(key: key);
 
   @override
   _ProfilescreenState createState() => _ProfilescreenState();
@@ -35,63 +38,83 @@ class _ProfilescreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
-               title: Text(
-                "Profile",
+        appBar: AppBar(
+          title: Text(
+            "Profile",
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                child: Icon(Icons.settings),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SettingsScreen()));
+                },
               ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    child: Icon(Icons.settings),
-                    onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));},
-                  ),
+            )
+          ],
+          backgroundColor: Theme.of(context).iconTheme.color,
+        ),
+        body: Column(
+          children: [
+            Row(
+              // User name and etc row
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.string(avatarSvg!,
+                    fit: BoxFit.contain, height: 128, width: 128),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${widget.user.name}'),
+                    Text('${widget.user.country.displayName}'),
+                    Text(
+                        '${widget.user.xp}xp'), //TODO: Add rank when the functionality is done.
+                  ],
                 )
               ],
-              backgroundColor: Colors.deepPurple,
             ),
-      body: Column(
-        children: [
-          Row( // User name and etc row
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.string(avatarSvg!, fit: BoxFit.contain, height: 128, width: 128),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${widget.user.name}'),
-                  Text('${widget.user.country.displayName}'),
-                  Text('${widget.user.xp}xp'), //TODO: Add rank when the functionality is done.
-                ],
-              )
-            ],
-          ),
-          Divider(
-            color: Theme.of(context).primaryColorLight,
-          ),
-          IntrinsicHeight(
-            child: Row( //Stadistics and friends button
+            Divider(
+              color: Theme.of(context).primaryColorLight,
+            ),
+            IntrinsicHeight(
+              child: Row(
+                //Stadistics and friends button
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded( // Stadistics
+                  Expanded(
+                    // Stadistics
                     child: GestureDetector(
-                      onTap: (){print('Tapped stadistics');},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StatisticsScreen()));
+                      },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorDark
-                        ),
+                            color: Theme.of(context).primaryColorDark),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                            child: Center(child: Text('Stadistics')),
+                          child: Center(child: Text('Stadistics')),
                         ),
                       ),
                     ),
                   ),
-                  Expanded( // Friends
+                  Expanded(
+                    // Friends
                     child: GestureDetector(
-                      onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsScreen()));},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FriendsScreen()));
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColorDark,
@@ -111,18 +134,17 @@ class _ProfilescreenState extends State<ProfileScreen>
                     ),
                   ),
                 ],
+              ),
             ),
-          ),
-          Divider(
-            color: Theme.of(context).primaryColorLight,
-          ),
-          Column( // TODO: Feed
+            Divider(
+              color: Theme.of(context).primaryColorLight,
+            ),
+            Column(// TODO: Feed
 
-          ),
-          Spacer(),
-          Container(), // TODO: Visit button
-        ],
-      )
-    );
+                ),
+            Spacer(),
+            Container(), // TODO: Visit button
+          ],
+        ));
   }
 }

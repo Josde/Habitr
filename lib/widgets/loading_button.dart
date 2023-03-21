@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoadingButton extends StatefulWidget {
@@ -8,40 +7,49 @@ class LoadingButton extends StatefulWidget {
   _LoadingButtonState createState() => _LoadingButtonState();
 }
 
-class _LoadingButtonState extends State<LoadingButton> with SingleTickerProviderStateMixin {
+class _LoadingButtonState extends State<LoadingButton>
+    with SingleTickerProviderStateMixin {
   //https://stackoverflow.com/questions/53424764/circular-progress-button-based-on-hold-flutter
   late AnimationController controller;
 
-  @override initState() {
+  @override
+  initState() {
     super.initState();
 
-    controller = AnimationController(vsync: this, duration: Duration(seconds: 2));
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
     controller.addListener(() {
       setState(() {});
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTapDown: (_) => controller.forward(),
         onTapUp: (_) {
-        if (controller.status == AnimationStatus.forward) {
-        controller.reverse();
-        } else if (controller.status == AnimationStatus.completed) {
-          widget.onComplete();
-        }
-      },
-      child: Stack(
-          children: [CircularProgressIndicator(value: 1.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.grey)),
-          CircularProgressIndicator(value: controller.value,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.green)),
-          Padding(
-            //TODO: REMOVE THIS AND FIND A BETTER WAY
-            padding: const EdgeInsets.all(6.0),
-            child: Icon(Icons.check),
-          )],
-      )
-    );
+          if (controller.status == AnimationStatus.forward) {
+            controller.reverse();
+          } else if (controller.status == AnimationStatus.completed) {
+            widget.onComplete();
+          }
+        },
+        child: Stack(
+          children: [
+            CircularProgressIndicator(
+              value: controller.value,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+              backgroundColor: Theme.of(context).colorScheme.background,
+              strokeWidth: 8.0,
+            ),
+            Padding(
+              //TODO: REMOVE THIS AND FIND A BETTER WAY
+              padding: const EdgeInsets.all(6.0),
+              child: Icon(Icons.check, shadows: <Shadow>[
+                Shadow(color: Colors.black, blurRadius: 4.0)
+              ]),
+            )
+          ],
+        ));
   }
 }

@@ -4,7 +4,6 @@ import 'feed_screen.dart';
 import 'game_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -18,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
     child = game;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,26 +25,23 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "Home",
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
         ),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).iconTheme.color,
       ),
       body: Center(
-        child: GestureDetector(
-          onHorizontalDragEnd: (DragEndDetails details) {
-            setState(() {
-              if (child == game) {
-                child = feed;
-              } else {
-                child = game;
-              }
-            }
-            );
-          },
-          child: child
-        )
-      ),
+          child: GestureDetector(
+              onHorizontalDragEnd: (DragEndDetails details) {
+                setState(() {
+                  if (child == game) {
+                    child = feed;
+                  } else {
+                    child = game;
+                  }
+                });
+              },
+              child: child)),
     );
   }
 }

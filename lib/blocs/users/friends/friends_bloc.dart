@@ -1,6 +1,5 @@
 //TODO: Implement this BLOC. Currently it is only constant values for debugging.
 // so it should probably be refactored into a map of userID to list of friends
-import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
@@ -18,4 +17,3 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     });
   }
 }
-
