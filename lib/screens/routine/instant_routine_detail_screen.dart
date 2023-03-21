@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/completion/routine_completion_cubit.dart';
-import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
-import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/widgets/loading_button.dart';
 import 'package:awesome_aurora_gradient/awesome_aurora_gradient.dart';
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
-import 'package:uuid/uuid.dart';
+
 int lastId = 0;
+
 class Routine {
   //TODO: Somehow add the possibility to only get notifications on certains day of the week.
   String name = "";
@@ -11,13 +12,21 @@ class Routine {
   int timerLength = 0;
   bool notificationsEnabled = false;
   late int? id;
-  Routine.withId(this.name, this.numberOfNotifications, this.notificationStartTime, this.notificationsEnabled, this.type, this.timerLength, this.id);
-  Routine(this.name, this.numberOfNotifications, this.notificationStartTime, this.notificationsEnabled, this.type, this.timerLength) {
+  Routine.withId(
+      this.name,
+      this.numberOfNotifications,
+      this.notificationStartTime,
+      this.notificationsEnabled,
+      this.type,
+      this.timerLength,
+      this.id);
+  Routine(this.name, this.numberOfNotifications, this.notificationStartTime,
+      this.notificationsEnabled, this.type, this.timerLength) {
     this.id = lastId++;
   }
   Routine.empty();
-  
-  Routine.fromJson(Map<String,dynamic> json) {
+
+  Routine.fromJson(Map<String, dynamic> json) {
     //TODO: Add error handling
     this.name = json['name'];
     this.type = ActivityType.values.elementAt(json['type']);
@@ -27,13 +36,13 @@ class Routine {
     if (json.containsKey('notificationStartTime')) {
       List<String> time = json['notificationStartTime'].split(',');
       if (time.length == 2) {
-        this.notificationStartTime = TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
+        this.notificationStartTime =
+            TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
       }
-
     }
     if (json.containsKey('id')) {
       this.id = json['id'];
-      lastId = this.id! > lastId? this.id! : lastId;
+      lastId = this.id! > lastId ? this.id! : lastId;
     } else {
       this.id = lastId++;
     }
@@ -49,7 +58,8 @@ class Routine {
     final Map<String, dynamic> json = new Map<String, dynamic>();
     json['name'] = this.name;
     json['numberOfNotifications'] = this.numberOfNotifications;
-    json['notificationStartTime'] = '${this.notificationStartTime.hour},${this.notificationStartTime.minute}';
+    json['notificationStartTime'] =
+        '${this.notificationStartTime.hour},${this.notificationStartTime.minute}';
     json['type'] = this.type.index;
     json['timerLength'] = this.timerLength;
     json['id'] = this.id;

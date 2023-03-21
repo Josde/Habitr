@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
-import 'package:habitr_tfg/data/enum/ActivityType.dart';
-import 'package:habitr_tfg/data/classes/routine.dart';
-import 'package:habitr_tfg/screens/routine/edit_routine_screen.dart';
 import 'package:habitr_tfg/screens/routine/new_create_routine_screen.dart';
 import 'package:habitr_tfg/screens/routine/routine_detail_screen.dart';
 

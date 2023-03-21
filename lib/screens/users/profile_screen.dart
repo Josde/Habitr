@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/screens/misc/settings_screen.dart';
 import 'package:habitr_tfg/screens/users/statistics_screen.dart';
-import 'package:uuid/uuid.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/classes/user.dart';

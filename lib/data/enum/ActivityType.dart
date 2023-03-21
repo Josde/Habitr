@@ -1,5 +1,1 @@
-enum ActivityType {
-  Instant,
-  Timer,
-  Stopwatch
-}
+enum ActivityType { Instant, Timer, Stopwatch }

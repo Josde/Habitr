@@ -8,7 +8,6 @@ import '../data/classes/routine.dart';
 import '../data/classes/user.dart';
 import '../screens/misc/home_screen.dart';
 import '../screens/routine/routine_screen.dart';
-import '../screens/misc/settings_screen.dart';
 import '../utils/appLifecycleHandler.dart';
 import '../utils/constants.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
