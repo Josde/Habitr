@@ -7,23 +7,7 @@ import 'package:habitr_tfg/data/classes/user.dart' as u;
 // es decir, no lo podemos importar hasta que se llame a main() pero si en ficheros que se importen despues de main.
 
 final supabase = Supabase.instance.client;
-ThemeData lightTheme = ThemeData(
-  scaffoldBackgroundColor: Colors.white,
-  primaryColor: Colors.white,
-  primaryColorDark: Colors.black12,
-  disabledColor: Colors.grey,
-  colorScheme: ColorScheme.light(),
-  iconTheme: IconThemeData(color: Colors.purple),
-);
 
-ThemeData? darkTheme = ThemeData(
-  scaffoldBackgroundColor: Colors.grey.shade900,
-  primaryColor: Colors.black,
-  primaryColorDark: Colors.white12,
-  disabledColor: Colors.grey,
-  colorScheme: ColorScheme.dark(),
-  iconTheme: IconThemeData(color: Colors.purple),
-);
 extension ShowSnackBar on BuildContext {
   void showSnackBar({
     required String message,
@@ -52,4 +36,3 @@ const NotificationDetails platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
 u.User debugUser = u.User.debug('Debug');
-

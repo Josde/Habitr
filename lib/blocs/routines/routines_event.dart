@@ -19,18 +19,21 @@ class CreateRoutine extends RoutinesEvent {
   @override
   List<Object> get props => [routine];
 }
+
 class ReadRoutine extends RoutinesEvent {
   final Routine routine;
   const ReadRoutine({required this.routine});
   @override
   List<Object> get props => [routine];
 }
+
 class UpdateRoutine extends RoutinesEvent {
   final Routine routine;
   const UpdateRoutine({required this.routine});
   @override
   List<Object> get props => [routine];
 }
+
 class DeleteRoutine extends RoutinesEvent {
   final Routine routine;
   const DeleteRoutine({required this.routine});

@@ -1,5 +1,4 @@
 // TODO: Implement this whole BLOC. Currently it is only constant values for debugging.
-import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';

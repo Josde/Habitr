@@ -7,7 +7,9 @@ abstract class FriendsState {
 }
 
 class FriendsInitial extends FriendsState {
-  final Map<User, List<User>> friends = {debugUser : [User.debug('Amigo1'), User.debug('Amigo2')]}; // i need to get SelfBloc into here somehow? whatever friends is not working for now
+  final Map<User, List<User>> friends = {
+    debugUser: [User.debug('Amigo1'), User.debug('Amigo2')]
+  }; // i need to get SelfBloc into here somehow? whatever friends is not working for now
 }
 
 class FriendsLoading extends FriendsState {
