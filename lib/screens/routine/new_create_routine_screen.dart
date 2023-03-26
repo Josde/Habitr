@@ -37,6 +37,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
       _timerLength = r.timerLength;
       _notificationStartTime = r.notificationStartTime;
     }
+    super.initState();
   }
 
   @override

@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 
+import '../../utils/io.dart';
+
 part 'routines_event.dart';
 part 'routines_state.dart';
 
@@ -12,14 +14,11 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     on<UpdateRoutine>(_onUpdateRoutine);
     on<DeleteRoutine>(_onDeleteRoutine);
     //on<ReadRoutine>(_onReadRoutine);
-
-
   }
 
   void _onLoadRoutines(LoadRoutines event, Emitter<RoutinesState> emit) {
     emit(RoutinesLoaded(routines: event.routines));
   }
-
 
   void _onAddRoutine(CreateRoutine event, Emitter<RoutinesState> emit) {
     final state = this.state;
@@ -33,8 +32,11 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     final state = this.state;
     if (state is RoutinesLoaded) {
       List<Routine> newRoutines = state.routines;
-      int index = state.routines.indexWhere((Routine r) {return r.id == event.routine.id;});
-      if (index == -1) { // FAILSAFE
+      int index = state.routines.indexWhere((Routine r) {
+        return r.id == event.routine.id;
+      });
+      if (index == -1) {
+        // FAILSAFE
         newRoutines.add(event.routine);
       } else {
         newRoutines[index] = event.routine;
@@ -44,14 +46,14 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
   }
 
   void _onDeleteRoutine(DeleteRoutine event, Emitter<RoutinesState> emit) {
-    // FIXME: No estamos borrando el archivo, asi que en el proximo inicio volvera a existir.
+    // TODO: Recheck
     final state = this.state;
     if (state is RoutinesLoaded) {
       List<Routine> newRoutines = state.routines.where((routine) {
         return routine.id != event.routine.id;
       }).toList();
+      deleteRoutine(event.routine);
       emit(RoutinesLoaded(routines: newRoutines));
     }
-
   }
 }
