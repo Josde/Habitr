@@ -49,18 +49,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget? childScreen;
   final ThemeSingleton myTheme = ThemeSingleton();
 
-  Future<bool?> getLoggedInState() async {
-    bool hasLoggedIn;
+  Future<bool> getLoggedInState() async {
+    Future<bool> hasLoggedIn;
     try {
       final initialSession = await SupabaseAuth.instance.initialSession;
       // Redirect users to different screens depending on the initial session
       if (initialSession != null) {
-        hasLoggedIn = true;
+        hasLoggedIn = Future.value(true);
       } else {
-        hasLoggedIn = false;
+        hasLoggedIn = Future.value(false);
       }
     } catch (e) {
-      hasLoggedIn = false;
+      hasLoggedIn = Future.value(false);
       // Handle initial auth state fetch error here
     }
     return hasLoggedIn;
@@ -73,35 +73,42 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       setState(() {});
     }); // To make theme reload on startup
     FlutterNativeSplash.remove();
-    // FIXME: This does not work correctly, use .then
-    var hasLoggedIn =
-        getLoggedInState(); // This has to be a function because initState cannot be async.
-    if (hasLoggedIn == false) {
-      childScreen = LogInScreen();
-    } else {
-      childScreen = BottomNavBar();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => RoutinesBloc()),
-        BlocProvider(create: (context) => SelfBloc()),
-        BlocProvider(create: (context) => FriendsBloc()),
-        BlocProvider(create: (context) => RoutineCompletionCubit())
-      ],
-      child: Builder(// Para evitar problemas de contexto con el cubit de tema
-          builder: (context) {
-        return MaterialApp(
-          title: 'Habitr',
-          themeMode: myTheme.currentTheme(),
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          home: childScreen!,
-        );
-      }),
-    );
+    return FutureBuilder(
+        future: getLoggedInState(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            childScreen = Text('Loading'); //FIXME: Temp
+          } else {
+            bool loggedIn = snapshot.data!;
+            if (!loggedIn) {
+              childScreen = LogInScreen();
+            } else {
+              childScreen = BottomNavBar();
+            }
+          }
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => RoutinesBloc()),
+              BlocProvider(create: (context) => SelfBloc()),
+              BlocProvider(create: (context) => FriendsBloc()),
+              BlocProvider(create: (context) => RoutineCompletionCubit())
+            ],
+            child: Builder(
+                // Para evitar problemas de contexto con el cubit de tema
+                builder: (context) {
+              return MaterialApp(
+                title: 'Habitr',
+                themeMode: myTheme.currentTheme(),
+                theme: lightTheme,
+                darkTheme: darkTheme,
+                home: childScreen!,
+              );
+            }),
+          );
+        });
   }
 }
