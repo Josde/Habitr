@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,11 +33,7 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   buildUserOptions(context),
                   buildLogout(context),
-                  IconButton(
-                    icon: Icon(Icons.work_rounded),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => DebugScreen())),
-                  )
+                  buildDebug(context),
                 ],
               ),
               SettingsGroup(title: 'General', children: [
@@ -85,5 +82,18 @@ class SettingsScreen extends StatelessWidget {
         Settings.setValue('dark-mode', myTheme.isDark);
       },
     );
+  }
+
+  Widget buildDebug(BuildContext context) {
+    // TODO: Check if this works fine and SizedBox dimension 0 doesnt crash
+    if (kDebugMode) {
+      return IconButton(
+        icon: Icon(Icons.work_rounded),
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => DebugScreen())),
+      );
+    } else {
+      return const SizedBox.square(dimension: 0.0);
+    }
   }
 }
