@@ -10,6 +10,7 @@ import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
+import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -81,7 +82,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         future: getLoggedInState(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            childScreen = Text('Loading'); //FIXME: Temp
+            childScreen = LoadingSpinner(); //FIXME: Temp
           } else {
             bool loggedIn = snapshot.data!;
             if (!loggedIn) {

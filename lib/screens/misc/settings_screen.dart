@@ -3,6 +3,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
+import 'package:habitr_tfg/screens/misc/debug_screen.dart';
 import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
@@ -31,6 +32,11 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   buildUserOptions(context),
                   buildLogout(context),
+                  IconButton(
+                    icon: Icon(Icons.work_rounded),
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => DebugScreen())),
+                  )
                 ],
               ),
               SettingsGroup(title: 'General', children: [
