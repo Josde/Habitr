@@ -91,11 +91,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _formKey.currentState!.save();
                   //TODO: Use redirect to prevent users from being redirected to localhost
                   try {
-                    final result = await supabase.auth
-                        .signUp(email: _email!, password: _password!);
+                    final result = await supabase.auth.signUp(
+                        email: _email!,
+                        password: _password!,
+                        data: {'name': _displayName});
                     if (result.user != null) {
-                      await supabase.from('user').insert(
-                          {'uuid': result.user!.id, 'name': _displayName});
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(//temp fix, reformat to bloc later
                               builder: (BuildContext context) {
