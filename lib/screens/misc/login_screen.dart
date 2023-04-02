@@ -92,7 +92,6 @@ class _LogInScreenState extends State<LogInScreen> {
                   return;
                 }
                 _formKey.currentState!.save();
-                // FIXME: Auth throws exception on wrong pass now, so we have to try catch all of these
                 try {
                   final result = await supabase.auth
                       .signInWithPassword(email: _email, password: _password!);

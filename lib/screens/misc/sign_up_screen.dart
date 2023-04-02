@@ -15,7 +15,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? _displayName, _email, _password;
+  String? _displayName, _email, _password, _country;
   var _obscureText = true;
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   hintText: 'Display name',
                   onSaved: (String? value) {
                     this._displayName = value!;
+                  },
+                  validator: (value) {
+                    return textNotEmptyValidator(value);
+                  }),
+            ),
+            Container(child: Text('TODO: Country selector')),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RoundedTextFormField(
+                  hintText: 'Country',
+                  onSaved: (String? value) {
+                    this._country = value!;
                   },
                   validator: (value) {
                     return textNotEmptyValidator(value);
@@ -81,7 +93,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   try {
                     final result = await supabase.auth
                         .signUp(email: _email!, password: _password!);
-                    if (result != null) {
+                    if (result.user != null) {
+                      await supabase.from('user').insert(
+                          {'uuid': result.user!.id, 'name': _displayName});
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(//temp fix, reformat to bloc later
                               builder: (BuildContext context) {

@@ -21,7 +21,7 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
       final myselfResponse = await supabase
           .from('user')
           .select()
-          .eq('id', supabase.auth.currentUser!.id.toString());
+          .eq('uuid', supabase.auth.currentUser!.id.toString());
       final User myself = myselfResponse as User;
     } catch (e) {
       print(e);
