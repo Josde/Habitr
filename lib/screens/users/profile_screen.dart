@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/misc/settings_screen.dart';
 import 'package:habitr_tfg/screens/users/statistics_screen.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
@@ -21,11 +23,19 @@ class _ProfilescreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   String? avatarSvg = '';
+  late User _user;
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    avatarSvg = Jdenticon.toSvg(widget.user.id);
+    if (widget.isSelfProfile) {
+      _user = BlocProvider.of<SelfBloc>(context)
+          .state
+          .self!; //FIXME: This may crash if we tap profile too quickly after loading the app.
+    } else {
+      _user = widget.user;
+    }
+    avatarSvg = Jdenticon.toSvg(_user.id);
   }
 
   @override
@@ -69,10 +79,10 @@ class _ProfilescreenState extends State<ProfileScreen>
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${widget.user.name}'),
-                    Text('${widget.user.country.displayName}'),
+                    Text('${_user.name}'),
+                    Text('${_user.country.displayName}'),
                     Text(
-                        '${widget.user.xp}xp'), //TODO: Add rank when the functionality is done.
+                        '${_user.xp}xp'), //TODO: Add rank when the functionality is done.
                   ],
                 )
               ],
@@ -124,7 +134,7 @@ class _ProfilescreenState extends State<ProfileScreen>
                             child: Column(
                               children: [
                                 Text('Friends'),
-                                Text('${widget.user.friendCount}')
+                                Text('${_user.friendCount}')
                               ],
                             ),
                           ),

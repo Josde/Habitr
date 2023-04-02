@@ -2,7 +2,7 @@ part of 'self_bloc.dart';
 
 @immutable
 abstract class SelfState {
-  final String? self;
+  final User? self;
 
   const SelfState({this.self});
 }
@@ -12,7 +12,7 @@ class SelfInitial extends SelfState {}
 class SelfLoading extends SelfState {}
 
 class SelfLoaded extends SelfState {
-  final String? self;
+  final User? self;
   SelfLoaded({required this.self});
 }
 

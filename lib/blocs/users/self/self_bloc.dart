@@ -22,10 +22,12 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
       final myselfResponse = await supabase
           .from('profiles')
           .select()
-          .eq('uuid', supabase.auth.currentUser!.id.toString());
+          .eq('uuid', supabase.auth.currentUser!.id)
+          .single() as Map;
       print(myselfResponse);
+      var myself = User.fromJson(myselfResponse);
       // final User myself = myselfResponse as User;
-      emitter.call(SelfLoaded(self: myselfResponse.toString()));
+      emitter.call(SelfLoaded(self: myself));
     } catch (e) {
       print(e);
     }
