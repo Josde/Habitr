@@ -12,17 +12,20 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
   }
 
   void _onLoadSelf(SelfEvent event, Emitter<SelfState> emitter) async {
+    emitter.call(SelfLoading());
     try {
-      emitter.call(SelfLoading());
       if (supabase.auth.currentUser == null) {
         emitter.call(SelfError('User is not logged in.'));
         return;
       }
+      print(supabase.auth.currentUser!.id);
       final myselfResponse = await supabase
           .from('profiles')
           .select()
           .eq('uuid', supabase.auth.currentUser!.id.toString());
-      final User myself = myselfResponse as User;
+      print(myselfResponse);
+      // final User myself = myselfResponse as User;
+      emitter.call(SelfLoaded(self: myselfResponse.toString()));
     } catch (e) {
       print(e);
     }
