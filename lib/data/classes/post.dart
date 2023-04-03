@@ -7,4 +7,10 @@ class Post {
     text = _text;
     date = DateTime.now();
   }
+
+  Post.fromJson(Map<dynamic, dynamic> json) {
+    this.posterId = json['poster_id'];
+    this.text = json['content'];
+    this.date = DateTime.parse(json['post_date']);
+  }
 }

@@ -51,19 +51,19 @@ class SettingsScreen extends StatelessWidget {
     User u = BlocProvider.of<SelfBloc>(context).state.self!;
     var avatarSvg = Jdenticon.toSvg(u.id);
     return BlocBuilder<SelfBloc, SelfState>(
-      builder:(context, state) {
+      builder: (context, state) {
         if (state is SelfLoaded) {
           return SimpleSettingsTile(
-          title: u.name,
-          subtitle: '',
-          leading: SvgPicture.string(avatarSvg,
-              fit: BoxFit.contain, height: 128, width: 128),
-        );
+            title: u.name,
+            subtitle: '',
+            leading: SvgPicture.string(avatarSvg,
+                fit: BoxFit.contain, height: 128, width: 128),
+          );
         } else {
-          return Container(alignment: Alignment.center, child: LoadingSpinner())
+          return Container(
+              alignment: Alignment.center, child: LoadingSpinner());
         }
       },
-      
     );
   }
 
