@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:habitr_tfg/screens/misc/debug_screen.dart';
 import 'package:habitr_tfg/screens/misc/login_screen.dart';
 import 'package:habitr_tfg/utils/constants.dart';
+import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
 import '../../utils/io.dart';
@@ -45,14 +48,22 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget buildUserOptions(BuildContext context) {
-    User u = User
-        .empty(); // Using default constructor for now, get current user from bloc next time.
+    User u = BlocProvider.of<SelfBloc>(context).state.self!;
     var avatarSvg = Jdenticon.toSvg(u.id);
-    return SimpleSettingsTile(
-      title: u.name,
-      subtitle: '',
-      leading: SvgPicture.string(avatarSvg,
-          fit: BoxFit.contain, height: 128, width: 128),
+    return BlocBuilder<SelfBloc, SelfState>(
+      builder:(context, state) {
+        if (state is SelfLoaded) {
+          return SimpleSettingsTile(
+          title: u.name,
+          subtitle: '',
+          leading: SvgPicture.string(avatarSvg,
+              fit: BoxFit.contain, height: 128, width: 128),
+        );
+        } else {
+          return Container(alignment: Alignment.center, child: LoadingSpinner())
+        }
+      },
+      
     );
   }
 
