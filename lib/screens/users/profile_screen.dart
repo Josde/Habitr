@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/misc/settings_screen.dart';
 import 'package:habitr_tfg/screens/users/statistics_screen.dart';
+import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/classes/user.dart';
@@ -28,14 +29,6 @@ class _ProfilescreenState extends State<ProfileScreen>
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    if (widget.isSelfProfile) {
-      _user = BlocProvider.of<SelfBloc>(context)
-          .state
-          .self!; //FIXME: This may crash if we tap profile too quickly after loading the app.
-    } else {
-      _user = widget.user;
-    }
-    avatarSvg = Jdenticon.toSvg(_user.id);
   }
 
   @override
@@ -43,6 +36,38 @@ class _ProfilescreenState extends State<ProfileScreen>
     _controller.dispose();
     super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isSelfProfile) {
+      return BlocBuilder<SelfBloc, SelfState>(
+        builder: (context, state) {
+          if (state is SelfLoaded) {
+            _user = state.self!;
+            avatarSvg = Jdenticon.toSvg(_user.id);
+            return Profile(avatarSvg: avatarSvg, user: _user);
+          } else {
+            return LoadingSpinner();
+          }
+        },
+      );
+    } else {
+      _user = widget.user;
+      avatarSvg = Jdenticon.toSvg(_user.id);
+      return Profile(avatarSvg: avatarSvg, user: _user);
+    }
+  }
+}
+
+class Profile extends StatelessWidget {
+  const Profile({
+    super.key,
+    required this.avatarSvg,
+    required User user,
+  }) : _user = user;
+
+  final String? avatarSvg;
+  final User _user;
 
   @override
   Widget build(BuildContext context) {

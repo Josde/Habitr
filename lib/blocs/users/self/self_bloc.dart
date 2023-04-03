@@ -18,13 +18,11 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
         emitter.call(SelfError('User is not logged in.'));
         return;
       }
-      print(supabase.auth.currentUser!.id);
       final myselfResponse = await supabase
           .from('profiles')
           .select()
           .eq('uuid', supabase.auth.currentUser!.id)
           .single() as Map;
-      print(myselfResponse);
       var myself = User.fromJson(myselfResponse);
       // final User myself = myselfResponse as User;
       emitter.call(SelfLoaded(self: myself));
