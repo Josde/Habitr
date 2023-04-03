@@ -27,11 +27,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<FriendsBloc, FriendsState>(
       builder: (context, state) {
+        var _child;
         if (state is FriendsLoaded) {
-          return Friends(friends: state.friends!);
+          _child = Friends(friends: state.friends!);
         } else {
-          return LoadingSpinner();
+          _child =
+              Container(alignment: Alignment.center, child: LoadingSpinner());
         }
+        return Scaffold(appBar: AppBar(title: Text('Friends')), body: _child);
       },
     );
   }

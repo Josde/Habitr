@@ -29,7 +29,7 @@ class _FeedScreenState extends State<FeedScreen> {
   void initState() {
     super.initState();
     final _random = new Random();
-    friends = BlocProvider.of<FriendsBloc>(context).state.friends![debugUser]!;
+    friends = BlocProvider.of<FriendsBloc>(context).state.friends!;
     lb = LikeButton(
         isAnimating: isHeartAnimating,
         isLiked: isLiked,

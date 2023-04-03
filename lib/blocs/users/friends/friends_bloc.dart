@@ -32,31 +32,11 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
         return;
       }
       ourId = supabase.auth.currentUser!.id;
-      final friendResponse = await supabase
-          .from('friendRequest')
-          .select()
-          .or('sent_by.eq.${ourId},sent_to.eq.${ourId}')
-          .eq('accepted', true) as List;
-      print(friendResponse);
-      for (Map record in friendResponse) {
-        if (!(_friendsIds.contains(record['sent_by'])) &&
-            record['sent_by'] != ourId) {
-          _friendsIds.add(record['sent_by']);
-        }
-        if (!(_friendsIds.contains(record['sent_to'])) &&
-            record['sent_to'] != ourId) {
-          _friendsIds.add(record['sent_to']);
-        }
-      }
-      print(_friendsIds);
-      for (String id in _friendsIds) {
-        final friend = await supabase
-            .from('profiles')
-            .select()
-            .eq('uuid', id)
-            .single() as Map;
-        print(friend);
-        _friends.add(User.fromJson(friend));
+      final friendsResponse = await supabase.from('profiles').select().neq(
+          'uuid',
+          ourId); // Thanks to RLS, any profile we can see that is not ours must be a friend.
+      for (var friend in friendsResponse) {
+        _friends.add(User.fromJson(friend as Map));
       }
 
       emit.call(FriendsLoaded(friends: _friends));
