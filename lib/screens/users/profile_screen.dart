@@ -47,7 +47,13 @@ class _ProfilescreenState extends State<ProfileScreen>
             avatarSvg = Jdenticon.toSvg(_user.id);
             return Profile(avatarSvg: avatarSvg, user: _user);
           } else {
-            return LoadingSpinner();
+            if (!(state is SelfLoading)) {
+              BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
+            }
+            return Scaffold(
+                appBar: AppBar(title: Text('Profile')),
+                body: Container(
+                    child: LoadingSpinner(), alignment: Alignment.center));
           }
         },
       );
