@@ -4,3 +4,5 @@ part of 'self_bloc.dart';
 abstract class SelfEvent {}
 
 class LoadSelfEvent extends SelfEvent {}
+
+class ReloadSelfEvent extends SelfEvent {}

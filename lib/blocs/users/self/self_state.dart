@@ -13,7 +13,14 @@ class SelfLoading extends SelfState {}
 
 class SelfLoaded extends SelfState {
   final User? self;
-  SelfLoaded({required this.self});
+  final DateTime lastLoadTime;
+  SelfLoaded({required this.self, required this.lastLoadTime});
+}
+
+class SelfReloading extends SelfState {
+  final User? self;
+
+  SelfReloading({required this.self});
 }
 
 class SelfError extends SelfState {

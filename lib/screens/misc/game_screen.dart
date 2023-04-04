@@ -18,43 +18,28 @@ class GameScreenState extends State<GameScreen> {
   var myself;
   late Widget _child;
 
-  Future<String> getLogin() async {
-    final myselfResponse = await supabase.from('profiles').select();
-
-    return Future.value(myselfResponse.toString());
-  }
-
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
+    var selfState = BlocProvider.of<SelfBloc>(context).state;
+    if (!(selfState is SelfLoaded) && !(selfState is SelfReloading))
+      BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
+    if ((selfState is SelfLoaded) &&
+        (selfState.lastLoadTime).difference(DateTime.now()).inMinutes >= 5) {
+      // Schedule reload if the data is stale
+      BlocProvider.of<SelfBloc>(context).add(ReloadSelfEvent());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelfBloc, SelfState>(builder: (context, state) {
-      if (state is SelfLoaded) {
+      if ((state is SelfLoaded) || (state is SelfReloading)) {
         _child = Text(state.self!.toString());
       } else {
         _child = LoadingSpinner();
       }
       return Container(alignment: Alignment.center, child: _child);
     });
-    // return FutureBuilder(
-    //   future: getLogin(),
-    //   builder: (context, snapshot) {
-    //     if (!snapshot.hasData) {
-    //       _child = LoadingSpinner();
-    //     } else {
-    //       print(snapshot.data!);
-    //       if (snapshot.hasError) {
-    //         _child = Text(snapshot.error.toString());
-    //       } else {
-    //         _child = Text(snapshot.data!.toString());
-    //       }
-    //     }
-    //     return Container(alignment: Alignment.center, child: _child);
-    //   },
-    // );
   }
 }
