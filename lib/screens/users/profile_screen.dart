@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/misc/settings_screen.dart';
 import 'package:habitr_tfg/screens/users/statistics_screen.dart';
@@ -77,6 +78,11 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: I could use a BlocBuilder for this but I don't want to add loading spinners for such a miniscule feature.
+    var _friendCount = (BlocProvider.of<FriendsBloc>(context).state
+            is FriendsLoaded)
+        ? BlocProvider.of<FriendsBloc>(context).state.friends!.length.toString()
+        : "";
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -165,7 +171,7 @@ class Profile extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text('Friends'),
-                                Text('${_user.friendCount}')
+                                Text('${_friendCount}')
                               ],
                             ),
                           ),
