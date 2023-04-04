@@ -43,7 +43,7 @@ class _ProfilescreenState extends State<ProfileScreen>
     if (widget.isSelfProfile) {
       return BlocBuilder<SelfBloc, SelfState>(
         builder: (context, state) {
-          if (state is SelfLoaded) {
+          if (state is SelfLoaded || state is SelfReloading) {
             _user = state.self!;
             avatarSvg = Jdenticon.toSvg(_user.id);
             return Profile(avatarSvg: avatarSvg, user: _user);

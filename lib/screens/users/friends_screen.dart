@@ -20,7 +20,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
+    if (!(BlocProvider.of<FriendsBloc>(context).state is FriendsLoaded))
+      BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
   }
 
   @override
