@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
+import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import '../blocs/routines/routines_bloc.dart';
 import '../data/classes/routine.dart';
@@ -63,6 +65,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
     leh = LifecycleEventHandler(context: context);
     WidgetsBinding.instance.addObserver(leh);
     initStateAsyncPart();
+    // Schedule first loading of BLoCs
+    BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
+    BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
     super.initState();
   }
 
