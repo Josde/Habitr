@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/screens/routine/new_create_routine_screen.dart';
 import 'package:habitr_tfg/screens/routine/routine_detail_screen.dart';
+import 'package:habitr_tfg/screens/routine/routine_repository_screen.dart';
 
 class RoutineScreen extends StatefulWidget {
   @override
@@ -74,20 +75,45 @@ class _RoutineScreenState extends State<RoutineScreen> {
                 },
               ),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BlocProvider.value(
-                    value: BlocProvider.of<RoutinesBloc>(context),
-                    child: NewCreateRoutineScreen(routine: null),
-                  );
-                }));
-              },
-              backgroundColor: Theme.of(context).iconTheme.color,
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).primaryColor,
-              ),
+            floatingActionButton: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FloatingActionButton(
+                    // Add from repository button
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return RoutineRepositoryScreen();
+                      }));
+                    },
+                    heroTag: null, // This prevents a crash.
+                    backgroundColor: Theme.of(context).iconTheme.color,
+                    child: Icon(
+                      Icons.wifi,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+                FloatingActionButton(
+                  // Create new button
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return BlocProvider.value(
+                        value: BlocProvider.of<RoutinesBloc>(context),
+                        child: NewCreateRoutineScreen(routine: null),
+                      );
+                    }));
+                  },
+                  backgroundColor: Theme.of(context).iconTheme.color,
+                  child: Icon(
+                    Icons.add,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
             ));
       } else {
         // state is DetailRoutine
