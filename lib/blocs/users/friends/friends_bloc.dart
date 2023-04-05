@@ -32,6 +32,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
         return;
       }
       ourId = supabase.auth.currentUser!.id;
+      //TODO: Change the query to select both friends and friend requests and properly separate them.
       final friendsResponse = await supabase.from('profiles').select().neq(
           'uuid',
           ourId); // Thanks to RLS, any profile we can see that is not ours must be a friend.

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
+import 'package:habitr_tfg/screens/users/friend_requests_screen.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
@@ -41,6 +42,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
   }
 }
 
+// FIXME: We can currently only access our own friends. Change it so friends button is disabled on other profiles (but we can see the count or smth like that)
 class Friends extends StatelessWidget {
   const Friends({
     super.key,
@@ -58,18 +60,24 @@ class Friends extends StatelessWidget {
             color: Theme.of(context).primaryColorDark,
             child: Padding(
               padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Text(
-                      'Friend requests'), //TODO: Add friends request screen on click
-                  Spacer(),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60.0)),
-                    child: Text(
-                        '0'), //TODO: Rework this once friend requests are working
-                  ),
-                ],
+              child: GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FriendRequestScreen())),
+                child: Row(
+                  children: [
+                    Text(
+                        'Friend requests'), //TODO: Add friends request screen on click
+                    Spacer(),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60.0)),
+                      child: Text(
+                          '0'), //TODO: Rework this once friend requests are working
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
