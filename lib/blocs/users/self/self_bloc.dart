@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/utils/constants.dart';

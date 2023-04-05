@@ -5,8 +5,7 @@ import 'io.dart';
 
 class LifecycleEventHandler extends WidgetsBindingObserver {
   late Directory documentsDir;
-  BuildContext
-      context; // TODO: Recheck this, search for more BLoC info because this is kinda janky.
+  BuildContext context;
   LifecycleEventHandler({required this.context});
 
   @override

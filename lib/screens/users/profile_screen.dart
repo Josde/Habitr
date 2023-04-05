@@ -11,12 +11,11 @@ import '../../data/classes/user.dart';
 import 'friends_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final User user;
+  late final User user;
   final bool isSelfProfile;
-  const ProfileScreen(
-      {Key? key, required this.user, this.isSelfProfile = false})
+  ProfileScreen({Key? key, required this.user, this.isSelfProfile = false})
       : super(key: key);
-
+  ProfileScreen.self({Key? key, this.isSelfProfile = true}) : super(key: key);
   @override
   _ProfilescreenState createState() => _ProfilescreenState();
 }
@@ -46,7 +45,10 @@ class _ProfilescreenState extends State<ProfileScreen>
           if (state is SelfLoaded || state is SelfReloading) {
             _user = state.self!;
             avatarSvg = Jdenticon.toSvg(_user.id);
-            return Profile(avatarSvg: avatarSvg, user: _user);
+            return Profile(
+                avatarSvg: avatarSvg,
+                user: _user,
+                isSelfProfile: widget.isSelfProfile);
           } else {
             if (!(state is SelfLoading)) {
               BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
@@ -61,7 +63,10 @@ class _ProfilescreenState extends State<ProfileScreen>
     } else {
       _user = widget.user;
       avatarSvg = Jdenticon.toSvg(_user.id);
-      return Profile(avatarSvg: avatarSvg, user: _user);
+      return Profile(
+          avatarSvg: avatarSvg,
+          user: _user,
+          isSelfProfile: widget.isSelfProfile);
     }
   }
 }
@@ -71,10 +76,12 @@ class Profile extends StatelessWidget {
     super.key,
     required this.avatarSvg,
     required User user,
+    required this.isSelfProfile,
   }) : _user = user;
 
   final String? avatarSvg;
   final User _user;
+  final bool isSelfProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -165,17 +172,23 @@ class Profile extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColorDark,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Text('Friends'),
-                                Text('${_friendCount}')
-                              ],
-                            ),
-                          ),
-                        ),
+                        child: Builder(builder: (context) {
+                          if (isSelfProfile) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Text('Friends'),
+                                    Text('$_friendCount')
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Container(); // FIXME: This looks jank
+                          }
+                        }),
                       ),
                     ),
                   ),
@@ -185,7 +198,7 @@ class Profile extends StatelessWidget {
             Divider(
               color: Theme.of(context).primaryColorLight,
             ),
-            Column(// TODO: Feed
+            Column(// TODO: Achivements
 
                 ),
             Spacer(),

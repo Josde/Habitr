@@ -7,7 +7,6 @@ import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import '../blocs/routines/routines_bloc.dart';
 import '../data/classes/routine.dart';
-import '../data/classes/user.dart';
 import '../screens/misc/home_screen.dart';
 import '../screens/routine/routine_screen.dart';
 import '../utils/appLifecycleHandler.dart';
@@ -30,10 +29,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     RoutineScreen(),
-    ProfileScreen(
-        user: User.empty(),
-        isSelfProfile:
-            true), //TODO: Update this to use Self from the Bloc when we start using the database.
+    ProfileScreen.self(),
   ];
 
   void _onItemTapped(int index) {

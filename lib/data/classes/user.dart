@@ -5,7 +5,7 @@ class User {
   // Defaults for empty constructor
   var uuid = Uuid();
   String id = '';
-  String name = 'User'; //TODO: Remove this, this is for debug.
+  String name = 'User';
   Country country = Country.worldWide;
   DateTime createdAt = DateTime.now();
   int xp = 0;
@@ -42,7 +42,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = new Map<String, dynamic>();
-    // TODO: Implement this
+    // TODO: Implement this if needed?
     return json;
   }
 }

@@ -82,7 +82,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         future: getLoggedInState(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            childScreen = LoadingSpinner(); //FIXME: Temp
+            childScreen =
+                Container(alignment: Alignment.center, child: LoadingSpinner());
           } else {
             bool loggedIn = snapshot.data!;
             if (!loggedIn) {

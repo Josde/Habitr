@@ -8,7 +8,6 @@ import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
 import '../../blocs/users/friends/friends_bloc.dart';
-import '../../utils/constants.dart';
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({Key? key}) : super(key: key);
@@ -42,7 +41,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
   }
 }
 
-// FIXME: We can currently only access our own friends. Change it so friends button is disabled on other profiles (but we can see the count or smth like that)
 class Friends extends StatelessWidget {
   const Friends({
     super.key,
@@ -67,8 +65,7 @@ class Friends extends StatelessWidget {
                         builder: (context) => FriendRequestScreen())),
                 child: Row(
                   children: [
-                    Text(
-                        'Friend requests'), //TODO: Add friends request screen on click
+                    Text('Friend requests'),
                     Spacer(),
                     Container(
                       decoration: BoxDecoration(

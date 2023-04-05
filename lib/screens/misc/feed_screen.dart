@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,7 +29,6 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    final _random = new Random();
     //FIXME: Add blocbuilder here
     friends = BlocProvider.of<FriendsBloc>(context).state.friends!;
     self = BlocProvider.of<SelfBloc>(context).state.self!;
@@ -52,11 +49,10 @@ class _FeedScreenState extends State<FeedScreen> {
             if (!(snapshot.hasData)) {
               return Container(child: LoadingSpinner());
             }
-            posts = snapshot.data!;
+            posts = snapshot.data!.reversed.toList();
             return ListView.builder(
               itemCount: posts
                   .length, //FIXME: Add paging (this will currently load all messages we can see)
-              //FIXME: Reverse post order
               //TODO: Add post datetime to the widget
               itemBuilder: (BuildContext context, int index) {
                 //TODO: Add getting message likes here for each post, unliking doesn't properly work yet.

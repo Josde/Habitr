@@ -45,7 +45,7 @@ Future<bool> initRoutines(BuildContext context) async {
       List<FileSystemEntity> files = await dirContents(routineDir);
       for (FileSystemEntity f in files) {
         if (f is File && f.path.endsWith('.json')) {
-          await (f as File).readAsString().then((String val) => rBloc
+          await f.readAsString().then((String val) => rBloc
               .add(CreateRoutine(routine: Routine.fromJson(json.decode(val)))));
         }
       }
@@ -69,7 +69,7 @@ Future<bool> initRoutineCompletions(BuildContext context) async {
     List<FileSystemEntity> files = await dirContents(routineCompletionDir);
     for (FileSystemEntity f in files) {
       if (f is File && f.path.endsWith('.json')) {
-        await (f as File).readAsString().then((String val) => rcBloc
+        await f.readAsString().then((String val) => rcBloc
             .state.routineCompletions
             .add(RoutineCompletion.fromJson(json.decode(val))));
       }

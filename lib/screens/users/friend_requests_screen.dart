@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
@@ -50,8 +48,9 @@ class _FriendRequestScreenState extends State<FriendRequestScreen> {
     List<String> _friendIds = List.empty(growable: true);
 
     try {
-      var friendRequestResponse = await supabase.from('friendRequest').select();
-      // FIXME: Add .eq('accepted', false), this is like this rn for testing
+      var friendRequestResponse =
+          await supabase.from('friendRequest').select().eq('accepted', false);
+
       for (var row in friendRequestResponse) {
         if (row['sent_by'] != selfId) _friendIds.add(row['sent_by']);
         if (row['sent_to'] != selfId) _friendIds.add(row['sent_to']);

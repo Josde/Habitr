@@ -46,7 +46,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
   }
 
   void _onDeleteRoutine(DeleteRoutine event, Emitter<RoutinesState> emit) {
-    // TODO: Recheck
     final state = this.state;
     if (state is RoutinesLoaded) {
       List<Routine> newRoutines = state.routines.where((routine) {

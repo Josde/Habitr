@@ -1,10 +1,11 @@
 part of 'friends_bloc.dart';
 
 @immutable
-// TODO: Implement this properly in the future
 abstract class FriendsState {
-  List<User>? friends;
-  List<User>? requests;
+  final List<User>? friends;
+  final List<User>? requests;
+
+  const FriendsState({this.friends, this.requests});
 }
 
 class FriendsInitial extends FriendsState {}
@@ -12,12 +13,12 @@ class FriendsInitial extends FriendsState {}
 class FriendsLoading extends FriendsState {}
 
 class FriendsLoaded extends FriendsState {
-  List<User>? friends;
-  List<User>? requests;
-  FriendsLoaded({this.friends});
+  final List<User>? friends;
+  final List<User>? requests;
+  FriendsLoaded({this.friends, this.requests});
 }
 
 class FriendsError extends FriendsState {
-  String? error;
+  final String? error;
   FriendsError({this.error});
 }

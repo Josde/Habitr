@@ -89,7 +89,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return;
                   }
                   _formKey.currentState!.save();
-                  //TODO: Use redirect to prevent users from being redirected to localhost
+                  //TODO: Make a webpage to prevent users from being redirected to localhost
+                  //TODO: Return a waiting for email confirmation screen
                   try {
                     final result = await supabase.auth.signUp(
                         email: _email!,
