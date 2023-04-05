@@ -43,7 +43,6 @@ class _LoadingButtonState extends State<LoadingButton>
               strokeWidth: 8.0,
             ),
             Padding(
-              //TODO: REMOVE THIS AND FIND A BETTER WAY
               padding: const EdgeInsets.all(6.0),
               child: Icon(Icons.check, shadows: <Shadow>[
                 Shadow(color: Colors.black, blurRadius: 4.0)

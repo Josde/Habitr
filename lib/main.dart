@@ -51,20 +51,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final ThemeSingleton myTheme = ThemeSingleton();
 
   Future<bool> getLoggedInState() async {
-    Future<bool> hasLoggedIn;
+    bool hasLoggedIn;
     try {
       final initialSession = await SupabaseAuth.instance.initialSession;
       // Redirect users to different screens depending on the initial session
       if (initialSession != null) {
-        hasLoggedIn = Future.value(true);
+        hasLoggedIn = true;
       } else {
-        hasLoggedIn = Future.value(false);
+        hasLoggedIn = false;
       }
     } catch (e) {
-      hasLoggedIn = Future.value(false);
+      hasLoggedIn = false;
       // Handle initial auth state fetch error here
     }
-    return hasLoggedIn;
+    return Future.value(hasLoggedIn);
   }
 
   @override
