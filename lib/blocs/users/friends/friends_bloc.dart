@@ -18,6 +18,8 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
   void _onLoadFriends(
       LoadFriendsEvent event, Emitter<FriendsState> emit) async {
     List<User> _friends = List<User>.empty(growable: true);
+    List<User> _requests = List<User>.empty(growable: true);
+    List<String> _friendRequestIds = List<String>.empty(growable: true);
     String? ourId;
     emit.call(FriendsLoading());
     try {
@@ -26,15 +28,32 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
         return;
       }
       ourId = supabase.auth.currentUser!.id;
-      //TODO: Change the query to select both friends and friend requests and properly separate them, so that we can use them for the friend request screen without making more queries.
-      final friendsResponse = await supabase.from('profiles').select().neq(
-          'uuid',
-          ourId); // Thanks to RLS, any profile we can see that is not ours must be a friend.
-      for (var friend in friendsResponse) {
-        _friends.add(User.fromJson(friend as Map));
+
+      final friendsResponse =
+          await supabase.from('profiles').select().neq('uuid', ourId);
+
+      var friendRequestResponse =
+          await supabase.from('friendRequest').select().eq('accepted', false);
+
+      for (var row in friendRequestResponse) {
+        if (row['sent_by'] != ourId) _friendRequestIds.add(row['sent_by']);
+        if (row['sent_to'] != ourId) _friendRequestIds.add(row['sent_to']);
       }
 
-      emit.call(FriendsLoaded(friends: _friends));
+      for (var friend in friendsResponse) {
+        if (!(_friendRequestIds.contains(friend['uuid'])))
+          _friends.add(User.fromJson(friend as Map));
+      }
+      var friendRequestProfileResponse = await supabase
+          .from('profiles')
+          .select()
+          .in_('uuid', _friendRequestIds);
+
+      for (var row in friendRequestProfileResponse) {
+        _requests.add(User.fromJson(row as Map));
+      }
+
+      emit.call(FriendsLoaded(friends: _friends, requests: _requests));
     } catch (e) {
       print(e);
     }

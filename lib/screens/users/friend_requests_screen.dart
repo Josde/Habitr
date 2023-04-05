@@ -27,43 +27,18 @@ class _FriendRequestScreenState extends State<FriendRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getFriendRequests(selfId),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            _child = Container(child: LoadingSpinner());
-          } else {
-            _child = FriendRequests(friends: snapshot.data!, selfId: selfId);
-          }
-
-          return Scaffold(
-            appBar: AppBar(title: Text('Friend requests')),
-            body: _child,
-          );
-        });
-  }
-
-  Future<List<User>>? getFriendRequests(String selfId) async {
-    List<User>? _friendRequests = List.empty(growable: true);
-    List<String> _friendIds = List.empty(growable: true);
-
-    try {
-      var friendRequestResponse =
-          await supabase.from('friendRequest').select().eq('accepted', false);
-
-      for (var row in friendRequestResponse) {
-        if (row['sent_by'] != selfId) _friendIds.add(row['sent_by']);
-        if (row['sent_to'] != selfId) _friendIds.add(row['sent_to']);
+    return BlocBuilder<FriendsBloc, FriendsState>(builder: (context, state) {
+      if (!(state is FriendsLoaded)) {
+        _child = Container(child: LoadingSpinner());
+      } else {
+        _child = FriendRequests(friends: state.requests!, selfId: selfId);
       }
-      var friendRequestProfileResponse =
-          await supabase.from('profiles').select().in_('uuid', _friendIds);
-      for (var row in friendRequestProfileResponse) {
-        _friendRequests.add(User.fromJson(row as Map));
-      }
-    } catch (e) {
-      print(e);
-    }
-    return Future.value(_friendRequests);
+
+      return Scaffold(
+        appBar: AppBar(title: Text('Friend requests')),
+        body: _child,
+      );
+    });
   }
 }
 
@@ -99,15 +74,14 @@ class FriendRequests extends StatelessWidget {
                   Spacer(),
                   IconButton(
                       onPressed: () {
-                        rejectButton(u, selfId);
-                        //FIXME: Adding or deleting friends currently does not update the other views
+                        rejectButton(context, u, selfId);
                         BlocProvider.of<FriendsBloc>(context)
                             .add(LoadFriendsEvent());
                       },
                       icon: Icon(Icons.close)),
                   IconButton(
                       onPressed: () {
-                        acceptButton(u, selfId);
+                        acceptButton(context, u, selfId);
                         BlocProvider.of<FriendsBloc>(context)
                             .add(LoadFriendsEvent());
                       },
@@ -118,21 +92,26 @@ class FriendRequests extends StatelessWidget {
   }
 
 //TODO: Simplify these to a single function with parameters
-  acceptButton(User u, String selfId) async {
+//TODO: Move database queries to the BLoC
+  acceptButton(BuildContext context, User u, String selfId) async {
     try {
       await supabase.from('friendRequest').update({'accepted': true}).or(
           'sent_by.eq.${u.id},sent_to.eq.${u.id}');
+      BlocProvider.of<FriendsBloc>(context)
+          .add(AcceptFriendRequestEvent(friend: u));
     } catch (e) {
       print(e);
     }
   }
 
-  rejectButton(User u, String selfId) async {
+  rejectButton(BuildContext context, User u, String selfId) async {
     try {
       await supabase
           .from('friendRequest')
           .delete()
           .or('sent_by.eq.${u.id},sent_to.eq.${u.id}');
+      BlocProvider.of<FriendsBloc>(context)
+          .add(DeclineFriendRequestEvent(friend: u));
     } catch (e) {
       print(e);
     }
