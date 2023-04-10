@@ -70,6 +70,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    myTheme.isDark = Settings.getValue('dark-mode', defaultValue: false)!;
     myTheme.addListener(() {
       setState(() {});
     }); // To make theme reload on startup
