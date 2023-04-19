@@ -32,8 +32,9 @@ class User {
     this.id = json['uuid'];
     this.name = json['name'];
     this.createdAt = DateTime.parse(json['created_at']);
-    this.country = Country
-        .worldWide; // FIXME: Doesn't work, i have to change supabase to use iso2
+    this.country = Country.tryParse(json['country_code']) ??
+        Country
+            .worldWide; // FIXME: Doesn't work, i have to change supabase to use iso2
     this.xp = json['xp'] ?? 0;
     this.currentStreak = json['current_streak'] ?? 0;
     this.maxStreak = json['max_streak'] ?? 0;
