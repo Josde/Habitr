@@ -168,7 +168,7 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                       if (widget.routine != null) {
                         //nuevaRutina.id = widget.routine!.id;
                         //BlocProvider.of<RoutinesBloc>(context, listen: false)
-                        //    .add(UpdateRoutine(routine: nuevaRutina));
+                        //    .add(UpdateRoutineEvent(routine: nuevaRutina));
                         Navigator.pop(context);
                       } else {
                         //BlocProvider.of<RoutinesBloc>(context, listen: false)

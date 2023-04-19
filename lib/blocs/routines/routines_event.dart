@@ -6,37 +6,32 @@ abstract class RoutinesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadRoutines extends RoutinesEvent {
-  final List<Routine> routines;
-  const LoadRoutines({required this.routines});
-  @override
-  List<Object> get props => [routines];
-}
+class LoadRoutinesEvent extends RoutinesEvent {}
 
-class CreateRoutine extends RoutinesEvent {
+class CreateRoutineEvent extends RoutinesEvent {
   final Routine routine;
-  const CreateRoutine({required this.routine});
+  const CreateRoutineEvent({required this.routine});
   @override
   List<Object> get props => [routine];
 }
 
-class ReadRoutine extends RoutinesEvent {
+class ReadRoutineEvent extends RoutinesEvent {
   final Routine routine;
-  const ReadRoutine({required this.routine});
+  const ReadRoutineEvent({required this.routine});
   @override
   List<Object> get props => [routine];
 }
 
-class UpdateRoutine extends RoutinesEvent {
+class UpdateRoutineEvent extends RoutinesEvent {
   final Routine routine;
-  const UpdateRoutine({required this.routine});
+  const UpdateRoutineEvent({required this.routine});
   @override
   List<Object> get props => [routine];
 }
 
-class DeleteRoutine extends RoutinesEvent {
+class DeleteRoutineEvent extends RoutinesEvent {
   final Routine routine;
-  const DeleteRoutine({required this.routine});
+  const DeleteRoutineEvent({required this.routine});
   @override
   List<Object> get props => [routine];
 }

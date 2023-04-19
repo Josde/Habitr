@@ -73,10 +73,10 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
           // Modo de edición
           nuevaRutina.id = widget.routine!.id;
           BlocProvider.of<RoutinesBloc>(context, listen: false)
-              .add(UpdateRoutine(routine: nuevaRutina));
+              .add(UpdateRoutineEvent(routine: nuevaRutina));
         } else {
           BlocProvider.of<RoutinesBloc>(context, listen: false)
-              .add(CreateRoutine(routine: nuevaRutina));
+              .add(CreateRoutineEvent(routine: nuevaRutina));
         }
         Navigator.pop(context);
       }

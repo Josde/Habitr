@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habitr_tfg/blocs/routines/completion/routine_completion_cubit.dart';
+import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/widgets/loading_button.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
@@ -46,7 +46,8 @@ class StopwatchRoutineDetailScreen extends StatelessWidget {
                 child: LoadingButton(onComplete: () {
                   RoutineCompletion rc =
                       RoutineCompletion.now(debugUser.id, routine.id!);
-                  BlocProvider.of<RoutineCompletionCubit>(context).add(rc);
+                  BlocProvider.of<RoutineCompletionBloc>(context)
+                      .add(AddRoutineCompletionEvent(rc: rc));
                   Navigator.pop(context, true);
                 }))
           ],

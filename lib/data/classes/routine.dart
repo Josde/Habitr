@@ -11,22 +11,15 @@ class Routine {
   ActivityType type = ActivityType.Instant;
   int timerLength = 0;
   bool notificationsEnabled = false;
-  late int? id;
-  Routine.withId(
-      this.name,
-      this.numberOfNotifications,
-      this.notificationStartTime,
-      this.notificationsEnabled,
-      this.type,
-      this.timerLength,
-      this.id);
+  bool isPublic = false;
+  late int? id = 0;
   Routine(this.name, this.numberOfNotifications, this.notificationStartTime,
-      this.notificationsEnabled, this.type, this.timerLength) {
-    this.id = lastId++;
-  }
+      this.notificationsEnabled, this.type, this.timerLength,
+      {this.isPublic = false});
+
   Routine.empty();
 
-  Routine.fromJson(Map<String, dynamic> json) {
+  Routine.fromJson(Map<dynamic, dynamic> json) {
     //TODO: Add error handling
     this.name = json['name'];
     this.type = ActivityType.values.elementAt(json['type']);

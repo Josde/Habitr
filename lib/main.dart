@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:habitr_tfg/blocs/routines/completion/routine_completion_cubit.dart';
+import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    myTheme.isDark = Settings.getValue('dark-mode', defaultValue: false)!;
+    myTheme.isDark = Settings.getValue<bool>('dark-mode', defaultValue: false)!;
     myTheme.addListener(() {
       setState(() {});
     }); // To make theme reload on startup
@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               BlocProvider(create: (context) => RoutinesBloc()),
               BlocProvider(create: (context) => SelfBloc()),
               BlocProvider(create: (context) => FriendsBloc()),
-              BlocProvider(create: (context) => RoutineCompletionCubit())
+              BlocProvider(create: (context) => RoutineCompletionBloc())
             ],
             child: Builder(
                 // Para evitar problemas de contexto con el cubit de tema

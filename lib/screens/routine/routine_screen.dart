@@ -15,110 +15,123 @@ class _RoutineScreenState extends State<RoutineScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<RoutinesBloc, RoutinesState>(builder: (context, state) {
       if (state is RoutinesLoaded) {
-        return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "Routines",
-              ),
-              backgroundColor: Theme.of(context).iconTheme.color,
-            ),
-            body: Center(
-              child: ListView.builder(
-                itemCount: state.routines.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                      child: Container(
-                        height: 50,
-                        color: Theme.of(context).primaryColorDark,
-                        child: Row(children: [
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('${state.routines[index].name}')),
-                          Spacer(),
-                          IconButton(
-                            onPressed: () {
-                              // Edit button
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return BlocProvider.value(
-                                  value: BlocProvider.of<RoutinesBloc>(context),
-                                  child: NewCreateRoutineScreen(
-                                      routine: state.routines[index]),
-                                );
-                              }));
-                            },
-                            icon: Icon(Icons.edit),
-                            color: Theme.of(context).iconTheme.color,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              // Delete button
-                              BlocProvider.of<RoutinesBloc>(context).add(
-                                  DeleteRoutine(
-                                      routine: state.routines[index]));
-                            },
-                            color: Theme.of(context).iconTheme.color,
-                            icon: Icon(Icons.delete),
-                          )
-                        ]),
+        return RoutineList(state: state);
+      } else if (state is DetailRoutine) {
+        // state is DetailRoutine
+        return RoutineList(state: state); //temp fix
+        //return RoutineDetailScreen(routine: (state as DetailRoutine).routine);
+      } else {
+        return RoutineList(
+            state: RoutinesLoaded(
+                routines: List.empty())); //temp fix, this is an error
+      }
+    });
+  }
+}
+
+class RoutineList extends StatelessWidget {
+  RoutinesState state;
+  RoutineList({super.key, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Routines",
+          ),
+          backgroundColor: Theme.of(context).iconTheme.color,
+        ),
+        body: Center(
+          child: ListView.builder(
+            itemCount: state.routines.length,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                  child: Container(
+                    height: 50,
+                    color: Theme.of(context).primaryColorDark,
+                    child: Row(children: [
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${state.routines[index].name}')),
+                      Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          // Edit button
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return BlocProvider.value(
+                              value: BlocProvider.of<RoutinesBloc>(context),
+                              child: NewCreateRoutineScreen(
+                                  routine: state.routines[index]),
+                            );
+                          }));
+                        },
+                        icon: Icon(Icons.edit),
+                        color: Theme.of(context).iconTheme.color,
                       ),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return BlocProvider.value(
-                            value: BlocProvider.of<RoutinesBloc>(context),
-                            child: RoutineDetailScreen(
-                                routine: state.routines[index]),
-                          );
-                        }));
-                      });
-                },
-              ),
-            ),
-            floatingActionButton: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FloatingActionButton(
-                    // Add from repository button
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return RoutineRepositoryScreen();
-                      }));
-                    },
-                    heroTag: null, // This prevents a crash.
-                    backgroundColor: Theme.of(context).iconTheme.color,
-                    child: Icon(
-                      Icons.wifi,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                      IconButton(
+                        onPressed: () {
+                          // Delete button
+                          BlocProvider.of<RoutinesBloc>(context).add(
+                              DeleteRoutineEvent(
+                                  routine: state.routines[index]));
+                        },
+                        color: Theme.of(context).iconTheme.color,
+                        icon: Icon(Icons.delete),
+                      )
+                    ]),
                   ),
-                ),
-                FloatingActionButton(
-                  // Create new button
-                  onPressed: () {
+                  onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return BlocProvider.value(
                         value: BlocProvider.of<RoutinesBloc>(context),
-                        child: NewCreateRoutineScreen(routine: null),
+                        child:
+                            RoutineDetailScreen(routine: state.routines[index]),
                       );
                     }));
-                  },
-                  backgroundColor: Theme.of(context).iconTheme.color,
-                  child: Icon(
-                    Icons.add,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  });
+            },
+          ),
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FloatingActionButton(
+                // Add from repository button
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return RoutineRepositoryScreen();
+                  }));
+                },
+                heroTag: null, // This prevents a crash.
+                backgroundColor: Theme.of(context).iconTheme.color,
+                child: Icon(
+                  Icons.wifi,
+                  color: Theme.of(context).primaryColor,
                 ),
-              ],
-            ));
-      } else {
-        // state is DetailRoutine
-        return RoutineDetailScreen(routine: (state as DetailRoutine).routine);
-      }
-    });
+              ),
+            ),
+            FloatingActionButton(
+              // Create new button
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BlocProvider.value(
+                    value: BlocProvider.of<RoutinesBloc>(context),
+                    child: NewCreateRoutineScreen(routine: null),
+                  );
+                }));
+              },
+              backgroundColor: Theme.of(context).iconTheme.color,
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ],
+        ));
   }
 }
