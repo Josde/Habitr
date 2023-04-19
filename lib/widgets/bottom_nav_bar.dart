@@ -38,7 +38,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   void initStateAsyncPart() async {
-    await initAll(context);
+    //await initAll(context);
     tz.initializeTimeZones();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
@@ -61,6 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     // Schedule first loading of BLoCs
     BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
     BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
+    BlocProvider.of<RoutinesBloc>(context).add(LoadRoutinesEvent());
     super.initState();
   }
 
