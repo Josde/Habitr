@@ -125,9 +125,10 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           return;
         }
         final routineResponse = await supabase
-            .from('routine')
+            .from(
+                'profileRoutine') //TODO: Delete stray routines if no references are left ?
             .delete()
-            .eq('id', r.id)
+            .eq('routine_id', r.id)
             .select()
             .single() as Map;
         print(routineResponse);
@@ -146,7 +147,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
   void _onAddRepositoryRoutine(
       AddRepositoryRoutineEvent event, Emitter<RoutinesState> emit) async {
     Routine r = event.routine;
-    print('OnAddRepositoryRoutine called with ${event.routine.toString()}');
     if (this.state is RoutinesLoaded) {
       try {
         if (supabase.auth.currentUser == null) {
