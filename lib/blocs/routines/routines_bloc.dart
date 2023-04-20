@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 
-import '../../utils/io.dart';
-
 part 'routines_event.dart';
 part 'routines_state.dart';
 
@@ -135,7 +133,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         List<Routine> newRoutines = state.routines.where((routine) {
           return routine.id != r.id;
         }).toList();
-        deleteRoutine(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
