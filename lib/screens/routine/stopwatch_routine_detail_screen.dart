@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/widgets/loading_button.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:awesome_aurora_gradient/awesome_aurora_gradient.dart';
+
+import '../../blocs/users/self/self_bloc.dart';
 
 class StopwatchRoutineDetailScreen extends StatelessWidget {
   final Routine routine;
@@ -44,8 +47,9 @@ class StopwatchRoutineDetailScreen extends StatelessWidget {
             Container(
                 height: 80,
                 child: LoadingButton(onComplete: () {
+                  User self = BlocProvider.of<SelfBloc>(context).state.self!;
                   RoutineCompletion rc =
-                      RoutineCompletion.now(debugUser.id, routine.id!);
+                      RoutineCompletion.now(self.id, routine.id!);
                   BlocProvider.of<RoutineCompletionBloc>(context)
                       .add(AddRoutineCompletionEvent(rc: rc));
                   Navigator.pop(context, true);

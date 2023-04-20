@@ -7,6 +7,9 @@ import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
 import 'package:awesome_aurora_gradient/awesome_aurora_gradient.dart';
 
+import '../../blocs/users/self/self_bloc.dart';
+import '../../data/classes/user.dart';
+
 class TimerRoutineDetailScreen extends StatefulWidget {
   final Routine routine;
   const TimerRoutineDetailScreen({Key? key, required this.routine})
@@ -19,8 +22,8 @@ class TimerRoutineDetailScreen extends StatefulWidget {
 class _TimerRoutineDetailScreenState extends State<TimerRoutineDetailScreen> {
   bool _isButtonEnabled = false;
   void buttonPress() {
-    RoutineCompletion rc =
-        RoutineCompletion.now(debugUser.id, widget.routine.id!);
+    User self = BlocProvider.of<SelfBloc>(context).state.self!;
+    RoutineCompletion rc = RoutineCompletion.now(self.id, widget.routine.id!);
     BlocProvider.of<RoutineCompletionBloc>(context)
         .add(AddRoutineCompletionEvent(rc: rc));
     Navigator.pop(context, true);

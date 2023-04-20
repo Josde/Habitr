@@ -6,6 +6,8 @@ import 'package:habitr_tfg/data/classes/routinecompletion.dart';
 import 'package:habitr_tfg/widgets/loading_button.dart';
 import 'package:awesome_aurora_gradient/awesome_aurora_gradient.dart';
 
+import '../../blocs/users/self/self_bloc.dart';
+import '../../data/classes/user.dart';
 import '../../utils/constants.dart';
 
 class InstantRoutineDetailScreen extends StatelessWidget {
@@ -39,9 +41,11 @@ class InstantRoutineDetailScreen extends StatelessWidget {
                 Container(
                     height: 80,
                     child: LoadingButton(onComplete: () {
-                      //User self = BlocProvider.of<SelfBloc>().state.self;
+                      //FIXME: On this and stopwatch and timer, check if BLOC is loaded
+                      User self =
+                          BlocProvider.of<SelfBloc>(context).state.self!;
                       RoutineCompletion rc =
-                          RoutineCompletion.now(debugUser.id, routine.id!);
+                          RoutineCompletion.now(self.id, routine.id!);
                       BlocProvider.of<RoutineCompletionBloc>(context)
                           .add(AddRoutineCompletionEvent(rc: rc));
                       Navigator.pop(context, true);
