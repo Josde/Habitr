@@ -131,70 +131,66 @@ class Profile extends StatelessWidget {
                 )
               ],
             ),
-            Divider(
-              color: Theme.of(context).primaryColorLight,
-            ),
-            IntrinsicHeight(
-              child: Row(
-                //Stadistics and friends button
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    // Stadistics
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => StatisticsScreen()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorDark),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                          child: Center(child: Text('Stadistics')),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    // Friends
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FriendsScreen()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        child: Builder(builder: (context) {
-                          if (isSelfProfile) {
-                            return Padding(
+            Builder(builder: (context) {
+              if ((isSelfProfile)) {
+                return IntrinsicHeight(
+                  child: Row(
+                    //Stadistics and friends button
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        // Stadistics
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => StatisticsScreen()));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColorDark),
+                            child: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Text('Friends'),
-                                    Text('$_friendCount')
-                                  ],
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Container(); // FIXME: This looks jank
-                          }
-                        }),
+                              child: Center(child: Text('Stadistics')),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        // Friends
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FriendsScreen()));
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      Text('Friends'),
+                                      Text('$_friendCount')
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                );
+              } else {
+                return Container();
+              }
+            }),
             Divider(
               color: Theme.of(context).primaryColorLight,
             ),
