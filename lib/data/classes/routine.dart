@@ -1,9 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 
-int lastId = 0;
-
-class Routine {
+class Routine extends Equatable {
   //TODO: Somehow add the possibility to only get notifications on certains day of the week.
   String name = "";
   int numberOfNotifications = 3;
@@ -35,9 +34,8 @@ class Routine {
     }
     if (json.containsKey('id')) {
       this.id = json['id'];
-      lastId = this.id! > lastId ? this.id! : lastId;
     } else {
-      this.id = lastId++;
+      this.id = 0;
     }
     if (json.containsKey('notificationsEnabled')) {
       this.notificationsEnabled = json['notificationsEnabled'];
@@ -60,4 +58,8 @@ class Routine {
     print(json.toString());
     return json;
   }
+
+  @override
+  List<Object?> get props =>
+      [name, id, numberOfNotifications, notificationStartTime];
 }

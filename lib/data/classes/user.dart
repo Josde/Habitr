@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 import 'package:country_picker/country_picker.dart';
 
-class User {
+class User extends Equatable {
   // Defaults for empty constructor
-  var uuid = Uuid();
+
   String id = '';
   String name = 'User';
   Country country = Country.worldWide;
@@ -15,18 +16,6 @@ class User {
   int friendCount = 0;
   bool isAdmin = false;
 
-  User.empty() {
-    this.id = uuid.v4();
-  }
-
-  User.debug(this.name) {
-    this.id = uuid.v4();
-  }
-
-  User(this.name, this.country, this.createdAt, this.xp, this.currentStreak,
-      this.maxStreak, this.friendCount, this.isAdmin) {
-    this.id = uuid.v4();
-  }
   User.fromJson(Map<dynamic, dynamic> json) {
     // <dynamic, dynamic> because supabase returns it like that; however first part of the map will always be a string.
     this.id = json['uuid'];
@@ -46,4 +35,8 @@ class User {
     // TODO: Implement this if needed?
     return json;
   }
+
+  @override
+  List<Object?> get props =>
+      [id, name, xp, currentStreak, maxStreak, friendCount];
 }

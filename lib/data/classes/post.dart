@@ -1,4 +1,6 @@
-class Post {
+import 'package:equatable/equatable.dart';
+
+class Post extends Equatable {
   late int id;
   String? posterId;
   String? text;
@@ -16,4 +18,7 @@ class Post {
     this.text = json['content'];
     this.date = DateTime.parse(json['post_date']);
   }
+
+  @override
+  List<Object?> get props => [id, posterId, text, date];
 }

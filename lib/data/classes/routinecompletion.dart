@@ -1,4 +1,6 @@
-class RoutineCompletion {
+import 'package:equatable/equatable.dart';
+
+class RoutineCompletion extends Equatable {
   late final String userId;
   late final int routineId;
   late final DateTime time;
@@ -20,4 +22,7 @@ class RoutineCompletion {
     json['time'] = time.toString();
     return json;
   }
+
+  @override
+  List<Object?> get props => [userId, routineId, time];
 }
