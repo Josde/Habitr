@@ -29,7 +29,7 @@ Future<void> main() async {
     await Supabase.initialize(
         url: myUrl,
         anonKey: myAnonKey,
-        debug: false,
+        debug: true,
         localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
     FlutterNativeSplash.remove();
