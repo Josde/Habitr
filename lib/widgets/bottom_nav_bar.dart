@@ -13,8 +13,6 @@ import '../utils/constants.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../utils/io.dart';
-
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
@@ -38,7 +36,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   void initStateAsyncPart() async {
-    //await initAll(context);
     tz.initializeTimeZones();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();

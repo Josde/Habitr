@@ -12,8 +12,6 @@ import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
-import '../../utils/io.dart';
-
 class SettingsScreen extends StatelessWidget {
   final ThemeSingleton myTheme = ThemeSingleton();
   @override
@@ -73,7 +71,6 @@ class SettingsScreen extends StatelessWidget {
       subtitle: '', // Required by the library
       leading: Icon(Icons.logout),
       onTap: () async {
-        await saveAll(context);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LogInScreen()));
         await supabase.auth.signOut();
