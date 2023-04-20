@@ -16,6 +16,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     on<CreateRoutineEvent>(_onAddRoutine);
     on<UpdateRoutineEvent>(_onUpdateRoutine);
     on<DeleteRoutineEvent>(_onDeleteRoutine);
+    on<AddRepositoryRoutineEvent>(_onAddRepositoryRoutine);
     //on<ReadRoutine>(_onReadRoutine);
   }
 
@@ -134,6 +135,28 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           return routine.id != r.id;
         }).toList();
         deleteRoutine(r);
+        emit(RoutinesLoaded(routines: newRoutines));
+      } catch (e) {
+        print(e);
+        emit(RoutinesError(error: e.toString()));
+      }
+    }
+  }
+
+  void _onAddRepositoryRoutine(
+      AddRepositoryRoutineEvent event, Emitter<RoutinesState> emit) async {
+    Routine r = event.routine;
+    print('OnAddRepositoryRoutine called with ${event.routine.toString()}');
+    if (this.state is RoutinesLoaded) {
+      try {
+        if (supabase.auth.currentUser == null) {
+          emit.call(RoutinesError(error: 'User is not logged in.'));
+          return;
+        }
+        final routineResponse = await supabase.from('profileRoutine').insert(
+            {'profile_id': supabase.auth.currentUser!.id, 'routine_id': r.id});
+        List<Routine> newRoutines = List.from(this.state.routines);
+        newRoutines.add(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);

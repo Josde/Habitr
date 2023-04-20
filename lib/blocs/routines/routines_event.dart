@@ -35,3 +35,11 @@ class DeleteRoutineEvent extends RoutinesEvent {
   @override
   List<Object> get props => [routine];
 }
+
+class AddRepositoryRoutineEvent extends RoutinesEvent {
+  final Routine routine;
+  const AddRepositoryRoutineEvent({required this.routine});
+
+  @override
+  List<Object> get props => [routine];
+}
