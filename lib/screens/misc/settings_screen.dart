@@ -7,7 +7,7 @@ import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:habitr_tfg/screens/misc/debug_screen.dart';
-import 'package:habitr_tfg/screens/misc/login_screen.dart';
+import 'package:habitr_tfg/screens/users/login_screen.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';

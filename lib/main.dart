@@ -8,7 +8,7 @@ import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
-import 'package:habitr_tfg/screens/misc/login_screen.dart';
+import 'package:habitr_tfg/screens/users/login_screen.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:hive_flutter/hive_flutter.dart';

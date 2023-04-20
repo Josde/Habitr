@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:meta/meta.dart';

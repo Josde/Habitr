@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:habitr_tfg/screens/misc/sign_up_screen.dart';
+import 'package:habitr_tfg/screens/users/sign_up_screen.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 import 'package:habitr_tfg/utils/constants.dart';
