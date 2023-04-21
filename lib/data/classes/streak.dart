@@ -1,12 +1,21 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'streak.g.dart';
 
+@JsonSerializable()
 class Streak extends Equatable {
-  String userId;
+  @JsonKey(name: 'profile_id')
+  String userId = '';
+  @JsonKey(name: 'id')
+  int id = 0;
+  @JsonKey(name: 'start_date', fromJson: DateTime.parse)
   DateTime startDate;
+  @JsonKey(name: 'end_date', fromJson: DateTime.parse)
   DateTime endDate;
-  Streak(
-      {required this.userId, required this.startDate, required this.endDate});
+  Streak({required this.startDate, required this.endDate});
+  factory Streak.fromJson(Map<dynamic, dynamic> json) => _$StreakFromJson(json);
 
+  Map<String, dynamic> toJson() => _$StreakToJson(this);
   @override
   List<Object?> get props => [userId, startDate, endDate];
 }

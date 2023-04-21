@@ -1,25 +1,40 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:habitr_tfg/data/converters/timeofdayconverter.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'routine.g.dart';
 
 @JsonSerializable()
 class Routine extends Equatable {
-  //TODO: Somehow add the possibility to only get notifications on certains day of the week.
+  @JsonKey()
   String name = "";
-  int numberOfNotifications = 3;
+  @JsonKey(name: "notification_time")
+  @TimeOfDayConverter() // Make fromJson and toJson for this
   TimeOfDay notificationStartTime = TimeOfDay.fromDateTime(DateTime(2022));
+  @JsonKey(name: "type")
   ActivityType type = ActivityType.Instant;
+
+  @JsonKey(name: "timer_length")
   int timerLength = 0;
+  @JsonKey(name: "notification_enabled")
   bool notificationsEnabled = false;
+  @JsonKey(name: "notification_days_of_week")
   List<bool> notificationDaysOfWeek = List.filled(7, true);
+  @JsonKey(name: "is_public")
   bool isPublic = false;
+  @JsonKey()
   late int? id = 0;
-  Routine(this.name, this.numberOfNotifications, this.notificationStartTime,
-      this.notificationsEnabled, this.type, this.timerLength,
+  Routine(this.name, this.notificationStartTime, this.notificationsEnabled,
+      this.notificationDaysOfWeek, this.type, this.timerLength,
       {this.isPublic = false});
 
   Routine.empty();
+  factory Routine.fromJson(Map<dynamic, dynamic> json) =>
+      _$RoutineFromJson(json);
 
+  Map<String, dynamic> toJson() => _$RoutineToJson(this);
   // Routine.fromJson(Map<dynamic, dynamic> json) {
   //   //TODO: Add error handling
   //   this.name = json['name'];
@@ -62,6 +77,13 @@ class Routine extends Equatable {
   // }
 
   @override
-  List<Object?> get props =>
-      [name, id, numberOfNotifications, notificationStartTime];
+  List<Object?> get props => [
+        name,
+        id,
+        notificationsEnabled,
+        notificationStartTime,
+        notificationDaysOfWeek
+      ];
+
+  static getActivityType() {}
 }
