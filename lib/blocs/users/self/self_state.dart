@@ -14,8 +14,7 @@ class SelfInitial extends SelfState {
 
 class SelfLoading extends SelfState {
   @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 class SelfLoaded extends SelfState {
