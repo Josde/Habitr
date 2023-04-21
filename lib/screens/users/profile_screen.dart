@@ -55,8 +55,9 @@ class _ProfilescreenState extends State<ProfileScreen>
             }
             return Scaffold(
                 appBar: AppBar(title: Text('Profile')),
-                body: Container(
-                    child: LoadingSpinner(), alignment: Alignment.center));
+                body: Center(
+                  child: LoadingSpinner(),
+                ));
           }
         },
       );

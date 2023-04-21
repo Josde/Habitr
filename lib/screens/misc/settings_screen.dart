@@ -58,8 +58,7 @@ class SettingsScreen extends StatelessWidget {
                 fit: BoxFit.contain, height: 128, width: 128),
           );
         } else {
-          return Container(
-              alignment: Alignment.center, child: LoadingSpinner());
+          return Center(child: LoadingSpinner());
         }
       },
     );

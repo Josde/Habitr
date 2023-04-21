@@ -29,7 +29,7 @@ class _FriendRequestScreenState extends State<FriendRequestScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<FriendsBloc, FriendsState>(builder: (context, state) {
       if (!(state is FriendsLoaded)) {
-        _child = Container(child: LoadingSpinner());
+        _child = Center(child: LoadingSpinner());
       } else {
         _child = FriendRequests(friends: state.requests!, selfId: selfId);
       }

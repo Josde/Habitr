@@ -12,15 +12,22 @@ class DebugScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          child: IconButton(
-        icon: Icon(Icons.replay_outlined),
-        onPressed: () {
-          BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
-          BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
-          BlocProvider.of<RoutinesBloc>(context).add(LoadRoutinesEvent());
-        },
-      )),
+      body: Center(
+        child: Column(
+          children: [
+            Container(
+                child: IconButton(
+              icon: Icon(Icons.replay_outlined),
+              onPressed: () {
+                BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
+                BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
+                BlocProvider.of<RoutinesBloc>(context).add(LoadRoutinesEvent());
+              },
+            )),
+            Center(child: Container(child: LoadingSpinner())),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -32,8 +32,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
         if (state is FriendsLoaded) {
           _child = Friends(friends: state.friends!);
         } else {
-          _child =
-              Container(alignment: Alignment.center, child: LoadingSpinner());
+          _child = Center(child: LoadingSpinner());
         }
         return Scaffold(appBar: AppBar(title: Text('Friends')), body: _child);
       },

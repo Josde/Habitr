@@ -47,7 +47,11 @@ class _FeedScreenState extends State<FeedScreen> {
           future: getMessages(),
           builder: (context, snapshot) {
             if (!(snapshot.hasData)) {
-              return Container(child: LoadingSpinner());
+              return Center(
+                  child: Container(
+                child: LoadingSpinner(),
+                alignment: Alignment.center,
+              ));
             }
             posts = snapshot.data!.reversed.toList();
             return ListView.builder(

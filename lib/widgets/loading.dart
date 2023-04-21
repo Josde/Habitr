@@ -26,14 +26,22 @@ class _LoadingSpinnerState extends State<LoadingSpinner>
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColorDark,
-              color: Theme.of(context).iconTheme.color,
-              value: null),
-          Text('Loading...'),
-        ],
+      alignment: Alignment.center,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                color: Theme.of(context).iconTheme.color,
+                value: null),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Loading...'),
+            ),
+          ],
+        ),
       ),
     );
   }

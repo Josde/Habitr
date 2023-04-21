@@ -25,7 +25,7 @@ class _RoutineRepositoryScreenState extends State<RoutineRepositoryScreen> {
           future: getRoutines(),
           builder: (context, snapshot) {
             if (!(snapshot.hasData)) {
-              return LoadingSpinner();
+              return Center(child: LoadingSpinner());
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
