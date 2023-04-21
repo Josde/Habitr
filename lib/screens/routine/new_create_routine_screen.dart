@@ -36,7 +36,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
       _routineName = r.name;
       _currentType = r.type;
       _notificationsEnabled = r.notificationsEnabled;
-      _numberOfNotifications = r.numberOfNotifications;
+      _daysOfWeek = r.notificationDaysOfWeek;
       _timerLength = r.timerLength;
       _notificationStartTime = r.notificationStartTime;
     }
@@ -65,13 +65,8 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
       // Add null checks here to prevent crashing due to ! operator
       if (this._formKey.currentState!.validate()) {
         this._formKey.currentState!.save();
-        Routine nuevaRutina = Routine(
-            _routineName,
-            _numberOfNotifications,
-            _notificationStartTime!,
-            _notificationsEnabled,
-            _currentType!,
-            _timerLength);
+        Routine nuevaRutina = Routine(_routineName, _notificationStartTime!,
+            _notificationsEnabled, _daysOfWeek, _currentType!, _timerLength);
         if (widget.routine != null) {
           // Modo de edición
           nuevaRutina.id = widget.routine!.id;

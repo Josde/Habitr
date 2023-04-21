@@ -125,7 +125,7 @@ class Profile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('${_user.name}'),
-                    Text('${_user.country.displayName}'),
+                    Text('${_user.country?.displayName}'),
                     Text(
                         '${_user.xp}xp'), //TODO: Add rank when the functionality is done.
                   ],

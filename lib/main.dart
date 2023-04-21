@@ -29,7 +29,7 @@ Future<void> main() async {
     await Supabase.initialize(
         url: myUrl,
         anonKey: myAnonKey,
-        debug: true,
+        debug: false,
         localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
     FlutterNativeSplash.remove();
@@ -83,8 +83,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         future: getLoggedInState(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            childScreen =
-                Container(alignment: Alignment.center, child: LoadingSpinner());
+            childScreen = Center(child: LoadingSpinner());
           } else {
             bool loggedIn = snapshot.data!;
             if (!loggedIn) {
