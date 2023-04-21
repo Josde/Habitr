@@ -21,7 +21,10 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
   int _numberOfNotifications = 3;
   int _timerLength = 0;
   TimeOfDay? _notificationStartTime = TimeOfDay.now();
+  List<bool> _daysOfWeek = List.filled(7, true);
   bool _notificationsEnabled = true;
+  bool _isPublic = false;
+  int _notificationType = 0;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -325,26 +328,119 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
               )),
         ),
         Visibility(
-          visible: _notificationsEnabled,
-          maintainState: true,
+          visible: this._notificationsEnabled,
           child: Padding(
-            // Number of notifications
             padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              initialValue: '${_numberOfNotifications.toString()}',
-              validator: (value) {
-                return numericInputValidator(value);
-              },
-              onSaved: (value) {
-                this._numberOfNotifications =
-                    (value == null ? 180 : int.parse(value));
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Number of notifications",
-                helperText: 'You will be notified every 5 minutes',
+            child: Row(
+              children: [
+                Text('Frequency',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Spacer(),
+                Container(
+                  height: 50,
+                  width: 100, // Requires hardcoded width to not crash
+                  child: DropdownButtonFormField(
+                      value: 0,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text('Daily'),
+                          value: 0,
+                        ),
+                        DropdownMenuItem(
+                          child: Text('Weekends'),
+                          value: 1,
+                        ),
+                        DropdownMenuItem(
+                          child: Text('Custom'),
+                          value: 2,
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          this._notificationType = value ?? 0;
+                          switch (this._notificationType) {
+                            case 0:
+                              this._daysOfWeek = [
+                                // TODO: prettify this but for now idgaf
+                                true,
+                                true,
+                                true,
+                                true,
+                                true,
+                                true,
+                                true
+                              ];
+                              break;
+                            case 1:
+                              this._daysOfWeek = [
+                                // TODO: prettify this but for now idgaf
+                                false, false, false, false, false,
+                                true,
+                                true
+                              ];
+                              break;
+                            case 2:
+                              break;
+                          }
+                        });
+                      }),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Visibility(
+          visible: this._notificationType == 2,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 50,
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 7,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  var _daysOfWeekNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+                  return Container(
+                    width: 48, //FIXME: Temporarily hardcoded container size
+                    height: 48,
+                    child: OutlinedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              _daysOfWeek[index]
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.transparent),
+                          shape: MaterialStateProperty.all(CircleBorder())),
+                      child: Text(_daysOfWeekNames[index]),
+                      onPressed: () => setState(
+                          () => _daysOfWeek[index] = !_daysOfWeek[index]),
+                    ),
+                  );
+                },
               ),
             ),
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:
+                Text('Social', style: TextStyle(fontWeight: FontWeight.bold))),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Text('Make public',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Spacer(),
+              Checkbox(
+                activeColor: Theme.of(context).iconTheme.color,
+                onChanged: (bool? value) {
+                  setState(() => this._isPublic = value!);
+                },
+                value: this._isPublic,
+              )
+            ],
           ),
         ),
       ]),
