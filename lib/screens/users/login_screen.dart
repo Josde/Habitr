@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:habitr_tfg/screens/misc/sign_up_screen.dart';
+import 'package:habitr_tfg/screens/users/sign_up_screen.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 import 'package:habitr_tfg/utils/constants.dart';
@@ -21,12 +21,13 @@ class _LogInScreenState extends State<LogInScreen> {
   late final StreamSubscription<AuthState> _authSubscription;
   String? _email, _password;
   User? _user;
-
+  var _obscureText = true;
   @override
   void initState() {
     _authSubscription = supabase.auth.onAuthStateChange.listen((data) {
       final AuthChangeEvent event = data.event;
       final Session? session = data.session;
+
       setState(() {
         _user = session?.user;
       });
@@ -49,7 +50,9 @@ class _LogInScreenState extends State<LogInScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/icons/motivation.png'),
+            Flexible(
+                child: Image.asset('assets/icons/motivation.png'),
+                fit: FlexFit.tight),
             Container(child: Text('Welcome to Habitr!')),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -66,8 +69,11 @@ class _LogInScreenState extends State<LogInScreen> {
               padding: const EdgeInsets.all(8.0),
               child: RoundedTextFormField(
                 hintText: 'Password',
-                obscureText: true,
+                obscureText: this._obscureText,
                 suffixIcon: Icons.visibility,
+                onSuffixIcon: () {
+                  setState(() => this._obscureText = !this._obscureText);
+                },
                 onSaved: (String? value) {
                   this._password = value!;
                 },
@@ -86,18 +92,19 @@ class _LogInScreenState extends State<LogInScreen> {
                   return;
                 }
                 _formKey.currentState!.save();
-                // FIXME: Auth throws exception on wrong pass now, so we have to try catch all of these
-                final result = await supabase.auth
-                    .signInWithPassword(email: _email, password: _password!);
-                if (result.session == null) {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(//temp fix, reformat to bloc later
-                          builder: (BuildContext context) {
-                    return BottomNavBar();
-                  }));
-                } else {
+                try {
+                  final result = await supabase.auth
+                      .signInWithPassword(email: _email, password: _password!);
+                  if (result.session != null) {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(//temp fix, reformat to bloc later
+                            builder: (BuildContext context) {
+                      return BottomNavBar();
+                    }));
+                  }
+                } on AuthException catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${result.toString()}')),
+                    SnackBar(content: Text(error.message)),
                   );
                 }
               },

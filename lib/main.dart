@@ -3,13 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:habitr_tfg/blocs/routines/completion/routine_completion_cubit.dart';
+import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
-import 'package:habitr_tfg/screens/misc/login_screen.dart';
+import 'package:habitr_tfg/screens/users/login_screen.dart';
 import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
+import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget? childScreen;
   final ThemeSingleton myTheme = ThemeSingleton();
 
-  Future<bool?> getLoggedInState() async {
+  Future<bool> getLoggedInState() async {
     bool hasLoggedIn;
     try {
       final initialSession = await SupabaseAuth.instance.initialSession;
@@ -63,45 +64,53 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       hasLoggedIn = false;
       // Handle initial auth state fetch error here
     }
-    return hasLoggedIn;
+    return Future.value(hasLoggedIn);
   }
 
   @override
   void initState() {
     super.initState();
+    myTheme.isDark = Settings.getValue<bool>('dark-mode', defaultValue: false)!;
     myTheme.addListener(() {
       setState(() {});
     }); // To make theme reload on startup
     FlutterNativeSplash.remove();
-    // FIXME: This does not work correctly, use .then
-    var hasLoggedIn =
-        getLoggedInState(); // This has to be a function because initState cannot be async.
-    if (hasLoggedIn == false) {
-      childScreen = LogInScreen();
-    } else {
-      childScreen = BottomNavBar();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => RoutinesBloc()),
-        BlocProvider(create: (context) => SelfBloc()),
-        BlocProvider(create: (context) => FriendsBloc()),
-        BlocProvider(create: (context) => RoutineCompletionCubit())
-      ],
-      child: Builder(// Para evitar problemas de contexto con el cubit de tema
-          builder: (context) {
-        return MaterialApp(
-          title: 'Habitr',
-          themeMode: myTheme.currentTheme(),
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          home: childScreen!,
-        );
-      }),
-    );
+    return FutureBuilder(
+        future: getLoggedInState(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            childScreen = Center(child: LoadingSpinner());
+          } else {
+            bool loggedIn = snapshot.data!;
+            if (!loggedIn) {
+              childScreen = LogInScreen();
+            } else {
+              childScreen = BottomNavBar();
+            }
+          }
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => RoutinesBloc()),
+              BlocProvider(create: (context) => SelfBloc()),
+              BlocProvider(create: (context) => FriendsBloc()),
+              BlocProvider(create: (context) => RoutineCompletionBloc())
+            ],
+            child: Builder(
+                // Para evitar problemas de contexto con el cubit de tema
+                builder: (context) {
+              return MaterialApp(
+                title: 'Habitr',
+                themeMode: myTheme.currentTheme(),
+                theme: lightTheme,
+                darkTheme: darkTheme,
+                home: childScreen!,
+              );
+            }),
+          );
+        });
   }
 }

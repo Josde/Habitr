@@ -6,11 +6,13 @@ class RoundedTextFormField extends StatelessWidget {
       this.hintText,
       this.validator,
       this.onSaved,
+      this.onSuffixIcon,
       this.suffixIcon,
       this.obscureText = false})
       : super(key: key);
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
+  final void Function()? onSuffixIcon;
   final String? hintText;
   final IconData? suffixIcon;
   final bool? obscureText;
@@ -27,7 +29,7 @@ class RoundedTextFormField extends StatelessWidget {
         errorMaxLines: 3,
         prefixIcon:
             Icon(null), //FIXME: Delete this, ffs // used for centering I think?
-        suffixIcon: Icon(suffixIcon),
+        suffixIcon: IconButton(icon: Icon(suffixIcon), onPressed: onSuffixIcon),
         border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(30.0)),

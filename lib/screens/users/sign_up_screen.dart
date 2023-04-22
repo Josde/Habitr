@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../widgets/bottom_nav_bar.dart';
 
@@ -14,7 +15,8 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? _displayName, _email, _password;
+  String? _displayName, _email, _password, _country;
+  var _obscureText = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +39,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return textNotEmptyValidator(value);
                   }),
             ),
+            Container(child: Text('TODO: Country selector')),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RoundedTextFormField(
+                  hintText: 'Country',
+                  onSaved: (String? value) {
+                    this._country = value!;
+                  },
+                  validator: (value) {
+                    return textNotEmptyValidator(value);
+                  }),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: RoundedTextFormField(
@@ -53,10 +67,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: const EdgeInsets.all(8.0),
               child: RoundedTextFormField(
                   hintText: 'Password',
-                  obscureText: true,
+                  obscureText: _obscureText,
                   suffixIcon: Icons.visibility,
                   onSaved: (String? value) {
                     this._password = value!;
+                  },
+                  onSuffixIcon: () {
+                    setState(() => this._obscureText = !this._obscureText);
                   },
                   validator: (value) {
                     return passwordValidator(value);
@@ -72,18 +89,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return;
                   }
                   _formKey.currentState!.save();
-                  //TODO: Use redirect to prevent users from being redirected to localhost
-                  final result = await supabase.auth
-                      .signUp(email: _email!, password: _password!);
-                  if (result.session == null) {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(//temp fix, reformat to bloc later
-                            builder: (BuildContext context) {
-                      return BottomNavBar();
-                    }));
-                  } else {
+                  //TODO: Make a webpage to prevent users from being redirected to localhost
+                  //TODO: Return a waiting for email confirmation screen
+                  try {
+                    final result = await supabase.auth.signUp(
+                        email: _email!,
+                        password: _password!,
+                        data: {'name': _displayName});
+                    if (result.user != null) {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(//temp fix, reformat to bloc later
+                              builder: (BuildContext context) {
+                        return BottomNavBar();
+                      }));
+                    }
+                  } on AuthException catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${result.toString()}')),
+                      SnackBar(content: Text(error.message)),
                     );
                   }
                 }),

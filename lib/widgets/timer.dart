@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:habitr_tfg/utils/time.dart';
 
 class TimerWidget extends StatefulWidget {
   const TimerWidget(
@@ -23,6 +22,11 @@ class _TimerWidgetState extends State<TimerWidget>
   late int _currentTimer;
   late AnimationController _controller;
   late Timer timer;
+  String secondsToHMS(int seconds) {
+    Duration tmp = Duration(seconds: seconds);
+    return tmp.toString().substring(0, 7);
+  }
+
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {

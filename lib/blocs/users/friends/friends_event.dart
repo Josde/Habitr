@@ -1,4 +1,25 @@
 part of 'friends_bloc.dart';
 
 @immutable
-abstract class FriendsEvent {}
+abstract class FriendsEvent extends Equatable {
+  const FriendsEvent();
+  @override
+  List<Object> get props => [];
+}
+
+class LoadFriendsEvent extends FriendsEvent {}
+
+class AcceptFriendRequestEvent extends FriendsEvent {
+  final User friend;
+
+  const AcceptFriendRequestEvent({required this.friend});
+  @override
+  List<Object> get props => [friend];
+}
+
+class DeclineFriendRequestEvent extends FriendsEvent {
+  final User friend;
+  const DeclineFriendRequestEvent({required this.friend});
+  @override
+  List<Object> get props => [friend];
+}

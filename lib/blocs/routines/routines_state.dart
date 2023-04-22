@@ -21,3 +21,11 @@ class DetailRoutine extends RoutinesState {
   List<Object> get props => [routine];
 }
 
+class RoutinesError extends RoutinesState {
+  final String error;
+
+  const RoutinesError({required this.error});
+
+  @override
+  List<Object> get props => [error];
+}

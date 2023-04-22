@@ -24,9 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           "Home",
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-          ),
         ),
         backgroundColor: Theme.of(context).iconTheme.color,
       ),
