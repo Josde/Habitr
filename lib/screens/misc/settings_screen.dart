@@ -92,7 +92,6 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget buildDebug(BuildContext context) {
-    // TODO: Check if this works fine and SizedBox dimension 0 doesnt crash
     if (kDebugMode) {
       return IconButton(
         icon: Icon(Icons.work_rounded),

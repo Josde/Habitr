@@ -16,9 +16,9 @@ class NewCreateRoutineScreen extends StatefulWidget {
 
 class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
   int _index = 0;
+  String _icon = "";
   ActivityType? _currentType;
   String _routineName = "";
-  int _numberOfNotifications = 3;
   int _timerLength = 0;
   TimeOfDay? _notificationStartTime = TimeOfDay.now();
   List<bool> _daysOfWeek = List.filled(7, true);
@@ -66,7 +66,8 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
       if (this._formKey.currentState!.validate()) {
         this._formKey.currentState!.save();
         Routine nuevaRutina = Routine(_routineName, _notificationStartTime!,
-            _notificationsEnabled, _daysOfWeek, _currentType!, _timerLength);
+            _notificationsEnabled, _daysOfWeek, _currentType!, _timerLength,
+            icon: _icon);
         if (widget.routine != null) {
           // Modo de edición
           nuevaRutina.id = widget.routine!.id;
@@ -355,24 +356,10 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                           this._notificationType = value ?? 0;
                           switch (this._notificationType) {
                             case 0:
-                              this._daysOfWeek = [
-                                // TODO: prettify this but for now idgaf
-                                true,
-                                true,
-                                true,
-                                true,
-                                true,
-                                true,
-                                true
-                              ];
+                              this._daysOfWeek = List.filled(7, true);
                               break;
                             case 1:
-                              this._daysOfWeek = [
-                                // TODO: prettify this but for now idgaf
-                                false, false, false, false, false,
-                                true,
-                                true
-                              ];
+                              this._daysOfWeek = List.filled(7, false);
                               break;
                             case 2:
                               break;

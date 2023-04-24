@@ -30,7 +30,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
       builder: (context, state) {
         var _child;
         if (state is FriendsLoaded) {
-          _child = Friends(friends: state.friends!);
+          _child = Friends(friends: state.friends!, requests: state.requests!);
         } else {
           _child = Center(child: LoadingSpinner());
         }
@@ -44,9 +44,12 @@ class Friends extends StatelessWidget {
   const Friends({
     super.key,
     required List<User> friends,
-  }) : _friends = friends;
+    required List<User> requests,
+  })  : _friends = friends,
+        _requests = requests;
 
   final List<User> _friends;
+  final List<User> _requests;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +72,7 @@ class Friends extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(60.0)),
-                      child: Text(
-                          '0'), //TODO: Rework this once friend requests are working
+                      child: Text(_requests.length.toString()),
                     ),
                   ],
                 ),

@@ -18,6 +18,9 @@ class Post extends Equatable {
   Map<String, dynamic> toJson() => _$PostToJson(this);
 
   Post(this.id, this.posterId, this.text, this.date);
+  Post.onlyText(this.text) {
+    this.date = DateTime.now();
+  }
   // Post(int _id, String _posterId, String _text) {
   //   id = _id;
   //   posterId = _posterId;

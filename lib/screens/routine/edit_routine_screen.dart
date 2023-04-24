@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
@@ -163,18 +165,19 @@ class _EditRoutineScreenState extends State<EditRoutineScreen> {
                         return;
                       }
                       _formKey.currentState!.save();
-                      //Routine nuevaRutina = Routine(this.nombreRutina, this.freqNotificaciones, this._currentType, this.timerLength);
-                      bool hasEventBeenAdded = false;
-                      if (widget.routine != null) {
-                        //nuevaRutina.id = widget.routine!.id;
-                        //BlocProvider.of<RoutinesBloc>(context, listen: false)
-                        //    .add(UpdateRoutineEvent(routine: nuevaRutina));
-                        Navigator.pop(context);
-                      } else {
-                        //BlocProvider.of<RoutinesBloc>(context, listen: false)
-                        //   .add(CreateRoutine(routine: nuevaRutina));
-                        Navigator.pop(context);
-                      }
+                      // Routine nuevaRutina = Routine
+                      //     .empty(); //FIXME: Refactor this screen into new_create_routine_screen
+                      // bool hasEventBeenAdded = false;
+                      // if (widget.routine != null) {
+                      //   nuevaRutina.id = widget.routine!.id;
+                      //   BlocProvider.of<RoutinesBloc>(context, listen: false)
+                      //       .add(UpdateRoutineEvent(routine: nuevaRutina));
+                      //   Navigator.pop(context);
+                      // } else {
+                      //   BlocProvider.of<RoutinesBloc>(context, listen: false)
+                      //       .add(CreateRoutineEvent(routine: nuevaRutina));
+                      //   Navigator.pop(context);
+                      // }
                     },
                     backgroundColor: Theme.of(context).iconTheme.color!,
                     child: const Icon(Icons.check),

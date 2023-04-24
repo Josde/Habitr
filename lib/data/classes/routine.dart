@@ -10,80 +10,39 @@ part 'routine.g.dart';
 @JsonSerializable()
 class Routine extends Equatable {
   @JsonKey()
-  String name = "";
+  String name;
   @JsonKey()
   String? icon;
   @JsonKey(
       name: "notification_time",
       defaultValue: TimeOfDay.now) // change default value
-  @TimeOfDayConverter() // Make fromJson and toJson for this
-  TimeOfDay notificationStartTime = TimeOfDay.fromDateTime(DateTime(2022));
+  @TimeOfDayConverter()
+  TimeOfDay notificationStartTime;
 
   @JsonKey(name: "type")
   @ActivityTypeConverter()
-  ActivityType type = ActivityType.Instant;
+  ActivityType type;
 
   @JsonKey(name: "timer_length")
-  int timerLength = 0;
+  int timerLength;
   @JsonKey(name: "notification_enabled", defaultValue: false)
-  bool notificationsEnabled = false;
+  bool notificationsEnabled;
   @JsonKey(
       name: "notification_days_of_week",
       defaultValue: [true, true, true, true, true, true, true])
-  List<bool> notificationDaysOfWeek = List.filled(7, true);
+  List<bool> notificationDaysOfWeek;
   @JsonKey(name: "is_public", defaultValue: false)
-  bool isPublic = false;
+  bool isPublic;
   @JsonKey()
-  late int? id = 0;
+  int? id;
   Routine(this.name, this.notificationStartTime, this.notificationsEnabled,
       this.notificationDaysOfWeek, this.type, this.timerLength,
-      {this.isPublic = false});
+      {this.icon, this.isPublic = false});
 
-  Routine.empty();
   factory Routine.fromJson(Map<dynamic, dynamic> json) =>
       _$RoutineFromJson(json);
 
   Map<String, dynamic> toJson() => _$RoutineToJson(this);
-  // Routine.fromJson(Map<dynamic, dynamic> json) {
-  //   //TODO: Add error handling
-  //   this.name = json['name'];
-  //   this.type = ActivityType.values.elementAt(json['type']);
-  //   if (json.containsKey('numberOfNotifications')) {
-  //     this.numberOfNotifications = json['numberOfNotifications'];
-  //   }
-  //   if (json.containsKey('notificationStartTime')) {
-  //     List<String> time = json['notificationStartTime'].split(',');
-  //     if (time.length == 2) {
-  //       this.notificationStartTime =
-  //           TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
-  //     }
-  //   }
-  //   if (json.containsKey('id')) {
-  //     this.id = json['id'];
-  //   } else {
-  //     this.id = 0;
-  //   }
-  //   if (json.containsKey('notificationsEnabled')) {
-  //     this.notificationsEnabled = json['notificationsEnabled'];
-  //   }
-  //   if (json.containsKey('timerLength')) {
-  //     this.timerLength = json['timerLength'];
-  //   }
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> json = new Map<String, dynamic>();
-  //   json['name'] = this.name;
-  //   json['numberOfNotifications'] = this.numberOfNotifications;
-  //   json['notificationStartTime'] =
-  //       '${this.notificationStartTime.hour},${this.notificationStartTime.minute}';
-  //   json['type'] = this.type.index;
-  //   json['timerLength'] = this.timerLength;
-  //   json['id'] = this.id;
-  //   json['notificationsEnabled'] = this.notificationsEnabled;
-  //   print(json.toString());
-  //   return json;
-  // }
 
   @override
   List<Object?> get props => [

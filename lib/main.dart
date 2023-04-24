@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
+import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
@@ -97,7 +98,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               BlocProvider(create: (context) => RoutinesBloc()),
               BlocProvider(create: (context) => SelfBloc()),
               BlocProvider(create: (context) => FriendsBloc()),
-              BlocProvider(create: (context) => RoutineCompletionBloc())
+              BlocProvider(create: (context) => RoutineCompletionBloc()),
+              BlocProvider(create: (context) => FeedBloc()),
             ],
             child: Builder(
                 // Para evitar problemas de contexto con el cubit de tema

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/post.dart';
@@ -10,7 +11,6 @@ import 'package:habitr_tfg/widgets/like_button.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../utils/constants.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -29,7 +29,6 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    //FIXME: Add blocbuilder here
     friends = BlocProvider.of<FriendsBloc>(context).state.friends!;
     self = BlocProvider.of<SelfBloc>(context).state.self!;
     lb = LikeButton(
@@ -43,17 +42,16 @@ class _FeedScreenState extends State<FeedScreen> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
             onPressed: displayNewPost, child: Icon(Icons.message)),
-        body: FutureBuilder(
-          future: getMessages(),
-          builder: (context, snapshot) {
-            if (!(snapshot.hasData)) {
+        body: BlocBuilder<FeedBloc, FeedState>(
+          builder: (context, state) {
+            if (!(state is SelfLoaded)) {
               return Center(
                   child: Container(
                 child: LoadingSpinner(),
                 alignment: Alignment.center,
               ));
             }
-            posts = snapshot.data!.reversed.toList();
+            posts = (state as FeedLoaded).posts;
             return ListView.builder(
               itemCount: posts
                   .length, //FIXME: Add paging (this will currently load all messages we can see)
@@ -103,19 +101,9 @@ class _FeedScreenState extends State<FeedScreen> {
                                     onTap: () async {
                                       // TODO: Add supabase like here
                                       if (!isLiked) {
-                                        await supabase
-                                            .from("messageLikes")
-                                            .insert({
-                                          "post_id": p.id,
-                                          "liked_by": self.id
-                                        });
-                                      } else {
-                                        await supabase
-                                            .from("messageLikes")
-                                            .delete()
-                                            .eq("liked_by", self.id)
-                                            .eq("post_id", p.id);
-                                      }
+                                        BlocProvider.of<FeedBloc>(context)
+                                            .add(LikePostEvent(p));
+                                      } else {}
                                       print('Tapped heart');
                                       setState(() {
                                         isLiked = !isLiked;
@@ -142,19 +130,6 @@ class _FeedScreenState extends State<FeedScreen> {
         ));
   }
 
-  Future<List<Post>> getMessages() async {
-    List<Post> messages = List.empty(growable: true);
-    try {
-      var messageResponse = await supabase.from('message').select();
-      for (var msg in messageResponse) {
-        messages.add(Post.fromJson(msg as Map));
-      }
-    } catch (e) {
-      print(e);
-    }
-    return Future.value(messages);
-  }
-
   Future<void> displayNewPost() async {
     //TODO: Add length validation and error handling.
     final TextEditingController _controller = TextEditingController();
@@ -176,23 +151,13 @@ class _FeedScreenState extends State<FeedScreen> {
                 child: Text("Send"),
                 color: Theme.of(context).iconTheme.color,
                 onPressed: () {
-                  sendMessage(postText);
+                  BlocProvider.of<FeedBloc>(context)
+                      .add(AddPostEvent(Post.onlyText(postText)));
                   Navigator.pop(context);
                 },
               )
             ],
           );
         });
-  }
-
-  void sendMessage(String? text) async {
-    User self = BlocProvider.of<SelfBloc>(context).state.self!;
-    try {
-      await supabase
-          .from('message')
-          .insert({'content': text, 'poster_id': self.id});
-    } catch (e) {
-      print(e);
-    }
   }
 }

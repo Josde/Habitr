@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:habitr_tfg/data/classes/user.dart' as u;
 // Source: https://supabase.com/docs/guides/with-flutter#set-up-authrequiredstate
 // Solo importar esto si Supabase.initialize ha sido llamado.
 // es decir, no lo podemos importar hasta que se llame a main() pero si en ficheros que se importen despues de main.

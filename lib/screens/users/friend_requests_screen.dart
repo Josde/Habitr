@@ -5,7 +5,6 @@ import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
-import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
@@ -74,46 +73,18 @@ class FriendRequests extends StatelessWidget {
                   Spacer(),
                   IconButton(
                       onPressed: () {
-                        rejectButton(context, u, selfId);
                         BlocProvider.of<FriendsBloc>(context)
-                            .add(LoadFriendsEvent());
+                            .add(DeclineFriendRequestEvent(friend: u));
                       },
                       icon: Icon(Icons.close)),
                   IconButton(
                       onPressed: () {
-                        acceptButton(context, u, selfId);
                         BlocProvider.of<FriendsBloc>(context)
-                            .add(LoadFriendsEvent());
+                            .add(AcceptFriendRequestEvent(friend: u));
                       },
                       icon: Icon(Icons.done)),
                 ]));
           }),
     );
-  }
-
-//TODO: Simplify these to a single function with parameters
-//TODO: Move database queries to the BLoC
-  acceptButton(BuildContext context, User u, String selfId) async {
-    try {
-      await supabase.from('friendRequest').update({'accepted': true}).or(
-          'sent_by.eq.${u.id},sent_to.eq.${u.id}');
-      BlocProvider.of<FriendsBloc>(context)
-          .add(AcceptFriendRequestEvent(friend: u));
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  rejectButton(BuildContext context, User u, String selfId) async {
-    try {
-      await supabase
-          .from('friendRequest')
-          .delete()
-          .or('sent_by.eq.${u.id},sent_to.eq.${u.id}');
-      BlocProvider.of<FriendsBloc>(context)
-          .add(DeclineFriendRequestEvent(friend: u));
-    } catch (e) {
-      print(e);
-    }
   }
 }

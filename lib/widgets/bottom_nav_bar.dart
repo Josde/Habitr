@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
@@ -8,7 +9,6 @@ import '../blocs/routines/routines_bloc.dart';
 import '../data/classes/routine.dart';
 import '../screens/misc/home_screen.dart';
 import '../screens/routine/routine_screen.dart';
-import '../utils/appLifecycleHandler.dart';
 import '../utils/constants.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -22,7 +22,6 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
-  late LifecycleEventHandler leh;
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     RoutineScreen(),
@@ -52,20 +51,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   void initState() {
-    leh = LifecycleEventHandler(context: context);
-    WidgetsBinding.instance.addObserver(leh);
     initStateAsyncPart();
-    // Schedule first loading of BLoCs
     BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
     BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
     BlocProvider.of<RoutinesBloc>(context).add(LoadRoutinesEvent());
+    BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(leh);
-    super.dispose();
   }
 
   @override

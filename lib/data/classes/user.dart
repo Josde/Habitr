@@ -27,25 +27,6 @@ class User extends Equatable {
   factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
-  // User.fromJson(Map<dynamic, dynamic> json) {
-  //   // <dynamic, dynamic> because supabase returns it like that; however first part of the map will always be a string.
-  //   this.id = json['uuid'];
-  //   this.name = json['name'];
-  //   this.createdAt = DateTime.parse(json['created_at']);
-  //   this.country = Country.tryParse(json['country_code']) ??
-  //       Country
-  //           .worldWide; // FIXME: Doesn't work, i have to change supabase to use iso2
-  //   this.xp = json['xp'] ?? 0;
-  //   this.currentStreak = json['current_streak'] ?? 0;
-  //   this.maxStreak = json['max_streak'] ?? 0;
-  //   this.isAdmin = json['is_admin'] ?? false;
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> json = new Map<String, dynamic>();
-  //   // TODO: Implement this if needed?
-  //   return json;
-  // }
 
   @override
   List<Object?> get props => [id, name, xp, currentStreak, maxStreak];
