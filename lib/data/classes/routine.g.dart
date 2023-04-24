@@ -8,30 +8,31 @@ part of 'routine.dart';
 
 Routine _$RoutineFromJson(Map<dynamic, dynamic> json) => Routine(
       json['name'] as String,
-      const TimeOfDayConverter().fromJson(json['notification_time'] as String),
-      json['notification_enabled'] as bool,
-      (json['notification_days_of_week'] as List<dynamic>)
-          .map((e) => e as bool)
-          .toList(),
-      $enumDecode(_$ActivityTypeEnumMap, json['type']),
+      json['notification_time'] == null
+          ? TimeOfDay.now()
+          : const TimeOfDayConverter()
+              .fromJson(json['notification_time'] as String),
+      json['notification_enabled'] as bool? ?? false,
+      (json['notification_days_of_week'] as List<dynamic>?)
+              ?.map((e) => e as bool)
+              .toList() ??
+          [true, true, true, true, true, true, true],
+      const ActivityTypeConverter().fromJson(json['type'] as int),
       json['timer_length'] as int,
       isPublic: json['is_public'] as bool? ?? false,
-    )..id = json['id'] as int?;
+    )
+      ..icon = json['icon'] as String?
+      ..id = json['id'] as int?;
 
 Map<String, dynamic> _$RoutineToJson(Routine instance) => <String, dynamic>{
       'name': instance.name,
+      'icon': instance.icon,
       'notification_time':
           const TimeOfDayConverter().toJson(instance.notificationStartTime),
-      'type': _$ActivityTypeEnumMap[instance.type]!,
+      'type': const ActivityTypeConverter().toJson(instance.type),
       'timer_length': instance.timerLength,
       'notification_enabled': instance.notificationsEnabled,
       'notification_days_of_week': instance.notificationDaysOfWeek,
       'is_public': instance.isPublic,
       'id': instance.id,
     };
-
-const _$ActivityTypeEnumMap = {
-  ActivityType.Instant: 'Instant',
-  ActivityType.Timer: 'Timer',
-  ActivityType.Stopwatch: 'Stopwatch',
-};

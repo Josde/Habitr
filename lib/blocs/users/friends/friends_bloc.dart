@@ -17,6 +17,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
 
   void _onLoadFriends(
       LoadFriendsEvent event, Emitter<FriendsState> emit) async {
+    print('_onLoadFriends');
     List<User> _friends = List<User>.empty(growable: true);
     List<User> _requests = List<User>.empty(growable: true);
     List<String> _friendRequestIds = List<String>.empty(growable: true);

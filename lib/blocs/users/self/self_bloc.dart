@@ -14,6 +14,7 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
   }
 
   void _onLoadSelf(SelfEvent event, Emitter<SelfState> emitter) async {
+    print('_onLoadSelf');
     emitter.call(SelfLoading());
     try {
       if (supabase.auth.currentUser == null) {
@@ -25,6 +26,7 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
           .select()
           .eq('uuid', supabase.auth.currentUser!.id)
           .single() as Map;
+      print(myselfResponse);
       var myself = User.fromJson(myselfResponse);
       emitter.call(SelfLoaded(self: myself, lastLoadTime: DateTime.now()));
     } catch (e) {

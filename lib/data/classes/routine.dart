@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:habitr_tfg/data/converters/activitytypeconverter.dart';
 import 'package:habitr_tfg/data/converters/timeofdayconverter.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,19 +11,27 @@ part 'routine.g.dart';
 class Routine extends Equatable {
   @JsonKey()
   String name = "";
-  @JsonKey(name: "notification_time")
+  @JsonKey()
+  String? icon;
+  @JsonKey(
+      name: "notification_time",
+      defaultValue: TimeOfDay.now) // change default value
   @TimeOfDayConverter() // Make fromJson and toJson for this
   TimeOfDay notificationStartTime = TimeOfDay.fromDateTime(DateTime(2022));
+
   @JsonKey(name: "type")
+  @ActivityTypeConverter()
   ActivityType type = ActivityType.Instant;
 
   @JsonKey(name: "timer_length")
   int timerLength = 0;
-  @JsonKey(name: "notification_enabled")
+  @JsonKey(name: "notification_enabled", defaultValue: false)
   bool notificationsEnabled = false;
-  @JsonKey(name: "notification_days_of_week")
+  @JsonKey(
+      name: "notification_days_of_week",
+      defaultValue: [true, true, true, true, true, true, true])
   List<bool> notificationDaysOfWeek = List.filled(7, true);
-  @JsonKey(name: "is_public")
+  @JsonKey(name: "is_public", defaultValue: false)
   bool isPublic = false;
   @JsonKey()
   late int? id = 0;

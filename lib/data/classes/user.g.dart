@@ -9,12 +9,11 @@ part of 'user.dart';
 User _$UserFromJson(Map<dynamic, dynamic> json) => User(
       json['uuid'] as String,
       json['name'] as String,
-      Country.tryParse(json['country_code'] as String),
+      Country.parse(json['country_code'] as String),
       DateTime.parse(json['created_at'] as String),
       json['xp'] as int,
-      json['current_streak'] as int,
-      json['max_streak'] as int,
-      json['friendCount'] as int,
+      json['current_streak'] as int? ?? 0,
+      json['max_streak'] as int? ?? 0,
       json['is_admin'] as bool,
     );
 
@@ -26,6 +25,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'xp': instance.xp,
       'current_streak': instance.currentStreak,
       'max_streak': instance.maxStreak,
-      'friendCount': instance.friendCount,
       'is_admin': instance.isAdmin,
     };

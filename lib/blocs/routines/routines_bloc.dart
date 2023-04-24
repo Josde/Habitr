@@ -20,6 +20,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
 
   void _onLoadRoutines(
       LoadRoutinesEvent event, Emitter<RoutinesState> emit) async {
+    print('_onLoadRoutines');
     List<Routine> _routines = List.empty(growable: true);
     try {
       if (supabase.auth.currentUser == null) {
@@ -30,6 +31,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           .from('profileRoutine')
           .select('*, routine!inner(*)') as List;
       for (var routine in routinesResponse) {
+        print(routine);
         _routines.add(Routine.fromJson(routine['routine'] as Map));
       }
       emit.call(RoutinesLoaded(routines: _routines));
