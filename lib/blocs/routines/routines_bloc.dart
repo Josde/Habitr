@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
@@ -152,7 +150,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           emit.call(RoutinesError(error: 'User is not logged in.'));
           return;
         }
-        final routineResponse = await supabase.from('profileRoutine').insert(
+        await supabase.from('profileRoutine').insert(
             {'profile_id': supabase.auth.currentUser!.id, 'routine_id': r.id});
         List<Routine> newRoutines = List.from(this.state.routines);
         newRoutines.add(r);

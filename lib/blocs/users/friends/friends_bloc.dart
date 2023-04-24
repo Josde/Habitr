@@ -61,30 +61,46 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
   }
 
   void _onDeleteFriend(
-      DeclineFriendRequestEvent event, Emitter<FriendsState> emit) {
+      DeclineFriendRequestEvent event, Emitter<FriendsState> emit) async {
     var state = this.state;
     var declinedFriend = event.friend;
     List<User> newFriendRequests;
     if (state is FriendsLoaded) {
-      newFriendRequests = state.requests!
-          .where((element) => (element != declinedFriend))
-          .toList();
-      emit(FriendsLoaded(friends: state.friends, requests: newFriendRequests));
+      try {
+        await supabase.from('friendRequest').delete().or(
+            'sent_by.eq.${declinedFriend.id},sent_to.eq.${declinedFriend.id}');
+        newFriendRequests = state.requests!
+            .where((element) => (element != declinedFriend))
+            .toList();
+        emit(
+            FriendsLoaded(friends: state.friends, requests: newFriendRequests));
+      } catch (e) {
+        print(e);
+        emit.call(FriendsError(error: e.toString()));
+      }
     }
   }
 
   void _onAcceptFriend(
-      AcceptFriendRequestEvent event, Emitter<FriendsState> emit) {
+      AcceptFriendRequestEvent event, Emitter<FriendsState> emit) async {
     var state = this.state;
     var acceptedFriend = event.friend;
     List<User> newFriendRequests;
     List<User> newFriends = state.friends!;
     if (state is FriendsLoaded) {
-      newFriendRequests = state.requests!
-          .where((element) => (element != acceptedFriend))
-          .toList();
-      newFriends.add(acceptedFriend);
-      emit(FriendsLoaded(friends: newFriends, requests: newFriendRequests));
+      try {
+        await supabase.from('friendRequest').update({'accepted': true}).or(
+            'sent_by.eq.${acceptedFriend.id},sent_to.eq.${acceptedFriend.id}');
+        newFriendRequests = state.requests!
+            .where((element) => (element != acceptedFriend))
+            .toList();
+        newFriends.add(acceptedFriend);
+        emit(FriendsLoaded(friends: newFriends, requests: newFriendRequests));
+      } catch (e) {
+        print(e);
+
+        emit.call(FriendsError(error: e.toString()));
+      }
     }
   }
 }
