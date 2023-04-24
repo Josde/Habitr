@@ -29,6 +29,9 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
+    if (BlocProvider.of<FeedBloc>(context).state is FeedInitial) {
+      BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
+    }
     friends = BlocProvider.of<FriendsBloc>(context).state.friends!;
     self = BlocProvider.of<SelfBloc>(context).state.self!;
     lb = LikeButton(
@@ -44,7 +47,7 @@ class _FeedScreenState extends State<FeedScreen> {
             onPressed: displayNewPost, child: Icon(Icons.message)),
         body: BlocBuilder<FeedBloc, FeedState>(
           builder: (context, state) {
-            if (!(state is SelfLoaded)) {
+            if (!(state is FeedLoaded)) {
               return Center(
                   child: Container(
                 child: LoadingSpinner(),

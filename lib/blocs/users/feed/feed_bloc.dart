@@ -17,6 +17,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   _onLoadPosts(LoadPostsEvent event, Emitter<FeedState> emit) async {
+    emit.call(FeedLoading());
     List<Post> posts = List.empty(growable: true);
     try {
       var postResponse = await supabase.from('message').select();
