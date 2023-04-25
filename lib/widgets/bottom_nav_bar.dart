@@ -51,11 +51,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   void initState() {
-    initStateAsyncPart();
+    BlocProvider.of<RoutinesBloc>(context).add(LoadRoutinesEvent());
     BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
     BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
-    BlocProvider.of<RoutinesBloc>(context).add(LoadRoutinesEvent());
     BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
+    initStateAsyncPart();
     super.initState();
   }
 
@@ -92,6 +92,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
 void scheduleAllRoutineNotifications(
     FlutterLocalNotificationsPlugin flnp, BuildContext context) async {
+  //Reformat this to schedule a single routine and then run it when state is loaded
   int counter = 0; // For notificaation IDs
   for (Routine r in BlocProvider.of<RoutinesBloc>(context).state.routines) {
     if (r.notificationsEnabled) {

@@ -49,6 +49,7 @@ dependencies:
   share_plus: ^6.3.0
   awesome_aurora_gradient: ^0.3.0+2
   json_annotation: ^4.8.0
+  fl_chart: ^0.62.0
 
 
 dev_dependencies:

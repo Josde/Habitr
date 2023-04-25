@@ -9,9 +9,9 @@ class RoundedContainer extends StatelessWidget {
     return Container(
       child: this.child,
       decoration: BoxDecoration(
-         borderRadius: BorderRadius.circular(30.0),
+        borderRadius: BorderRadius.circular(30.0),
+        color: Theme.of(context).primaryColorDark,
       ),
-      color: Theme.of(context).primaryColorDark,
     );
   }
 }
