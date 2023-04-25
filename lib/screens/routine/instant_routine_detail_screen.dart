@@ -8,7 +8,6 @@ import 'package:awesome_aurora_gradient/awesome_aurora_gradient.dart';
 
 import '../../blocs/users/self/self_bloc.dart';
 import '../../data/classes/user.dart';
-import '../../utils/constants.dart';
 
 class InstantRoutineDetailScreen extends StatelessWidget {
   final Routine routine;

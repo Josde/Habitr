@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/converters/timeofdayconverter.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 
 part 'routines_event.dart';
@@ -15,7 +16,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     on<AddRepositoryRoutineEvent>(_onAddRepositoryRoutine);
     //on<ReadRoutine>(_onReadRoutine);
   }
-
   void _onLoadRoutines(
       LoadRoutinesEvent event, Emitter<RoutinesState> emit) async {
     print('_onLoadRoutines');
@@ -29,8 +29,14 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           .from('profileRoutine')
           .select('*, routine!inner(*)') as List;
       for (var routine in routinesResponse) {
-        print(routine);
+        (routine['routine'] as Map).addAll({
+          'notification_days_of_week': routine['notification_days_of_week'],
+          'notification_time': (routine['notification_time']),
+          'notification_enabled': routine['notification_enabled']
+        } as Map<dynamic,
+            dynamic>); // Removing this cast will make this snot work
         _routines.add(Routine.fromJson(routine['routine'] as Map));
+        print(Routine.fromJson(routine['routine'] as Map));
       }
       emit.call(RoutinesLoaded(routines: _routines));
     } catch (e) {
@@ -60,7 +66,14 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
             })
             .select()
             .single() as Map;
-        print(routineResponse);
+        final profileRoutineResponse =
+            await supabase.from('profileRoutine').insert({
+          'routine_id': routineResponse['id'],
+          'profile_id': supabase.auth.currentUser!.id,
+          'notification_days_of_week': r.notificationDaysOfWeek,
+          'notification_time': r.notificationTime.toIso8601String(),
+          'notification_enabled': r.notificationsEnabled
+        });
         r.id = routineResponse['id'];
         List<Routine> newRoutines = List.from(state.routines)..add(r);
         emit(RoutinesLoaded(routines: newRoutines));
@@ -81,19 +94,27 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           emit.call(RoutinesError(error: 'User is not logged in.'));
           return;
         }
-        final routineResponse = await supabase
-            .from('routine')
-            .update({
-              'name': r.name,
-              'type': r.type.index,
-              'timer_length': r.timerLength,
-              'is_public': r.isPublic,
-              'creator_id': supabase.auth.currentUser!.id
-            })
-            .eq('id', r.id)
-            .select()
-            .single() as Map;
-        print(routineResponse);
+        try {
+          final routineResponse = await supabase.from('routine').update({
+            'name': r.name,
+            'type': r.type.index,
+            'timer_length': r.timerLength,
+            'is_public': r.isPublic,
+            'creator_id': supabase.auth.currentUser!.id
+          }).eq('id', r.id);
+        } catch (e) {
+          //TODO: Separate this into 2 different functions, or improve it one for our own routines and one for online ones.
+          print('Routine is not ours.');
+        }
+
+        final profileRoutineResponse =
+            await supabase.from('profileRoutine').update({
+          'routine_id': r.id,
+          'profile_id': supabase.auth.currentUser!.id,
+          'notification_days_of_week': r.notificationDaysOfWeek,
+          'notification_time': r.notificationTime.toIso8601String(),
+          'notification_enabled': r.notificationsEnabled
+        }).eq('routine_id', r.id);
         List<Routine> newRoutines = state.routines;
         int index = state.routines.indexWhere((Routine r) {
           return r.id == event.routine.id;
@@ -143,6 +164,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
 
   void _onAddRepositoryRoutine(
       AddRepositoryRoutineEvent event, Emitter<RoutinesState> emit) async {
+    // TODO: Add a date picker before calling this and also insert notification days of week and such.
     Routine r = event.routine;
     if (this.state is RoutinesLoaded) {
       try {

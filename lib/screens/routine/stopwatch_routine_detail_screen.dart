@@ -6,7 +6,6 @@ import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/widgets/loading_button.dart';
 import 'package:habitr_tfg/widgets/timer.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
-import 'package:habitr_tfg/utils/constants.dart';
 import 'package:awesome_aurora_gradient/awesome_aurora_gradient.dart';
 
 import '../../blocs/users/self/self_bloc.dart';

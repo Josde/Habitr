@@ -13,11 +13,14 @@ class Routine extends Equatable {
   String name;
   @JsonKey()
   String? icon;
+
   @JsonKey(
       name: "notification_time",
-      defaultValue: TimeOfDay.now) // change default value
-  @TimeOfDayConverter()
-  TimeOfDay notificationStartTime;
+      defaultValue: DateTime.now,
+      fromJson: DateTime.parse) // Check if working
+  DateTime notificationTime;
+
+  get notificationStartTime => TimeOfDay.fromDateTime(notificationTime);
 
   @JsonKey(name: "type")
   @ActivityTypeConverter()
@@ -35,7 +38,7 @@ class Routine extends Equatable {
   bool isPublic;
   @JsonKey()
   int? id;
-  Routine(this.name, this.notificationStartTime, this.notificationsEnabled,
+  Routine(this.name, this.notificationTime, this.notificationsEnabled,
       this.notificationDaysOfWeek, this.type, this.timerLength,
       {this.icon, this.isPublic = false});
 

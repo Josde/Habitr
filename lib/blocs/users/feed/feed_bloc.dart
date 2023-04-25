@@ -78,6 +78,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       });
     } catch (e) {
       print(e);
+      emit.call(FeedError(error: e.toString()));
     }
   }
 
@@ -90,6 +91,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           .eq("post_id", event.post.id);
     } catch (e) {
       print(e);
+      emit.call(FeedError(error: e.toString()));
     }
   }
 }

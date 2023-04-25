@@ -20,7 +20,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
   ActivityType? _currentType;
   String _routineName = "";
   int _timerLength = 0;
-  TimeOfDay? _notificationStartTime = TimeOfDay.now();
+  DateTime? _notificationStartTime = DateTime.now();
   List<bool> _daysOfWeek = List.filled(7, true);
   bool _notificationsEnabled = true;
   bool _isPublic = false;
@@ -38,7 +38,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
       _notificationsEnabled = r.notificationsEnabled;
       _daysOfWeek = r.notificationDaysOfWeek;
       _timerLength = r.timerLength;
-      _notificationStartTime = r.notificationStartTime;
+      _notificationStartTime = r.notificationTime;
     }
     super.initState();
   }
@@ -315,9 +315,17 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                   Spacer(),
                   ElevatedButton(
                     child: Icon(Icons.access_alarm),
-                    onPressed: () async => {
-                      this._notificationStartTime = await showTimePicker(
-                          context: context, initialTime: TimeOfDay.now())
+                    onPressed: () async {
+                      TimeOfDay? td = await showTimePicker(
+                          context: context, initialTime: TimeOfDay.now());
+                      DateTime now = DateTime.now();
+
+                      this._notificationStartTime = DateTime(
+                          now.year,
+                          now.month,
+                          now.day,
+                          td?.hour ?? now.hour,
+                          td?.minute ?? now.minute);
                     },
                   )
                 ],
