@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:habitr_tfg/data/classes/streak.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:country_picker/country_picker.dart';
 part 'user.g.dart';
@@ -16,14 +17,18 @@ class User extends Equatable {
   @JsonKey(name: 'xp')
   int xp = 0;
   @JsonKey(name: 'current_streak', defaultValue: 0)
-  int currentStreak =
+  int currentStreakId =
       0; //FIXME: Esto son IDs de las rachas, no la longitud, aunque de momento para desarrollar la interfaz lo voy a tomar como longitud
   @JsonKey(name: 'max_streak', defaultValue: 0)
-  int maxStreak = 0;
+  int maxStreakId = 0;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Streak? currentStreak;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Streak? maxStreak;
   @JsonKey(name: 'is_admin')
   bool isAdmin = false;
   User(this.id, this.name, this.country, this.createdAt, this.xp,
-      this.currentStreak, this.maxStreak, this.isAdmin);
+      this.currentStreakId, this.maxStreakId, this.isAdmin);
   factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);

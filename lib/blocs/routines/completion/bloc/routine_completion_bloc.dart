@@ -9,7 +9,32 @@ part 'routine_completion_state.dart';
 class RoutineCompletionBloc
     extends Bloc<RoutineCompletionEvent, RoutineCompletionState> {
   RoutineCompletionBloc() : super(RoutineCompletionInitial()) {
+    on<LoadRoutineCompletionsEvent>(_onLoadRoutineCompletions);
     on<AddRoutineCompletionEvent>(_onAddRoutineCompletion);
+  }
+
+  void _onLoadRoutineCompletions(LoadRoutineCompletionsEvent event,
+      Emitter<RoutineCompletionState> emit) async {
+    List<RoutineCompletion> routineCompletions = List.empty(growable: true);
+    try {
+      if (supabase.auth.currentUser == null) {
+        print('User is not logged in.');
+        return;
+      }
+      final routineCompletionResponse = await supabase
+          .from('routineCompletion')
+          .select()
+          .eq('profile_id', supabase.auth.currentUser!.id) as List;
+      print(routineCompletionResponse);
+      for (var rc in routineCompletionResponse) {
+        routineCompletions.add(RoutineCompletion.fromJson(rc as Map));
+      }
+      emit.call(
+          RoutineCompletionLoaded(routineCompletions: routineCompletions));
+    } catch (e) {
+      print(e);
+      emit.call((RoutineCompletionError(error: e.toString())));
+    }
   }
 
   void _onAddRoutineCompletion(AddRoutineCompletionEvent event,

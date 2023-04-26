@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
@@ -55,6 +56,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
     BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
     BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
     BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
+    BlocProvider.of<RoutineCompletionBloc>(context)
+        .add(LoadRoutineCompletionsEvent());
     initStateAsyncPart();
     super.initState();
   }
@@ -92,7 +95,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
 void scheduleAllRoutineNotifications(
     FlutterLocalNotificationsPlugin flnp, BuildContext context) async {
-  //Reformat this to schedule a single routine and then run it when state is loaded
+  //FIXME: Refactor this to schedule a single routine and then run it when state is loaded, also schedule it even when app isn't open.
   int counter = 0; // For notificaation IDs
   for (Routine r in BlocProvider.of<RoutinesBloc>(context).state.routines) {
     if (r.notificationsEnabled) {

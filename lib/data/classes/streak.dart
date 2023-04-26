@@ -10,7 +10,8 @@ class Streak extends Equatable {
   int id = 0;
   @JsonKey(name: 'start_date', fromJson: DateTime.parse)
   DateTime startDate;
-  @JsonKey(name: 'end_date', fromJson: DateTime.parse)
+  @JsonKey(
+      name: 'end_date', fromJson: DateTime.parse, defaultValue: DateTime.now)
   DateTime endDate;
   Streak({required this.startDate, required this.endDate});
   factory Streak.fromJson(Map<dynamic, dynamic> json) => _$StreakFromJson(json);

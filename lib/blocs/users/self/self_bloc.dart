@@ -4,6 +4,8 @@ import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:meta/meta.dart';
 
+import '../../../data/classes/streak.dart';
+
 part 'self_event.dart';
 part 'self_state.dart';
 
@@ -28,6 +30,20 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
           .single() as Map;
       print(myselfResponse);
       var myself = User.fromJson(myselfResponse);
+      final streakResponse = await supabase
+              .from('streak')
+              .select()
+              .eq('profile_id', supabase.auth.currentUser!.id)
+              .or('id.eq.${myself.maxStreakId},id.eq.${myself.currentStreakId}')
+          as List;
+      print(streakResponse);
+      for (var streak in streakResponse) {
+        if (streak['id'] == myself.maxStreakId) {
+          myself.maxStreak = Streak.fromJson(streak as Map);
+        } else {
+          myself.currentStreak = Streak.fromJson(streak as Map);
+        }
+      }
       emitter.call(SelfLoaded(self: myself, lastLoadTime: DateTime.now()));
     } catch (e) {
       print(e);

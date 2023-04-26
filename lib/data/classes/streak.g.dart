@@ -8,7 +8,9 @@ part of 'streak.dart';
 
 Streak _$StreakFromJson(Map<dynamic, dynamic> json) => Streak(
       startDate: DateTime.parse(json['start_date'] as String),
-      endDate: DateTime.parse(json['end_date'] as String),
+      endDate: json['end_date'] == null
+          ? DateTime.now()
+          : DateTime.parse(json['end_date'] as String),
     )
       ..userId = json['profile_id'] as String
       ..id = json['id'] as int;

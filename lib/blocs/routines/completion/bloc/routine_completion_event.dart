@@ -7,6 +7,13 @@ abstract class RoutineCompletionEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class LoadRoutineCompletionsEvent extends RoutineCompletionEvent {
+  const LoadRoutineCompletionsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class AddRoutineCompletionEvent extends RoutineCompletionEvent {
   final RoutineCompletion rc;
   const AddRoutineCompletionEvent({required this.rc});
