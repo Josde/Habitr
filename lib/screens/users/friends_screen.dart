@@ -34,7 +34,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
         } else {
           _child = Center(child: LoadingSpinner());
         }
-        return Scaffold(appBar: AppBar(title: Text('Friends')), body: _child);
+        return Scaffold(
+            appBar: AppBar(
+              title: Text('Friends'),
+              backgroundColor: Theme.of(context).iconTheme.color,
+            ),
+            body: _child);
       },
     );
   }

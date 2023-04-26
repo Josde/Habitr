@@ -19,6 +19,7 @@ class _RoutineRepositoryScreenState extends State<RoutineRepositoryScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Routine Store'),
+          backgroundColor: Theme.of(context).iconTheme.color,
         ),
         body: Center(
             child: FutureBuilder(

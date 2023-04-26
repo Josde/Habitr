@@ -44,7 +44,9 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-            onPressed: displayNewPost, child: Icon(Icons.message)),
+            backgroundColor: Theme.of(context).iconTheme.color,
+            onPressed: displayNewPost,
+            child: Icon(Icons.message)),
         body: BlocBuilder<FeedBloc, FeedState>(
           builder: (context, state) {
             if (!(state is FeedLoaded)) {

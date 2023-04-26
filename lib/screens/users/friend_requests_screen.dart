@@ -34,7 +34,10 @@ class _FriendRequestScreenState extends State<FriendRequestScreen> {
       }
 
       return Scaffold(
-        appBar: AppBar(title: Text('Friend requests')),
+        appBar: AppBar(
+          title: Text('Friend requests'),
+          backgroundColor: Theme.of(context).iconTheme.color,
+        ),
         body: _child,
       );
     });
