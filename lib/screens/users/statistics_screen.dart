@@ -130,19 +130,17 @@ Widget buildMonthlyStatsWidget(BuildContext context) {
     rc = state.routineCompletions;
   }
   List<List<RoutineCompletion>> rcByMonth = List.empty(growable: true);
-  for (int i = 0; i < 12; i++) {
-    List<RoutineCompletion> tmp = List.empty(growable: true);
-    int counter = 0;
-    for (var completion in rc) {
-      if (completion.time.month - 1 == i && completion.time.year == now.year) {
-        counter++;
-        if (counter > max) max = counter;
-        tmp.add(completion);
-      }
-    }
+
+  for (int _month = 1; _month <= 12; _month++) {
+    List<RoutineCompletion> tmp = rc
+        .where((completion) =>
+            completion.time.month == _month && completion.time.year == now.year)
+        .toList();
+    if (tmp.length > max) max = tmp.length;
+    print(tmp.length);
     rcByMonth.add(tmp);
     chartData.add(BarChartGroupData(
-        x: i + 1, barRods: [BarChartRodData(toY: tmp.length.toDouble())]));
+        x: _month, barRods: [BarChartRodData(toY: tmp.length.toDouble())]));
   }
   return Container(
     constraints: BoxConstraints(maxWidth: 250, maxHeight: 100),
@@ -155,7 +153,7 @@ Widget buildMonthlyStatsWidget(BuildContext context) {
         maxY: max.toDouble(),
         titlesData: FlTitlesData(
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
