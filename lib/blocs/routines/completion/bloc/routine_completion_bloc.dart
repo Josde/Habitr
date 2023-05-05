@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 
@@ -54,6 +55,15 @@ class RoutineCompletionBloc
           })
           .select()
           .single() as Map;
+
+      if (this.state is RoutineCompletionLoaded) {
+        List<RoutineCompletion> newList =
+            (this.state as RoutineCompletionLoaded).routineCompletions.toList();
+        newList.add(rc);
+        emit.call(RoutineCompletionLoaded(routineCompletions: newList));
+      } else {
+        emit.call(RoutineCompletionLoaded(routineCompletions: [rc]));
+      }
       print(routineResponse);
     } catch (e) {
       print(e);

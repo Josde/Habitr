@@ -15,7 +15,7 @@ class RoutineCompletionLoaded extends RoutineCompletionState {
   RoutineCompletionLoaded({required this.routineCompletions});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [routineCompletions];
 }
 
 class RoutineCompletionError extends RoutineCompletionState {
@@ -24,5 +24,5 @@ class RoutineCompletionError extends RoutineCompletionState {
   RoutineCompletionError({required this.error});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [error];
 }
