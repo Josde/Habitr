@@ -24,6 +24,7 @@ class _LogInScreenState extends State<LogInScreen> {
   var _obscureText = true;
   @override
   void initState() {
+    super.initState();
     _authSubscription = supabase.auth.onAuthStateChange.listen((data) {
       final AuthChangeEvent event = data.event;
       final Session? session = data.session;
@@ -31,8 +32,14 @@ class _LogInScreenState extends State<LogInScreen> {
       setState(() {
         _user = session?.user;
       });
+      if (_user != null) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(//temp fix, reformat to bloc later
+                builder: (BuildContext context) {
+          return BottomNavBar();
+        }));
+      }
     });
-    super.initState();
   }
 
   @override
@@ -95,17 +102,9 @@ class _LogInScreenState extends State<LogInScreen> {
                 try {
                   final result = await supabase.auth
                       .signInWithPassword(email: _email, password: _password!);
-                  if (result.session != null) {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(//temp fix, reformat to bloc later
-                            builder: (BuildContext context) {
-                      return BottomNavBar();
-                    }));
-                  }
-                } on AuthException catch (error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(error.message)),
-                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(e.toString())));
                 }
               },
             ),
