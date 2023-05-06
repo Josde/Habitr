@@ -6,6 +6,7 @@ import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
+import 'package:habitr_tfg/utils/notifications.dart';
 import '../blocs/routines/routines_bloc.dart';
 import '../data/classes/routine.dart';
 import '../screens/misc/home_screen.dart';
@@ -35,30 +36,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
     });
   }
 
-  void initStateAsyncPart() async {
-    tz.initializeTimeZones();
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-    InitializationSettings initializationSettings = InitializationSettings(
-        android: AndroidInitializationSettings('app_icon'),
-        iOS: DarwinInitializationSettings(
-          requestSoundPermission: true,
-          requestBadgePermission: true,
-          requestAlertPermission: true,
-        ));
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    scheduleAllRoutineNotifications(flutterLocalNotificationsPlugin, context);
-  }
-
   @override
   void initState() {
+    NotificationManager nm = NotificationManager();
+    nm.init();
     BlocProvider.of<RoutinesBloc>(context).add(LoadRoutinesEvent());
     BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
     BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
     BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
     BlocProvider.of<RoutineCompletionBloc>(context)
         .add(LoadRoutineCompletionsEvent());
-    initStateAsyncPart();
+
     super.initState();
   }
 

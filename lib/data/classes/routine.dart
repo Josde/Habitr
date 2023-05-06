@@ -20,7 +20,8 @@ class Routine extends Equatable {
       fromJson: DateTime.parse) // Check if working
   DateTime notificationTime;
 
-  get notificationStartTime => TimeOfDay.fromDateTime(notificationTime);
+  TimeOfDay get notificationStartTime =>
+      TimeOfDay.fromDateTime(notificationTime);
 
   @JsonKey(name: "type")
   @ActivityTypeConverter()

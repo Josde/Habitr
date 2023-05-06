@@ -2,22 +2,26 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/constants.dart';
+import 'package:habitr_tfg/utils/notifications.dart';
 
 part 'routines_event.dart';
 part 'routines_state.dart';
 
 class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
+  late NotificationManager nm;
   RoutinesBloc() : super(RoutinesLoaded(routines: [])) {
     on<LoadRoutinesEvent>(_onLoadRoutines);
     on<CreateRoutineEvent>(_onAddRoutine);
     on<UpdateRoutineEvent>(_onUpdateRoutine);
     on<DeleteRoutineEvent>(_onDeleteRoutine);
     on<AddRepositoryRoutineEvent>(_onAddRepositoryRoutine);
+    this.nm = NotificationManager();
     //on<ReadRoutine>(_onReadRoutine);
   }
   void _onLoadRoutines(
       LoadRoutinesEvent event, Emitter<RoutinesState> emit) async {
     print('_onLoadRoutines');
+
     List<Routine> _routines = List.empty(growable: true);
     try {
       if (supabase.auth.currentUser == null) {
@@ -27,16 +31,18 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
       final routinesResponse = await supabase
           .from('profileRoutine')
           .select('*, routine!inner(*)') as List;
-      for (var routine in routinesResponse) {
-        (routine['routine'] as Map).addAll({
-          'notification_days_of_week': routine['notification_days_of_week'],
-          'notification_time': (routine['notification_time']),
-          'notification_enabled': routine['notification_enabled']
+      for (var response in routinesResponse) {
+        (response['routine'] as Map).addAll({
+          'notification_days_of_week': response['notification_days_of_week'],
+          'notification_time': (response['notification_time']),
+          'notification_enabled': response['notification_enabled']
         } as Map<dynamic,
             dynamic>); // Removing this cast will make this snot work
-        _routines.add(Routine.fromJson(routine['routine'] as Map));
-        print(Routine.fromJson(routine['routine'] as Map));
+        Routine r = Routine.fromJson(response['routine'] as Map);
+        _routines.add(r);
+        nm.addToQueue(r, process: false);
       }
+      nm.processQueue();
       emit.call(RoutinesLoaded(routines: _routines));
     } catch (e) {
       print(e);
@@ -74,6 +80,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           'notification_enabled': r.notificationsEnabled
         });
         r.id = routineResponse['id'];
+        nm.addToQueue(r);
         List<Routine> newRoutines = List.from(state.routines)..add(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
@@ -124,6 +131,8 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         } else {
           newRoutines[index] = event.routine;
         }
+        nm.removeRoutineNotification(r);
+        nm.addToQueue(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
@@ -153,6 +162,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         List<Routine> newRoutines = state.routines.where((routine) {
           return routine.id != r.id;
         }).toList();
+        nm.removeRoutineNotification(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
