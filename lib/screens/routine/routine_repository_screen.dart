@@ -32,9 +32,14 @@ class _RoutineRepositoryScreenState extends State<RoutineRepositoryScreen> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   return Container(
+                    color: Theme.of(context).primaryColorDark,
                     height: 50,
                     child: Row(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(snapshot.data![index].icon ?? ""),
+                        ),
                         Text(snapshot.data![index].name),
                         Spacer(),
                         IconButton(

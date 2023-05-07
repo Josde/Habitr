@@ -54,7 +54,10 @@ class Routine extends Equatable {
         id,
         notificationsEnabled,
         notificationStartTime,
-        notificationDaysOfWeek
+        notificationDaysOfWeek,
+        icon,
+        type,
+        isPublic,
       ];
 
   static getActivityType() {}

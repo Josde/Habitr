@@ -17,8 +17,7 @@ class User extends Equatable {
   @JsonKey(name: 'xp')
   int xp = 0;
   @JsonKey(name: 'current_streak', defaultValue: 0)
-  int currentStreakId =
-      0; //FIXME: Esto son IDs de las rachas, no la longitud, aunque de momento para desarrollar la interfaz lo voy a tomar como longitud
+  int currentStreakId = 0;
   @JsonKey(name: 'max_streak', defaultValue: 0)
   int maxStreakId = 0;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -34,5 +33,6 @@ class User extends Equatable {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object?> get props => [id, name, xp, currentStreak, maxStreak];
+  List<Object?> get props =>
+      [id, name, xp, currentStreak, maxStreak, currentStreakId, maxStreakId];
 }

@@ -4,7 +4,7 @@ import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/utils/theming.dart';
 import 'package:habitr_tfg/utils/validator.dart';
-
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import '../../blocs/routines/routines_bloc.dart';
 
 class NewCreateRoutineScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class NewCreateRoutineScreen extends StatefulWidget {
 
 class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
   int _index = 0;
-  String _icon = "";
+  String? _icon = "";
   ActivityType? _currentType;
   String _routineName = "";
   int _timerLength = 0;
@@ -39,6 +39,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
       _daysOfWeek = r.notificationDaysOfWeek;
       _timerLength = r.timerLength;
       _notificationStartTime = r.notificationTime;
+      _icon = r.icon ?? "";
     }
     super.initState();
   }
@@ -260,6 +261,21 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
               labelText: "Activity name",
             ),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+              initialValue: '$_icon',
+              validator: (value) {
+                return iconValidator(value?.trim());
+              },
+              onSaved: (value) {
+                this._icon = value ?? '';
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Icon",
+              )),
         ),
         Visibility(
           child: Padding(
