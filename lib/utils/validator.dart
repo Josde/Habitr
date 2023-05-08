@@ -51,6 +51,9 @@ String? passwordValidator(value) {
 String? iconValidator(value) {
   RegExp regex = RegExp(
       '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
+  if (value == null || value == "") {
+    return null;
+  }
   if (value.runes.length > 1) {
     return 'Please enter only emoji character';
   }

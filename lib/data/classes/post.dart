@@ -21,19 +21,6 @@ class Post extends Equatable {
   Post.onlyText(this.text) {
     this.date = DateTime.now();
   }
-  // Post(int _id, String _posterId, String _text) {
-  //   id = _id;
-  //   posterId = _posterId;
-  //   text = _text;
-  //   date = DateTime.now();
-  // }
-
-  // Post.fromJson(Map<dynamic, dynamic> json) {
-  //   this.id = json['id'];
-  //   this.posterId = json['poster_id'];
-  //   this.text = json['content'];
-  //   this.date = DateTime.parse(json['post_date']);
-  // }
 
   @override
   List<Object?> get props => [id, posterId, text, date];
