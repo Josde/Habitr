@@ -39,6 +39,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         } as Map<dynamic,
             dynamic>); // Removing this cast will make this snot work
         Routine r = Routine.fromJson(response['routine'] as Map);
+        print(r);
         _routines.add(r);
         nm.addToQueue(r, process: false);
       }
@@ -46,7 +47,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
       emit.call(RoutinesLoaded(routines: _routines));
     } catch (e) {
       print(e);
-      emit.call(RoutinesError(error: e.toString()));
+      emit.call(RoutinesError(routines: _routines, error: e.toString()));
     }
   }
 
@@ -67,25 +68,26 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
               'type': r.type.index,
               'timer_length': r.timerLength,
               'is_public': r.isPublic,
-              'creator_id': supabase.auth.currentUser!.id
+              'creator_id': supabase.auth.currentUser!.id,
+              'icon': r.icon
             })
             .select()
             .single() as Map;
+        r.id = routineResponse['id'];
         final profileRoutineResponse =
             await supabase.from('profileRoutine').insert({
-          'routine_id': routineResponse['id'],
+          'routine_id': r.id,
           'profile_id': supabase.auth.currentUser!.id,
           'notification_days_of_week': r.notificationDaysOfWeek,
           'notification_time': r.notificationTime.toIso8601String(),
-          'notification_enabled': r.notificationsEnabled
+          'notification_enabled': r.notificationsEnabled,
         });
-        r.id = routineResponse['id'];
         nm.addToQueue(r);
         List<Routine> newRoutines = List.from(state.routines)..add(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        emit.call(RoutinesError(error: e.toString()));
+        emit.call(RoutinesError(routines: state.routines, error: e.toString()));
       }
     }
   }
@@ -94,37 +96,58 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
       UpdateRoutineEvent event, Emitter<RoutinesState> emit) async {
     final state = this.state;
     Routine r = event.routine;
+    int? _newRoutineId = r.id;
     if (state is RoutinesLoaded) {
       try {
         if (supabase.auth.currentUser == null) {
           emit.call(RoutinesError(error: 'User is not logged in.'));
           return;
         }
-        try {
-          final routineResponse = await supabase.from('routine').update({
-            'name': r.name,
-            'type': r.type.index,
-            'timer_length': r.timerLength,
-            'is_public': r.isPublic,
-            'creator_id': supabase.auth.currentUser!.id
-          }).eq('id', r.id);
-        } catch (e) {
-          //TODO: Separate this into 2 different functions, or improve it one for our own routines and one for online ones.
-          print('Routine is not ours.');
+        if (r.creatorId == supabase.auth.currentUser!.id) {
+          final routineResponse = await supabase
+              .from('routine')
+              .update({
+                'name': r.name,
+                'type': r.type.index,
+                'timer_length': r.timerLength,
+                'is_public': r.isPublic,
+                'creator_id': supabase.auth.currentUser!.id,
+                'icon': r.icon
+              })
+              .eq('id', r.id)
+              .select()
+              .single();
+          print(routineResponse);
+        } else {
+          final routineResponse = await supabase
+              .from('routine')
+              .insert({
+                'name': r.name,
+                'type': r.type.index,
+                'timer_length': r.timerLength,
+                'is_public': r.isPublic,
+                'creator_id': supabase.auth.currentUser!.id,
+                'icon': r.icon
+              })
+              .select()
+              .single() as Map;
+          print(routineResponse);
+          _newRoutineId = routineResponse['id'];
         }
 
         final profileRoutineResponse =
             await supabase.from('profileRoutine').update({
-          'routine_id': r.id,
+          'routine_id': _newRoutineId,
           'profile_id': supabase.auth.currentUser!.id,
           'notification_days_of_week': r.notificationDaysOfWeek,
           'notification_time': r.notificationTime.toIso8601String(),
-          'notification_enabled': r.notificationsEnabled
+          'notification_enabled': r.notificationsEnabled,
         }).eq('routine_id', r.id);
-        List<Routine> newRoutines = state.routines;
+        List<Routine> newRoutines = List.from(state.routines);
         int index = state.routines.indexWhere((Routine r) {
           return r.id == event.routine.id;
         });
+
         if (index == -1) {
           // FAILSAFE
           newRoutines.add(event.routine);
@@ -136,7 +159,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        RoutinesError(error: e.toString());
+        RoutinesError(routines: state.routines, error: e.toString());
       }
     }
   }
@@ -151,22 +174,30 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           emit.call(RoutinesError(error: 'User is not logged in.'));
           return;
         }
-        final routineResponse = await supabase
-            .from(
-                'profileRoutine') //TODO: Delete stray routines if no references are left ?
+        final profileRoutineResponse = await supabase
+            .from('profileRoutine')
             .delete()
             .eq('routine_id', r.id)
             .select()
             .single() as Map;
-        print(routineResponse);
-        List<Routine> newRoutines = state.routines.where((routine) {
+        if (!r.isPublic ||
+            (r.isPublic && r.creatorId == supabase.auth.currentUser!.id)) {
+          final routineResponse = await supabase
+              .from('routine')
+              .delete()
+              .eq('id', r.id)
+              .select()
+              .single();
+          print(routineResponse);
+        }
+        List<Routine> newRoutines = state.routines.toList().where((routine) {
           return routine.id != r.id;
         }).toList();
         nm.removeRoutineNotification(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        emit(RoutinesError(error: e.toString()));
+        emit(RoutinesError(routines: state.routines, error: e.toString()));
       }
     }
   }
@@ -188,7 +219,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        emit(RoutinesError(error: e.toString()));
+        emit(RoutinesError(routines: state.routines, error: e.toString()));
       }
     }
   }

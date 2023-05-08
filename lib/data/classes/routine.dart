@@ -13,7 +13,8 @@ class Routine extends Equatable {
   String name;
   @JsonKey()
   String? icon;
-
+  @JsonKey(name: "creator_id")
+  String creatorId;
   @JsonKey(
       name: "notification_time",
       defaultValue: DateTime.now,
@@ -41,7 +42,7 @@ class Routine extends Equatable {
   int? id;
   Routine(this.name, this.notificationTime, this.notificationsEnabled,
       this.notificationDaysOfWeek, this.type, this.timerLength,
-      {this.icon, this.isPublic = false});
+      {this.creatorId = "", this.icon, this.isPublic = false});
 
   factory Routine.fromJson(Map<dynamic, dynamic> json) =>
       _$RoutineFromJson(json);
@@ -52,6 +53,7 @@ class Routine extends Equatable {
   List<Object?> get props => [
         name,
         id,
+        creatorId,
         notificationsEnabled,
         notificationStartTime,
         notificationDaysOfWeek,

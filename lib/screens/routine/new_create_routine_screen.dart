@@ -6,6 +6,7 @@ import 'package:habitr_tfg/utils/theming.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import '../../blocs/routines/routines_bloc.dart';
+import '../../utils/constants.dart';
 
 class NewCreateRoutineScreen extends StatefulWidget {
   const NewCreateRoutineScreen({Key? key, this.routine}) : super(key: key);
@@ -25,6 +26,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
   bool _notificationsEnabled = true;
   bool _isPublic = false;
   int _notificationType = 0;
+  String _creatorId = "";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -32,12 +34,12 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
     if (widget.routine != null) {
       // modo de edición de rutina
       Routine r = widget.routine!;
-      _index = 1;
       _routineName = r.name;
       _currentType = r.type;
       _notificationsEnabled = r.notificationsEnabled;
       _daysOfWeek = r.notificationDaysOfWeek;
       _timerLength = r.timerLength;
+      _creatorId = r.creatorId;
       _notificationStartTime = r.notificationTime;
       _icon = r.icon ?? "";
     }
@@ -68,7 +70,10 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
         this._formKey.currentState!.save();
         Routine nuevaRutina = Routine(_routineName, _notificationStartTime!,
             _notificationsEnabled, _daysOfWeek, _currentType!, _timerLength,
+            creatorId: supabase.auth.currentUser!.id,
+            isPublic: _isPublic,
             icon: _icon);
+        print(nuevaRutina);
         if (widget.routine != null) {
           // Modo de edición
           nuevaRutina.id = widget.routine!.id;
@@ -443,6 +448,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                 activeColor: Theme.of(context).iconTheme.color,
                 onChanged: (bool? value) {
                   setState(() => this._isPublic = value!);
+                  print(value!);
                 },
                 value: this._isPublic,
               )

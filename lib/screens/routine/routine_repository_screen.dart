@@ -43,11 +43,26 @@ class _RoutineRepositoryScreenState extends State<RoutineRepositoryScreen> {
                         Text(snapshot.data![index].name),
                         Spacer(),
                         IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            BlocProvider.of<RoutinesBloc>(context).add(
-                                AddRepositoryRoutineEvent(
-                                    routine: snapshot.data![index]));
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              BlocProvider.of<RoutinesBloc>(context).add(
+                                  AddRepositoryRoutineEvent(
+                                      routine: snapshot.data![index]));
+                            }),
+                        Builder(
+                          builder: (context) {
+                            if (snapshot.data![index].creatorId ==
+                                supabase.auth.currentUser!.id) {
+                              return IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () =>
+                                    BlocProvider.of<RoutinesBloc>(context).add(
+                                        DeleteRoutineEvent(
+                                            routine: snapshot.data![index])),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
                           },
                         ),
                       ],
