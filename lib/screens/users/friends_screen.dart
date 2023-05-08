@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
+import 'package:habitr_tfg/screens/users/add_friends_screen.dart';
 import 'package:habitr_tfg/screens/users/friend_requests_screen.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
@@ -36,9 +37,20 @@ class _FriendsScreenState extends State<FriendsScreen> {
         }
         return Scaffold(
             appBar: AppBar(
-              title: Text('Friends'),
-              backgroundColor: Theme.of(context).iconTheme.color,
-            ),
+                title: Text('Friends'),
+                backgroundColor: Theme.of(context).iconTheme.color,
+                actions: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.person_add,
+                    ),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddFriendsScreen(),
+                        )),
+                  )
+                ]),
             body: _child);
       },
     );

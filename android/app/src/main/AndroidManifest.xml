@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="usal.jorgecruz.habitr_tfg">
+    <!-- For scan -->
+   <uses-permission android:name="android.permission.CAMERA"/>
    <application
         android:label="Habitr"
         android:icon="@mipmap/ic_launcher">
