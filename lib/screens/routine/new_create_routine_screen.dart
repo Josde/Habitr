@@ -4,7 +4,6 @@ import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/utils/theming.dart';
 import 'package:habitr_tfg/utils/validator.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import '../../blocs/routines/routines_bloc.dart';
 import '../../utils/constants.dart';
 
