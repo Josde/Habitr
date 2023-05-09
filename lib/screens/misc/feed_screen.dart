@@ -60,15 +60,13 @@ class _FeedScreenState extends State<FeedScreen> {
             return ListView.builder(
               itemCount: posts
                   .length, //FIXME: Add paging (this will currently load all messages we can see)
-              //TODO: Add post datetime to the widget
               itemBuilder: (BuildContext context, int index) {
                 //TODO: Add getting message likes here for each post, unliking doesn't properly work yet.
                 Post p = posts[index];
                 User u = friends.firstWhere(
                     (element) => element.id == p.posterId,
                     orElse: () => self);
-                bool isSelfPost =
-                    (u.id == self.id); //TODO: Add delete button for self posts
+                bool isSelfPost = (p.posterId == self.id);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
@@ -90,39 +88,58 @@ class _FeedScreenState extends State<FeedScreen> {
                               SvgPicture.string(Jdenticon.toSvg(u.id),
                                   width: 32, height: 32),
                               Text(u.name),
+                              Spacer(),
+                              Text(
+                                  '${p.date!.day}-${p.date!.month}-${p.date!.year} ${p.date!.hour}:${p.date!.minute}')
                             ]),
                           ),
-                          Text(p.text!),
+                          Center(child: Text(p.text!)),
                           Row(
-                              //TODO: Make buttons clickable
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              //TODO: These aren't centered?
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                GestureDetector(
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0.0, 0.0, 20.0, 0.0),
-                                      child: lb,
-                                    ),
-                                    onTap: () async {
-                                      // TODO: Add supabase like here
-                                      if (!isLiked) {
-                                        BlocProvider.of<FeedBloc>(context)
-                                            .add(LikePostEvent(p));
-                                      } else {}
-                                      print('Tapped heart');
-                                      setState(() {
-                                        isLiked = !isLiked;
-                                        isHeartAnimating = true;
-                                      });
-                                    }),
                                 Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        20.0, 0.0, 0.0, 0.0),
-                                    child: GestureDetector(
-                                        child: Icon(Icons.share),
-                                        onTap: () => (Share.share(p
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: GestureDetector(
+                                      child: lb,
+                                      onTap: () async {
+                                        // TODO: Add supabase like here
+                                        if (!isLiked) {
+                                          BlocProvider.of<FeedBloc>(context)
+                                              .add(LikePostEvent(p));
+                                        } else {}
+                                        print('Tapped heart');
+                                        setState(() {
+                                          isLiked = !isLiked;
+                                          isHeartAnimating = true;
+                                        });
+                                      }),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: IconButton(
+                                        icon: Icon(Icons.share),
+                                        onPressed: () => (Share.share(p
                                             .text!)) //TODO: More effort on this
                                         )),
+                                Builder(
+                                  builder: (context) {
+                                    if (isSelfPost) {
+                                      return Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () =>
+                                                BlocProvider.of<FeedBloc>(
+                                                        context)
+                                                    .add(DeletePostEvent(p)),
+                                          ));
+                                    } else {
+                                      return SizedBox.shrink();
+                                    }
+                                  },
+                                ),
                               ])
                         ]),
                       ),

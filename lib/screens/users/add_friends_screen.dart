@@ -32,7 +32,10 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add friends')),
+      appBar: AppBar(
+        title: Text('Add friends'),
+        backgroundColor: Theme.of(context).iconTheme.color,
+      ),
       body: BlocBuilder<SelfBloc, SelfState>(
         builder: (context, state) {
           Widget _qr = LoadingSpinner();

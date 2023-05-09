@@ -23,6 +23,7 @@ class _AddFriendsQrScanScreenState extends State<AddFriendsQrScanScreen>
     return Scaffold(
         appBar: AppBar(
           title: Text('Scan QR'),
+          backgroundColor: Theme.of(context).iconTheme.color,
         ),
         body: ScanView(
           controller: _controller,

@@ -33,7 +33,7 @@ class InstantRoutineDetailScreen extends StatelessWidget {
                             fontFamily: 'Roboto Mono',
                             fontWeight: FontWeight.w300,
                             fontSize: 48,
-                            color: Theme.of(context).primaryColor)),
+                            shadows: [Shadow(blurRadius: 10.0)])),
                   ),
                 ),
                 Spacer(),
@@ -47,6 +47,7 @@ class InstantRoutineDetailScreen extends StatelessWidget {
                           RoutineCompletion.now(self.id, routine.id!);
                       BlocProvider.of<RoutineCompletionBloc>(context)
                           .add(AddRoutineCompletionEvent(rc: rc));
+                      BlocProvider.of<SelfBloc>(context).add(ReloadSelfEvent());
                       Navigator.pop(context, true);
                     }))
               ],

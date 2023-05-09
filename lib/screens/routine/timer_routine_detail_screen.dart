@@ -54,7 +54,7 @@ class _TimerRoutineDetailScreenState extends State<TimerRoutineDetailScreen> {
                         fontFamily: 'Roboto Mono',
                         fontWeight: FontWeight.w300,
                         fontSize: 48,
-                        color: Theme.of(context).primaryColor)),
+                        shadows: [Shadow(blurRadius: 10.0)])),
               ),
             ),
             TimerWidget(
