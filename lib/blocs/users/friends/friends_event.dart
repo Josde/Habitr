@@ -23,3 +23,12 @@ class DeclineFriendRequestEvent extends FriendsEvent {
   @override
   List<Object> get props => [friend];
 }
+
+class SendFriendRequestEvent extends FriendsEvent {
+  final String friendId;
+
+  const SendFriendRequestEvent({required this.friendId});
+
+  @override
+  List<Object> get props => [friendId];
+}

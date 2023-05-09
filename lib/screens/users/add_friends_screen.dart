@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/users/add_friends_qr_scan_screen.dart';
 import 'package:habitr_tfg/utils/qr.dart';
+import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:habitr_tfg/screens/users/add_friends_qr_scan_screen.dart';
 import 'package:scan/scan.dart';
@@ -65,15 +69,30 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                             IconButton(
                               icon: Icon(Icons.share),
                               onPressed: () async {
-                                XFile f = await _captureAndSaveQRCode();
-                                Share.shareXFiles([f]);
+                                XFile? f = await _captureAndSaveQRCode(
+                                    saveToGallery: false);
+                                if (f != null) {
+                                  Share.shareXFiles([f]);
+                                } else {
+                                  context.showErrorSnackBar(context,
+                                      message:
+                                          'Please allow storage access for this to work.');
+                                }
                               },
                             ),
                             IconButton(
-                              icon: Icon(Icons.save),
-                              onPressed: () async =>
-                                  await _captureAndSaveQRCode(),
-                            )
+                                icon: Icon(Icons.save),
+                                onPressed: () async {
+                                  XFile? f = await _captureAndSaveQRCode();
+                                  if (f == null) {
+                                    context.showErrorSnackBar(context,
+                                        message:
+                                            'Please allow storage access for this to work.');
+                                  } else {
+                                    context.showSnackBar(context,
+                                        message: 'Saved file to ${f.path}');
+                                  }
+                                })
                           ],
                         )
                       ],
@@ -106,12 +125,27 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                           ),
                           TextButton(
                               onPressed: () async {
-                                final ImagePicker picker = ImagePicker();
-                                final XFile? image = await picker.pickImage(
-                                    source: ImageSource.gallery);
-                                if (image != null) {
-                                  String? result = await Scan.parse(image.path);
-                                  print(result);
+                                var status = await Permission.storage.status;
+                                var result = PermissionStatus.denied;
+                                if (!status.isGranted) {
+                                  result = await Permission.storage.request();
+                                }
+                                if (status.isGranted ||
+                                    result == PermissionStatus.granted) {
+                                  final ImagePicker picker = ImagePicker();
+                                  final XFile? image = await picker.pickImage(
+                                      source: ImageSource.gallery);
+                                  if (image != null) {
+                                    String? result =
+                                        await Scan.parse(image.path);
+                                    if (isValidQR(result)) {
+                                      BlocProvider.of<FriendsBloc>(context).add(
+                                          SendFriendRequestEvent(
+                                              friendId: parseQRData(result!)));
+                                    }
+                                    context.showSnackBar(context,
+                                        message: result ?? "Result was null");
+                                  }
                                 }
                               },
                               child: Text('UPLOAD'))
@@ -126,9 +160,28 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
     );
   }
 
-  Future<XFile> _captureAndSaveQRCode() async {
-    final imageDirectory = await getApplicationDocumentsDirectory();
-    _controller.captureAndSave(imageDirectory.toString() + '/qr.png');
-    return XFile(imageDirectory.toString() + '/qr.png');
+  Future<XFile?> _captureAndSaveQRCode({bool saveToGallery = true}) async {
+    var status = await Permission.storage.status;
+    PermissionStatus result =
+        status.isGranted ? PermissionStatus.granted : PermissionStatus.denied;
+    if (!status.isGranted) {
+      result = await Permission.storage.request();
+    }
+    if (result == PermissionStatus.granted ||
+        result == PermissionStatus.limited) {
+      final image = await _controller.capture();
+      if (image != null) {
+        if (saveToGallery) {
+          final result = await ImageGallerySaver.saveImage(image,
+              quality: 100, name: 'qr.jpg');
+          if (result['isSuccess']) {
+            return Future.value(XFile(result['filePath']));
+          }
+        } else {
+          return Future.value(XFile.fromData(image, mimeType: 'image/png'));
+        }
+      }
+    }
+    return null;
   }
 }
