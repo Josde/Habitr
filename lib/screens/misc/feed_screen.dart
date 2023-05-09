@@ -23,9 +23,6 @@ class _FeedScreenState extends State<FeedScreen> {
   late List<Post> posts = List.empty(growable: true);
   late List<User> friends;
   late User self;
-  bool isHeartAnimating = true;
-  bool isLiked = false;
-  late LikeButton lb;
   @override
   void initState() {
     super.initState();
@@ -34,10 +31,6 @@ class _FeedScreenState extends State<FeedScreen> {
     }
     friends = BlocProvider.of<FriendsBloc>(context).state.friends!;
     self = BlocProvider.of<SelfBloc>(context).state.self!;
-    lb = LikeButton(
-        isAnimating: isHeartAnimating,
-        isLiked: isLiked,
-        duration: Duration(milliseconds: 400));
   }
 
   @override
@@ -67,6 +60,14 @@ class _FeedScreenState extends State<FeedScreen> {
                     (element) => element.id == p.posterId,
                     orElse: () => self);
                 bool isSelfPost = (p.posterId == self.id);
+                //FIXME: These are static, they should vary
+                bool isHeartAnimating = false;
+                bool isLiked = false;
+                LikeButton lb = LikeButton(
+                    isAnimating: isHeartAnimating,
+                    isLiked: isLiked,
+                    duration: Duration(milliseconds: 400),
+                    likeCount: p.likes);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(

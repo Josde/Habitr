@@ -20,8 +20,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     emit.call(FeedLoading());
     List<Post> posts = List.empty(growable: true);
     try {
-      var postResponse = await supabase.from('message').select();
+      var postResponse =
+          await supabase.from('message').select('*, messageLikes!inner(*)');
       for (var msg in postResponse) {
+        msg['likes'] = msg['messageLikes'].length ?? 0;
         posts.add(Post.fromJson(msg as Map));
       }
       emit.call(FeedLoaded(posts: posts));
@@ -71,27 +73,42 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   _onLikePost(LikePostEvent event, Emitter<FeedState> emit) async {
-    try {
-      await supabase.from("messageLikes").insert({
-        "post_id": event.post.id,
-        "liked_by": supabase.auth.currentSession!.user.id
-      });
-    } catch (e) {
-      print(e);
-      emit.call(FeedError(error: e.toString()));
+    if (this.state is FeedLoaded) {
+      Post p = event.post;
+      try {
+        await supabase.from("messageLikes").insert({
+          "post_id": p.id,
+          "liked_by": supabase.auth.currentSession!.user.id
+        });
+        List<Post> newPostList = List.from((this.state as FeedLoaded).posts);
+        var index = newPostList.indexOf(event.post);
+        newPostList[index] =
+            Post(p.id, p.posterId, p.text, p.date, p.likes + 1);
+        emit.call(FeedLoaded(posts: newPostList));
+      } catch (e) {
+        print(e);
+        emit.call(FeedError(error: e.toString()));
+      }
     }
   }
 
   _onUnlikePost(UnlikePostEvent event, Emitter<FeedState> emit) async {
-    try {
-      await supabase
-          .from("messageLikes")
-          .delete()
-          .eq("liked_by", supabase.auth.currentSession!.user.id)
-          .eq("post_id", event.post.id);
-    } catch (e) {
-      print(e);
-      emit.call(FeedError(error: e.toString()));
+    if (this.state is FeedLoaded) {
+      Post p = event.post;
+      try {
+        await supabase
+            .from("messageLikes")
+            .delete()
+            .eq("liked_by", supabase.auth.currentSession!.user.id)
+            .eq("post_id", event.post.id);
+        List<Post> newPostList = List.from((this.state as FeedLoaded).posts);
+        var index = newPostList.indexOf(event.post);
+        newPostList[index] =
+            Post(p.id, p.posterId, p.text, p.date, p.likes - 1);
+      } catch (e) {
+        print(e);
+        emit.call(FeedError(error: e.toString()));
+      }
     }
   }
 }
