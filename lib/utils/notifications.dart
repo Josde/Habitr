@@ -11,7 +11,7 @@ class NotificationManager {
   int id = 0;
   ValueNotifier<bool> hasInit = ValueNotifier(false);
   Queue<Routine> routines = Queue();
-  Map<int, int> notifications = Map();
+  Map<int, List<int>> notifications = Map();
   FlutterLocalNotificationsPlugin flnp = FlutterLocalNotificationsPlugin();
   InitializationSettings initializationSettings = InitializationSettings(
       android: AndroidInitializationSettings('app_icon'),
@@ -53,47 +53,65 @@ class NotificationManager {
   void processQueue() async {
     if (this.hasInit.value) {
       for (Routine r in this.routines) {
-        var notificationId = await this.scheduleRoutineNotification(r);
-        this.notifications[r.id!] = notificationId;
+        var notificationIds = await this.scheduleRoutineNotification(r);
+        this.notifications[r.id!] = notificationIds;
       }
       this.routines.clear();
     }
   }
 
   void removeRoutineNotification(Routine r) async {
-    var notificationId = this.notifications[r.id!] ?? -1;
-    if (notificationId != -1 && this.hasInit.value) {
-      await this.flnp.cancel(notificationId);
+    var notificationIds = this.notifications[r.id!];
+    if (this.hasInit.value) {
+      for (var id in notificationIds ?? List.empty()) {
+        await this.flnp.cancel(id);
+      }
     }
   }
 
-  Future<int> scheduleRoutineNotification(Routine r) async {
+  Future<List<int>> scheduleRoutineNotification(Routine r) async {
+    List<int> returnIds = List.empty(growable: true);
     if (r.notificationsEnabled && this.hasInit.value) {
       // TODO: Maybe schedule this everyday? I don't know what happens with the app open more than 1 day
-      DateTime now = DateTime.now();
-      tz.TZDateTime finalDateTime = tz.TZDateTime.local(
-          now.year,
-          now.month,
-          now.day,
-          r.notificationStartTime.hour,
-          r.notificationStartTime.minute,
-          0);
-      print(
-          "Scheduling ${r.name} for ${finalDateTime.hour}:${finalDateTime.minute}");
-      await this.flnp.zonedSchedule(
-            this.id++,
-            r.name,
-            'The hour to do ${r.name} has begun!',
-            finalDateTime,
-            platformChannelSpecifics,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
-            androidAllowWhileIdle: true,
-            payload: r.name,
-            matchDateTimeComponents: DateTimeComponents.time,
-          );
-      return Future.value(this.id);
+      DateTime _nowTemp = DateTime.now();
+      tz.TZDateTime now = tz.TZDateTime.local(
+        _nowTemp.year,
+        _nowTemp.month,
+        _nowTemp.day,
+        _nowTemp.hour,
+        _nowTemp.minute,
+      );
+      int startingDay = now.weekday;
+      for (int dayOfWeek = now.weekday; dayOfWeek <= 7; dayOfWeek++) {
+        if (r.notificationDaysOfWeek[dayOfWeek - 1]) {
+          tz.TZDateTime finalDateTime = tz.TZDateTime.local(
+              now.year,
+              now.month,
+              now.day + (dayOfWeek - startingDay),
+              r.notificationStartTime.hour,
+              r.notificationStartTime.minute,
+              0);
+          if (now.isAfter(finalDateTime)) {
+            continue; // Skip adding routines if today already passed
+          }
+          await this.flnp.zonedSchedule(
+                ++this.id,
+                r.name,
+                'The hour to do ${r.name} has begun!',
+                finalDateTime,
+                platformChannelSpecifics,
+                uiLocalNotificationDateInterpretation:
+                    UILocalNotificationDateInterpretation.absoluteTime,
+                androidAllowWhileIdle: true,
+                payload: r.name,
+                matchDateTimeComponents: DateTimeComponents.time,
+              );
+          returnIds.add(this.id);
+          print(
+              "Scheduling ${r.name} for ${finalDateTime.hour}:${finalDateTime.minute}");
+        }
+      }
     }
-    return Future.value(-1);
+    return Future.value(returnIds);
   }
 }
