@@ -60,7 +60,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   _onDeletePost(DeletePostEvent event, Emitter<FeedState> emit) async {
     Post p = event.post;
     try {
-      await supabase.from('message').delete().eq('id', p.id.toString());
+      await supabase.from('message').delete().eq('id', p.id);
       if (state is FeedLoaded) {
         List<Post> newPosts = List.from((state as FeedLoaded).posts);
         newPosts.removeWhere((element) => element == p);
@@ -105,6 +105,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         var index = newPostList.indexOf(event.post);
         newPostList[index] =
             Post(p.id, p.posterId, p.text, p.date, p.likes - 1);
+        emit.call(FeedLoaded(posts: newPostList));
       } catch (e) {
         print(e);
         emit.call(FeedError(error: e.toString()));

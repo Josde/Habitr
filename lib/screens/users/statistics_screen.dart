@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
+import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:habitr_tfg/widgets/rounded_container.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -59,14 +60,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 }
 
 Widget buildMaxStreakWidget(BuildContext context) {
-  User self = BlocProvider.of<SelfBloc>(context).state.self!;
-  Streak? maxStreak = self
-      .maxStreak!; // FIXME: Fix null-safety and add blocbuilders on this screen, this is just a quick sketch.
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Container(
-      constraints: BoxConstraints(maxWidth: 250, maxHeight: 100),
-      child: Row(
+  var state = BlocProvider.of<SelfBloc>(context).state;
+  Widget _child;
+  if (state is SelfLoaded || (state is SelfError && state.self != null)) {
+    User self = BlocProvider.of<SelfBloc>(context).state.self!;
+    Streak maxStreak = self.maxStreak ??
+        Streak(startDate: DateTime.now(), endDate: DateTime.now());
+    _child = Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -83,39 +83,50 @@ Widget buildMaxStreakWidget(BuildContext context) {
           Text(
               //FIXME: Temp solution. Taken from https://stackoverflow.com/a/62449867
               '${maxStreak.startDate.toString().substring(0, 10)} - ${maxStreak.endDate.toString().substring(0, 10)}')
-        ],
-      ),
+        ]);
+  } else {
+    _child = LoadingSpinner();
+  }
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      constraints: BoxConstraints(maxWidth: 250, maxHeight: 100),
+      child: _child,
     ),
   );
 }
 
 Widget buildCurrentStreakWidget(BuildContext context) {
   //FIXME: This widget currently overflows
-  User self = BlocProvider.of<SelfBloc>(context).state.self!;
-  Streak? currentStreak = self
-      .currentStreak!; // FIXME: Fix null-safety and add blocbuilders on this screen, this is just a quick sketch.
+  Widget _child;
+  var state = BlocProvider.of<SelfBloc>(context).state;
+  if (state is SelfLoaded || (state is SelfError && state.self != null)) {
+    User self = BlocProvider.of<SelfBloc>(context).state.self!;
+    Streak? currentStreak = self.currentStreak ??
+        Streak(startDate: DateTime.now(), endDate: DateTime.now());
+    _child = Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Current streak'),
+            Text(
+                '${DateTime.now().difference(currentStreak.startDate).inDays} days'),
+          ],
+        ),
+        Spacer(),
+        Text('${currentStreak.startDate.toString().substring(0, 10)} - ?'),
+      ],
+    );
+  } else {
+    _child = LoadingSpinner();
+  }
   return Container(
     constraints: BoxConstraints(maxWidth: 250, maxHeight: 100),
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Current streak'),
-              Text(
-                  '${DateTime.now().difference(currentStreak.startDate).inDays} days'),
-            ],
-          ),
-          Spacer(),
-          Text('${currentStreak.startDate.toString().substring(0, 10)} - ?'),
-        ],
-      ),
-    ),
+    child: Padding(padding: const EdgeInsets.all(8.0), child: _child),
   );
 }
 
