@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habitr_tfg/screens/misc/leaderboard_screen.dart';
 
 import 'feed_screen.dart';
 import 'game_screen.dart';
@@ -25,6 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "Home",
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.leaderboard),
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LeaderboardScreen())),
+          )
+        ],
         backgroundColor: Theme.of(context).iconTheme.color,
       ),
       body: Center(
