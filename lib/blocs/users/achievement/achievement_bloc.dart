@@ -29,9 +29,10 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
     OneWeekStreakAchievement(),
     ThreeWeekStreakAchievement()
   ];
-  AchievementBloc() : super(AchievementInitial()) {
-    List<Achievement> userAchievements = [FirstLevelUpAchievement()];
 
+  List<Achievement> userAchievements = [FirstLevelUpAchievement()];
+
+  AchievementBloc() : super(AchievementInitial()) {
     on<LoadAchievementsEvent>(_onLoadAchievements);
     on<CheckFeedAchievementsEvent>(_onCheckFeedAchievements);
     on<CheckRoutineAchievementsEvent>(_onCheckRoutineAchievements);
