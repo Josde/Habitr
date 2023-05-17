@@ -48,10 +48,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           .single() as Map);
       if (state is FeedLoaded) {
         List<Post> newPosts = List.from((state as FeedLoaded).posts);
-        newPosts.add(newPost);
-        newPosts.sort(
-          (a, b) => a.date!.compareTo(b.date!),
-        ); // TODO: Null-safety?
+        newPosts.insert(0, newPost);
         emit.call(FeedLoaded(posts: newPosts));
       } else {
         emit.call(FeedLoaded(posts: [newPost]));
