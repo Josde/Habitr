@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
 import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
@@ -44,6 +45,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     BlocProvider.of<SelfBloc>(context).add(LoadSelfEvent());
     BlocProvider.of<FriendsBloc>(context).add(LoadFriendsEvent());
     BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
+    BlocProvider.of<AchievementBloc>(context).add(LoadAchievementsEvent());
     BlocProvider.of<RoutineCompletionBloc>(context)
         .add(LoadRoutineCompletionsEvent());
 

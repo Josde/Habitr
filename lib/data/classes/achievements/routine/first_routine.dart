@@ -1,6 +1,7 @@
 import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/constants.dart';
+import 'package:habitr_tfg/utils/typer.dart';
 
 import '../base_achievement.dart';
 
@@ -10,6 +11,7 @@ class FirstRoutineAchievement extends Achievement {
   AchievementType type = AchievementType.Routine;
   bool isUnlocked = false;
   int id = 0;
+  Typer shouldUnlockDataType = Typer<List<Routine>>();
   FirstRoutineAchievement({this.isUnlocked = false});
 
   @override

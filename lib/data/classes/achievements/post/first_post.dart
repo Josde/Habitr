@@ -4,13 +4,15 @@ import 'package:habitr_tfg/data/classes/post.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
 import 'package:habitr_tfg/utils/constants.dart';
+import 'package:habitr_tfg/utils/typer.dart';
 
 class FirstPostAchievement extends Achievement {
   String name = "Agora";
   String description = "You have shared your first post!";
-  AchievementType type = AchievementType.RoutineCompletion;
+  AchievementType type = AchievementType.Post;
   bool isUnlocked = false;
   int id = 0;
+  Typer shouldUnlockDataType = Typer<List<Post>>();
   FirstPostAchievement({this.isUnlocked = false});
 
   @override

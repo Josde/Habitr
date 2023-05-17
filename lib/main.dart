@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
 import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
@@ -30,7 +31,7 @@ Future<void> main() async {
     await Supabase.initialize(
         url: myUrl,
         anonKey: myAnonKey,
-        debug: false,
+        debug: true,
         localStorage: HiveLocalStorage());
     await Settings.init(cacheProvider: SharePreferenceCache());
     FlutterNativeSplash.remove();
@@ -100,6 +101,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               BlocProvider(create: (context) => FriendsBloc()),
               BlocProvider(create: (context) => RoutineCompletionBloc()),
               BlocProvider(create: (context) => FeedBloc()),
+              BlocProvider(
+                create: (context) => AchievementBloc(),
+              )
             ],
             child: Builder(
                 // Para evitar problemas de contexto con el cubit de tema

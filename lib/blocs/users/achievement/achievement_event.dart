@@ -9,42 +9,11 @@ abstract class AchievementEvent extends Equatable {
 
 class LoadAchievementsEvent extends AchievementEvent {}
 
-class CheckRoutineAchievementsEvent extends AchievementEvent {
-  final List<Routine> routines;
+class CheckAchievementsEvent extends AchievementEvent {
+  final dynamic data;
+  final AchievementType type;
 
-  CheckRoutineAchievementsEvent({required this.routines});
+  CheckAchievementsEvent({required this.data, required this.type});
   @override
-  List<Object> get props => [routines];
-}
-
-class CheckRoutineCompletionAchievementsEvent extends AchievementEvent {
-  final List<RoutineCompletion> routineCompletions;
-
-  CheckRoutineCompletionAchievementsEvent({required this.routineCompletions});
-  @override
-  List<Object> get props => [routineCompletions];
-}
-
-class CheckFeedAchievementsEvent extends AchievementEvent {
-  final List<Post> posts;
-
-  CheckFeedAchievementsEvent({required this.posts});
-  @override
-  List<Object> get props => [posts];
-}
-
-class CheckUserAchievementsEvent extends AchievementEvent {
-  final User user;
-
-  CheckUserAchievementsEvent({required this.user});
-  @override
-  List<Object> get props => [user];
-}
-
-class CheckStreakAchievementsEvent extends AchievementEvent {
-  final List<Streak> streaks;
-
-  CheckStreakAchievementsEvent({required this.streaks});
-  @override
-  List<Object> get props => [streaks];
+  List<Object> get props => [data, type];
 }

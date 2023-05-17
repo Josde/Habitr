@@ -10,9 +10,7 @@ abstract class AchievementState extends Equatable {
 class AchievementInitial extends AchievementState {}
 
 class AchievementLoaded extends AchievementState {
-  List<bool> isUnlocked;
-
-  AchievementLoaded({required this.isUnlocked});
+  AchievementLoaded();
   @override
-  List<Object> get props => [isUnlocked];
+  List<Object> get props => [];
 }
