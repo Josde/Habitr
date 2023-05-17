@@ -13,7 +13,7 @@ class Post extends Equatable {
   @JsonKey(name: 'post_date', fromJson: DateTime.parse)
   DateTime? date;
   @JsonKey(defaultValue: 0)
-  late int likes;
+  late int? likes;
 
   factory Post.fromJson(Map<dynamic, dynamic> json) => _$PostFromJson(json);
 

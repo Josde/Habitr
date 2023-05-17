@@ -20,8 +20,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     emit.call(FeedLoading());
     List<Post> posts = List.empty(growable: true);
     try {
-      var postResponse =
-          await supabase.from('message').select('*, messageLikes!inner(*)');
+      var postResponse = await supabase
+          .from('message')
+          .select('*, messageLikes!inner(*)')
+          .order('post_date');
       for (var msg in postResponse) {
         msg['likes'] = msg['messageLikes'].length ?? 0;
         posts.add(Post.fromJson(msg as Map));
@@ -47,6 +49,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       if (state is FeedLoaded) {
         List<Post> newPosts = List.from((state as FeedLoaded).posts);
         newPosts.add(newPost);
+        newPosts.sort(
+          (a, b) => a.date!.compareTo(b.date!),
+        ); // TODO: Null-safety?
         emit.call(FeedLoaded(posts: newPosts));
       } else {
         emit.call(FeedLoaded(posts: [newPost]));
@@ -83,7 +88,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         List<Post> newPostList = List.from((this.state as FeedLoaded).posts);
         var index = newPostList.indexOf(event.post);
         newPostList[index] =
-            Post(p.id, p.posterId, p.text, p.date, p.likes + 1);
+            Post(p.id, p.posterId, p.text, p.date, (p.likes ?? 0) + 1);
         emit.call(FeedLoaded(posts: newPostList));
       } catch (e) {
         print(e);
@@ -104,7 +109,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         List<Post> newPostList = List.from((this.state as FeedLoaded).posts);
         var index = newPostList.indexOf(event.post);
         newPostList[index] =
-            Post(p.id, p.posterId, p.text, p.date, p.likes - 1);
+            Post(p.id, p.posterId, p.text, p.date, (p.likes ?? 1) - 1);
         emit.call(FeedLoaded(posts: newPostList));
       } catch (e) {
         print(e);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
 import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 import 'package:habitr_tfg/data/classes/post.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
@@ -29,7 +31,7 @@ class _FeedScreenState extends State<FeedScreen> {
     if (BlocProvider.of<FeedBloc>(context).state is FeedInitial) {
       BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
     }
-    friends = BlocProvider.of<FriendsBloc>(context).state.friends!;
+    friends = BlocProvider.of<FriendsBloc>(context).state.friends ?? [];
     self = BlocProvider.of<SelfBloc>(context).state.self!;
   }
 
@@ -67,7 +69,7 @@ class _FeedScreenState extends State<FeedScreen> {
                     isAnimating: isHeartAnimating,
                     isLiked: isLiked,
                     duration: Duration(milliseconds: 400),
-                    likeCount: p.likes);
+                    likeCount: p.likes ?? 0);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
@@ -176,6 +178,12 @@ class _FeedScreenState extends State<FeedScreen> {
                 onPressed: () {
                   BlocProvider.of<FeedBloc>(context)
                       .add(AddPostEvent(Post.onlyText(postText)));
+                  var posts =
+                      (BlocProvider.of<FeedBloc>(context).state as FeedLoaded)
+                          .posts;
+                  BlocProvider.of<AchievementBloc>(context).add(
+                      CheckAchievementsEvent(
+                          data: posts, type: AchievementType.Post));
                   Navigator.pop(context);
                 },
               )
