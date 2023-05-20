@@ -12,7 +12,7 @@ class ThreeWeekStreakAchievement extends Achievement {
       "You have successfully completed routines daily for 3 weeks!";
   AchievementType type = AchievementType.Streak;
   bool isUnlocked = false;
-  int id = 0;
+  int id = 31;
   Typer shouldUnlockDataType = Typer<List<Streak>>();
   ThreeWeekStreakAchievement({this.isUnlocked = false});
 

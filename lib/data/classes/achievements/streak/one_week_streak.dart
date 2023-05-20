@@ -11,7 +11,7 @@ class OneWeekStreakAchievement extends Achievement {
   String description = "You have completed routines 7 days in a row!";
   AchievementType type = AchievementType.Streak;
   bool isUnlocked = false;
-  int id = 0;
+  int id = 30;
   Typer shouldUnlockDataType = Typer<List<Streak>>();
   OneWeekStreakAchievement({this.isUnlocked = false});
 

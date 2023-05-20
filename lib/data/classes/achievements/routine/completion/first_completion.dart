@@ -10,7 +10,7 @@ class FirstRoutineCompletionAchievement extends Achievement {
   String description = "You have completed your first routine!";
   AchievementType type = AchievementType.RoutineCompletion;
   bool isUnlocked = false;
-  int id = 0;
+  int id = 10;
   Typer shouldUnlockDataType = Typer<List<RoutineCompletion>>();
   FirstRoutineCompletionAchievement({this.isUnlocked = false});
 

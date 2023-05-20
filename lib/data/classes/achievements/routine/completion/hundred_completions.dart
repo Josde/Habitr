@@ -10,7 +10,7 @@ class HundredCompletionsAchievement extends Achievement {
   String description = "You have completed over 100 routines!";
   AchievementType type = AchievementType.RoutineCompletion;
   bool isUnlocked = false;
-  int id = 0;
+  int id = 11;
   Typer shouldUnlockDataType = Typer<List<RoutineCompletion>>();
   HundredCompletionsAchievement({this.isUnlocked = false});
 

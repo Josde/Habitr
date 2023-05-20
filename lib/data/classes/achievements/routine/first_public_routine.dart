@@ -10,7 +10,7 @@ class FirstPublicRoutineAchievement extends Achievement {
       "You have successfully created or added a public routine!";
   AchievementType type = AchievementType.Routine;
   bool isUnlocked = false;
-  int id = 0;
+  int id = 20;
   Typer shouldUnlockDataType = Typer<List<Routine>>();
   FirstPublicRoutineAchievement({this.isUnlocked = false});
 

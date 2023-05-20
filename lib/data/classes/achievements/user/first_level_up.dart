@@ -12,7 +12,7 @@ class FirstLevelUpAchievement extends Achievement {
   String description = "You have leveled up!";
   AchievementType type = AchievementType.User;
   bool isUnlocked = false;
-  int id = 0;
+  int id = 40;
   Typer shouldUnlockDataType = Typer<List<User>>();
   FirstLevelUpAchievement({this.isUnlocked = false});
 
