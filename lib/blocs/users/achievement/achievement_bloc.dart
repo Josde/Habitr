@@ -32,6 +32,8 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
             .firstWhere((element) => element.id == item['achievement_id']);
         Achievement _newAchievement = achievement;
         _newAchievement.isUnlocked = true;
+        _newAchievement.unlockedAt =
+            DateTime.tryParse(item['unlocked_at']) ?? DateTime.now();
         achievements[achievements.indexOf(achievement)] = _newAchievement;
       } catch (e) {
         print("Achievement with ID ${item['achievement_id']} not found");

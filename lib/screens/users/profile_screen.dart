@@ -232,8 +232,42 @@ class Profile extends StatelessWidget {
               return ListView.builder(
                 itemCount: (snapshot.data!).length,
                 itemBuilder: (context, index) {
-                  return Text(
-                      "${_user.name} unlocked the achievement ${snapshot.data![index].name}");
+                  bool _showDate = index == 0 ||
+                      snapshot.data![index - 1].unlockedAt!
+                              .difference(snapshot.data![index].unlockedAt!) >
+                          Duration(days: 1);
+                  Widget header = _showDate
+                      ? Column(children: [
+                          Text(snapshot.data![index].unlockedAt.toString()),
+                          Divider()
+                        ])
+                      : SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        header,
+                        Row(
+                          children: [
+                            Text("${_user.name} unlocked the achievement "),
+                            GestureDetector(
+                              child: Text(
+                                "${snapshot.data![index].name}!",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onTap: () => ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                    "${snapshot.data![index].description}"),
+                              )),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
                 },
               );
             }
@@ -253,8 +287,12 @@ class Profile extends StatelessWidget {
         .eq("profile_id", supabase.auth.currentUser?.id ?? "")
         .order("unlocked_at") as List;
     for (var item in achievementResponse) {
-      lst.add(achievementList
-          .firstWhere((element) => element.id == item['achievement_id']));
+      var newAchievement = achievementList
+          .firstWhere((element) => element.id == item['achievement_id']);
+      newAchievement.unlockedAt =
+          DateTime.tryParse(item['unlocked_at']) ?? DateTime.now();
+      print(newAchievement.unlockedAt);
+      lst.add(newAchievement);
     }
     return Future.value(lst);
   }

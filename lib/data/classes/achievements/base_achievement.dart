@@ -8,6 +8,7 @@ abstract class Achievement extends Equatable {
   bool isUnlocked = false;
   int id = 0;
   AchievementType type = AchievementType.Post;
+  DateTime? unlockedAt;
   Typer shouldUnlockDataType = Typer<Object>();
   bool shouldUnlock(dynamic data);
 
