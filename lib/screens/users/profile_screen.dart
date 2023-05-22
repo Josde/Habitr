@@ -224,7 +224,7 @@ class Profile extends StatelessWidget {
         Expanded(
             // TODO: Achivements
             child: FutureBuilder(
-          future: _getUserAchievements(),
+          future: _getUserAchievements(_user.id),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return LoadingSpinner();
@@ -279,12 +279,12 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Future<List<Achievement>> _getUserAchievements() async {
+  Future<List<Achievement>> _getUserAchievements(String userId) async {
     List<Achievement> lst = List.empty(growable: true);
     var achievementResponse = await supabase
         .from("profileAchievement")
         .select()
-        .eq("profile_id", supabase.auth.currentUser?.id ?? "")
+        .eq("profile_id", userId)
         .order("unlocked_at") as List;
     for (var item in achievementResponse) {
       var newAchievement = achievementList
