@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/classes/routinecompletion.dart';
 import 'package:habitr_tfg/utils/constants.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'routine_completion_event.dart';
 part 'routine_completion_state.dart';

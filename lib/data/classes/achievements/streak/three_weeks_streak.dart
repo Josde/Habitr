@@ -7,13 +7,13 @@ import 'package:habitr_tfg/utils/typer.dart';
 import '../base_achievement.dart';
 
 class ThreeWeekStreakAchievement extends Achievement {
-  String name = "Consistency";
-  String description =
+  final String name = "Consistency";
+  final String description =
       "You have successfully completed routines daily for 3 weeks!";
-  AchievementType type = AchievementType.Streak;
+  final AchievementType type = AchievementType.Streak;
   bool isUnlocked = false;
-  int id = 31;
-  Typer shouldUnlockDataType = Typer<List<Streak>>();
+  final int id = 31;
+  final Typer shouldUnlockDataType = Typer<List<Streak>>();
   ThreeWeekStreakAchievement({this.isUnlocked = false});
 
   @override

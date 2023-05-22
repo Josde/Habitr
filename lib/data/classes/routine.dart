@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/converters/activitytypeconverter.dart';
-import 'package:habitr_tfg/data/converters/timeofdayconverter.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:json_annotation/json_annotation.dart';
 

@@ -5,13 +5,13 @@ import 'package:habitr_tfg/utils/typer.dart';
 import '../base_achievement.dart';
 
 class FirstPublicRoutineAchievement extends Achievement {
-  String name = "Going public";
-  String description =
+  final String name = "Going public";
+  final String description =
       "You have successfully created or added a public routine!";
-  AchievementType type = AchievementType.Routine;
+  final AchievementType type = AchievementType.Routine;
   bool isUnlocked = false;
-  int id = 20;
-  Typer shouldUnlockDataType = Typer<List<Routine>>();
+  final int id = 20;
+  final Typer shouldUnlockDataType = Typer<List<Routine>>();
   FirstPublicRoutineAchievement({this.isUnlocked = false});
 
   @override

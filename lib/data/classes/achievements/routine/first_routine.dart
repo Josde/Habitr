@@ -6,12 +6,13 @@ import 'package:habitr_tfg/utils/typer.dart';
 import '../base_achievement.dart';
 
 class FirstRoutineAchievement extends Achievement {
-  String name = "The start of something big";
-  String description = "You have successfully created your first routine!";
-  AchievementType type = AchievementType.Routine;
+  final String name = "The start of something big";
+  final String description =
+      "You have successfully created your first routine!";
+  final AchievementType type = AchievementType.Routine;
   bool isUnlocked = false;
-  int id = 21;
-  Typer shouldUnlockDataType = Typer<List<Routine>>();
+  final int id = 21;
+  final Typer shouldUnlockDataType = Typer<List<Routine>>();
   FirstRoutineAchievement({this.isUnlocked = false});
 
   @override

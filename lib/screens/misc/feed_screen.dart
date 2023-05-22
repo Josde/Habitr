@@ -52,7 +52,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 alignment: Alignment.center,
               ));
             }
-            posts = (state as FeedLoaded).posts;
+            posts = state.posts;
             return ListView.builder(
               itemCount: posts
                   .length, //FIXME: Add paging (this will currently load all messages we can see)

@@ -1,4 +1,5 @@
 import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
+// ignore: unused_import
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/classes/streak.dart';
 import 'package:habitr_tfg/utils/constants.dart';
@@ -7,12 +8,12 @@ import 'package:habitr_tfg/utils/typer.dart';
 import '../base_achievement.dart';
 
 class OneWeekStreakAchievement extends Achievement {
-  String name = "Going strong";
-  String description = "You have completed routines 7 days in a row!";
-  AchievementType type = AchievementType.Streak;
+  final String name = "Going strong";
+  final String description = "You have completed routines 7 days in a row!";
+  final AchievementType type = AchievementType.Streak;
   bool isUnlocked = false;
-  int id = 30;
-  Typer shouldUnlockDataType = Typer<List<Streak>>();
+  final int id = 30;
+  final Typer shouldUnlockDataType = Typer<List<Streak>>();
   OneWeekStreakAchievement({this.isUnlocked = false});
 
   @override

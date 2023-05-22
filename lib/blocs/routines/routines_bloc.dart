@@ -36,8 +36,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           'notification_days_of_week': response['notification_days_of_week'],
           'notification_time': (response['notification_time']),
           'notification_enabled': response['notification_enabled']
-        } as Map<dynamic,
-            dynamic>); // Removing this cast will make this snot work
+        }); // Removing this cast will make this snot work
         Routine r = Routine.fromJson(response['routine'] as Map);
         print(r);
         _routines.add(r);

@@ -3,16 +3,16 @@ import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 import 'package:habitr_tfg/utils/typer.dart';
 
 abstract class Achievement extends Equatable {
-  String name = "";
-  String description = "";
+  final String name = "";
+  final String description = "";
   bool isUnlocked = false;
-  int id = 0;
-  AchievementType type = AchievementType.Post;
+  final int id = 0;
+  final AchievementType type = AchievementType.Post;
   DateTime? unlockedAt;
-  Typer shouldUnlockDataType = Typer<Object>();
+  final Typer shouldUnlockDataType = Typer<Object>();
   bool shouldUnlock(dynamic data);
 
-  void set unlock(bool unlock) {
+  set unlock(bool unlock) {
     isUnlocked = unlock;
   }
 

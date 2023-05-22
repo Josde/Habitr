@@ -8,12 +8,12 @@ import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/utils/typer.dart';
 
 class FirstLevelUpAchievement extends Achievement {
-  String name = "Getting stronger";
-  String description = "You have leveled up!";
-  AchievementType type = AchievementType.User;
+  final String name = "Getting stronger";
+  final String description = "You have leveled up!";
+  final AchievementType type = AchievementType.User;
   bool isUnlocked = false;
-  int id = 40;
-  Typer shouldUnlockDataType = Typer<List<User>>();
+  final int id = 40;
+  final Typer shouldUnlockDataType = Typer<List<User>>();
   FirstLevelUpAchievement({this.isUnlocked = false});
 
   @override
