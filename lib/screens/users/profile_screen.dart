@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/all.dart';
 import 'package:habitr_tfg/screens/misc/settings_screen.dart';
 import 'package:habitr_tfg/screens/users/statistics_screen.dart';
+import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -219,12 +221,41 @@ class Profile extends StatelessWidget {
         Divider(
           color: Theme.of(context).primaryColorLight,
         ),
-        Column(// TODO: Achivements
-
-            ),
+        Expanded(
+            // TODO: Achivements
+            child: FutureBuilder(
+          future: _getUserAchievements(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return LoadingSpinner();
+            } else {
+              return ListView.builder(
+                itemCount: (snapshot.data!).length,
+                itemBuilder: (context, index) {
+                  return Text(
+                      "${_user.name} unlocked the achievement ${snapshot.data![index].name}");
+                },
+              );
+            }
+          },
+        )),
         Spacer(),
         Container(), // TODO: Visit button
       ],
     );
+  }
+
+  Future<List<Achievement>> _getUserAchievements() async {
+    List<Achievement> lst = List.empty(growable: true);
+    var achievementResponse = await supabase
+        .from("profileAchievement")
+        .select()
+        .eq("profile_id", supabase.auth.currentUser?.id ?? "")
+        .order("unlocked_at") as List;
+    for (var item in achievementResponse) {
+      lst.add(achievementList
+          .firstWhere((element) => element.id == item['achievement_id']));
+    }
+    return Future.value(lst);
   }
 }

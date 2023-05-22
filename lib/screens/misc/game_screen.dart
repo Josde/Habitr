@@ -31,7 +31,7 @@ class GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<SelfBloc, SelfState>(builder: (context, state) {
       if ((state is SelfLoaded) || (state is SelfReloading)) {
-        _child = Text(state.self!.toString());
+        _child = Text("TODO: Pantalla de juego");
       } else {
         _child = LoadingSpinner();
       }

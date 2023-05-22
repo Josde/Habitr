@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
-import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
+
 import 'package:habitr_tfg/data/classes/post.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';

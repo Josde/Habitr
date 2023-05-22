@@ -6,6 +6,8 @@ import 'package:habitr_tfg/utils/theming.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import '../../blocs/routines/routines_bloc.dart';
 import '../../utils/constants.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 
 class NewCreateRoutineScreen extends StatefulWidget {
   const NewCreateRoutineScreen({Key? key, this.routine}) : super(key: key);
@@ -78,9 +80,15 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
           nuevaRutina.id = widget.routine!.id;
           BlocProvider.of<RoutinesBloc>(context, listen: false)
               .add(UpdateRoutineEvent(routine: nuevaRutina));
+          BlocProvider.of<AchievementBloc>(context).add(CheckAchievementsEvent(
+              data: BlocProvider.of<RoutinesBloc>(context).state.routines,
+              type: AchievementType.Routine));
         } else {
           BlocProvider.of<RoutinesBloc>(context, listen: false)
               .add(CreateRoutineEvent(routine: nuevaRutina));
+          BlocProvider.of<AchievementBloc>(context).add(CheckAchievementsEvent(
+              data: BlocProvider.of<RoutinesBloc>(context).state.routines,
+              type: AchievementType.Routine));
         }
         Navigator.pop(context);
       }

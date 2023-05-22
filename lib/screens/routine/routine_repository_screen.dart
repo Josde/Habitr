@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
@@ -48,6 +50,13 @@ class _RoutineRepositoryScreenState extends State<RoutineRepositoryScreen> {
                               BlocProvider.of<RoutinesBloc>(context).add(
                                   AddRepositoryRoutineEvent(
                                       routine: snapshot.data![index]));
+                              BlocProvider.of<AchievementBloc>(context).add(
+                                  CheckAchievementsEvent(
+                                      data:
+                                          BlocProvider.of<RoutinesBloc>(context)
+                                              .state
+                                              .routines,
+                                      type: AchievementType.Routine));
                             }),
                         Builder(
                           builder: (context) {

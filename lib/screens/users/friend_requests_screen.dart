@@ -8,6 +8,8 @@ import 'package:habitr_tfg/screens/users/add_friends_screen.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 
 class FriendRequestScreen extends StatefulWidget {
   const FriendRequestScreen({super.key});

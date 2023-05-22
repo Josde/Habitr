@@ -14,21 +14,7 @@ part 'achievement_event.dart';
 part 'achievement_state.dart';
 
 class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
-  List<Achievement> achievements = [
-    // Feed
-    FirstPostAchievement(),
-    // Routine
-    FirstRoutineAchievement(),
-    FirstPublicRoutineAchievement(),
-    // Routine Completion
-    FirstRoutineCompletionAchievement(),
-    HundredCompletionsAchievement(),
-    // Streak
-    OneWeekStreakAchievement(),
-    ThreeWeekStreakAchievement(),
-    // User
-    FirstLevelUpAchievement()
-  ];
+  List<Achievement> achievements = List.from(achievementList);
 
   AchievementBloc() : super(AchievementInitial()) {
     on<LoadAchievementsEvent>(_onLoadAchievements);
@@ -42,13 +28,13 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         await supabase.from("profileAchievement").select() as List;
     for (var item in achievementResponse) {
       try {
-        Achievement achievement =
-            achievements.firstWhere((element) => element.id == item['id']);
+        Achievement achievement = achievements
+            .firstWhere((element) => element.id == item['achievement_id']);
         Achievement _newAchievement = achievement;
         _newAchievement.isUnlocked = true;
         achievements[achievements.indexOf(achievement)] = _newAchievement;
       } catch (e) {
-        print("Achievement with ID ${item['id']} not found");
+        print("Achievement with ID ${item['achievement_id']} not found");
       }
     }
     emit.call(AchievementLoaded());
@@ -70,7 +56,7 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
           achievement.isUnlocked = true;
           this.achievements[index] = achievement;
           await supabase.from("profileAchievement").insert({
-            'id': achievement.id,
+            'achievement_id': achievement.id,
             'profile_id': supabase.auth.currentUser?.id
           });
         }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:habitr_tfg/data/classes/achievements/all.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 // Source: https://supabase.com/docs/guides/with-flutter#set-up-authrequiredstate
 // Solo importar esto si Supabase.initialize ha sido llamado.
@@ -34,3 +35,19 @@ const AndroidNotificationDetails androidPlatformChannelSpecifics =
         ticker: 'ticker');
 const NotificationDetails platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
+
+List<Achievement> achievementList = [
+  // Feed
+  FirstPostAchievement(),
+  // Routine
+  FirstRoutineAchievement(),
+  FirstPublicRoutineAchievement(),
+  // Routine Completion
+  FirstRoutineCompletionAchievement(),
+  HundredCompletionsAchievement(),
+  // Streak
+  OneWeekStreakAchievement(),
+  ThreeWeekStreakAchievement(),
+  // User
+  FirstLevelUpAchievement()
+];
