@@ -1,6 +1,8 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/utils/validator.dart';
+import 'package:habitr_tfg/widgets/rounded_container.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -15,8 +17,9 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? _displayName, _email, _password, _country;
+  String? _displayName, _email, _password;
   var _obscureText = true;
+  Country _country = Country.worldWide;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,18 +37,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   hintText: 'Display name',
                   onSaved: (String? value) {
                     this._displayName = value!;
-                  },
-                  validator: (value) {
-                    return textNotEmptyValidator(value);
-                  }),
-            ),
-            Container(child: Text('TODO: Country selector')),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RoundedTextFormField(
-                  hintText: 'Country',
-                  onSaved: (String? value) {
-                    this._country = value!;
                   },
                   validator: (value) {
                     return textNotEmptyValidator(value);
@@ -79,12 +70,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return passwordValidator(value);
                   }),
             ),
+            AspectRatio(
+              aspectRatio: 5.5, //TODO: Prettify this!
+              child: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RoundedContainer(
+                      child: GestureDetector(
+                          child: Center(
+                              child: Text(_country == Country.worldWide
+                                  ? "Country"
+                                  : _country.name)),
+                          onTap: () => showCountryPicker(
+                              context: context,
+                              onSelect: (value) =>
+                                  setState(() => _country = value)))),
+                ),
+              ),
+            ),
             ElevatedButton(
                 child: Text('Register'),
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Data is not correct.')),
+                    );
+                    return;
+                  }
+                  if (_country == Country.worldWide) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Remember to pick a country!')),
                     );
                     return;
                   }
@@ -95,8 +111,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     final result = await supabase.auth.signUp(
                         email: _email!,
                         password: _password!,
-                        data: {'name': _displayName});
+                        data: {
+                          'name': _displayName,
+                          'country': _country.countryCode
+                        });
                     if (result.user != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              Text("Please verify your e-mail and come back")));
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(//temp fix, reformat to bloc later
                               builder: (BuildContext context) {
