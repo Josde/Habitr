@@ -97,7 +97,6 @@ Widget buildMaxStreakWidget(BuildContext context) {
 }
 
 Widget buildCurrentStreakWidget(BuildContext context) {
-  //FIXME: This widget currently overflows
   Widget _child;
   var state = BlocProvider.of<SelfBloc>(context).state;
   if (state is SelfLoaded || (state is SelfError && state.self != null)) {

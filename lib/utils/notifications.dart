@@ -108,7 +108,7 @@ class NotificationManager {
               );
           returnIds.add(this.id);
           print(
-              "Scheduling ${r.name} for ${finalDateTime.hour}:${finalDateTime.minute}");
+              "Scheduling ${r.name} for ${finalDateTime.hour}:${finalDateTime.minute} on ${finalDateTime.day}");
         }
       }
     }

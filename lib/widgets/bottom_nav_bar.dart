@@ -13,7 +13,6 @@ import '../data/classes/routine.dart';
 import '../screens/misc/home_screen.dart';
 import '../screens/routine/routine_screen.dart';
 import '../utils/constants.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class BottomNavBar extends StatefulWidget {
