@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/post.dart';
+import 'package:habitr_tfg/data/repositories/post_repository.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:meta/meta.dart';
 
@@ -8,6 +9,7 @@ part 'feed_event.dart';
 part 'feed_state.dart';
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
+  PostRepository repository = PostRepository();
   FeedBloc() : super(FeedInitial()) {
     on<LoadPostsEvent>(_onLoadPosts);
     on<AddPostEvent>(_onAddPost);
@@ -20,15 +22,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     emit.call(FeedLoading());
     List<Post> posts = List.empty(growable: true);
     try {
-      //FIXME: Desde la linea de abajo a la 29 tendría que hacerlo el repositorio, devolviendo ya toda la lista de mensajes. Además, debería de limitar la paginación.
-      var postResponse = await supabase
-          .from('message')
-          .select('*, messageLikes!inner(*)')
-          .order('post_date');
-      for (var msg in postResponse) {
-        msg['likes'] = msg['messageLikes'].length ?? 0;
-        posts.add(Post.fromJson(msg as Map));
+      if (supabase.auth.currentUser?.id == null) {
+        emit.call(FeedError(error: "User is not logged in"));
+        return;
       }
+      posts = await this.repository.loadPosts();
       emit.call(FeedLoaded(posts: posts));
     } catch (e) {
       print(e);
@@ -40,14 +38,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     Post p = event.post;
     try {
       //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
-      Post newPost = Post.fromJson(await supabase
-          .from('message')
-          .insert({
-            'content': p.text,
-            'poster_id': supabase.auth.currentSession!.user.id
-          })
-          .select()
-          .single() as Map);
+      if (supabase.auth.currentUser?.id == null) {
+        emit.call(FeedError(error: "User is not logged in"));
+        return;
+      }
+      Post newPost = await this.repository.addPost(p);
       if (state is FeedLoaded) {
         List<Post> newPosts = List.from((state as FeedLoaded).posts);
         newPosts.insert(0, newPost);
@@ -65,7 +60,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     Post p = event.post;
     try {
       //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
-      await supabase.from('message').delete().eq('id', p.id);
+      if (supabase.auth.currentUser?.id == null) {
+        emit.call(FeedError(error: "User is not logged in"));
+        return;
+      }
+      this.repository.deletePost(p);
       if (state is FeedLoaded) {
         List<Post> newPosts = List.from((state as FeedLoaded).posts);
         newPosts.removeWhere((element) => element == p);
@@ -82,10 +81,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       Post p = event.post;
       try {
         //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
-        await supabase.from("messageLikes").insert({
-          "post_id": p.id,
-          "liked_by": supabase.auth.currentSession!.user.id
-        });
+        this.repository.likePost(p);
         List<Post> newPostList = List.from((this.state as FeedLoaded).posts);
         var index = newPostList.indexOf(event.post);
         newPostList[index] =
@@ -102,12 +98,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (this.state is FeedLoaded) {
       Post p = event.post;
       try {
+        if (supabase.auth.currentUser?.id == null) {
+          emit.call(FeedError(error: "User is not logged in"));
+          return;
+        }
         //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
-        await supabase
-            .from("messageLikes")
-            .delete()
-            .eq("liked_by", supabase.auth.currentSession!.user.id)
-            .eq("post_id", event.post.id);
+        this.repository.likePost(p, unlike: true);
         List<Post> newPostList = List.from((this.state as FeedLoaded).posts);
         var index = newPostList.indexOf(event.post);
         newPostList[index] =

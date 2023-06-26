@@ -10,7 +10,15 @@ abstract class AchievementState extends Equatable {
 class AchievementInitial extends AchievementState {}
 
 class AchievementLoaded extends AchievementState {
-  AchievementLoaded();
+  AchievementLoaded({required this.achievements});
+  List<Achievement> achievements;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [achievements];
+}
+
+class AchievementError extends AchievementState {
+  AchievementError({required this.error});
+  String error;
+  @override
+  List<String> get props => [error];
 }

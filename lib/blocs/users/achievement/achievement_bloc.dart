@@ -4,13 +4,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 import 'package:habitr_tfg/data/classes/achievements/all.dart';
+import 'package:habitr_tfg/data/repositories/achievement_repository.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 part 'achievement_event.dart';
 part 'achievement_state.dart';
 
 class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
-  List<Achievement> achievements = List.from(achievementList);
-
+  AchievementRepository repository = AchievementRepository();
   AchievementBloc() : super(AchievementInitial()) {
     on<LoadAchievementsEvent>(_onLoadAchievements);
     on<CheckAchievementsEvent>(_onCheckAchievements);
@@ -20,46 +20,50 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
       LoadAchievementsEvent event, Emitter<AchievementState> emit) async {
     // TODO: ??? creo que ya lo hacemos Load isUnlocked for all routines here.
     //FIXME: Desde la linea de abajo a la 25 tendría que hacerlo el repositorio
-    var achievementResponse =
-        await supabase.from("profileAchievement").select() as List;
-    for (var item in achievementResponse) {
-      try {
-        Achievement achievement = achievements
-            .firstWhere((element) => element.id == item['achievement_id']);
-        Achievement _newAchievement = achievement;
-        _newAchievement.isUnlocked = true;
-        _newAchievement.unlockedAt =
-            DateTime.tryParse(item['unlocked_at']) ?? DateTime.now();
-        achievements[achievements.indexOf(achievement)] = _newAchievement;
-      } catch (e) {
-        print("Achievement with ID ${item['achievement_id']} not found");
+    try {
+      if (supabase.auth.currentUser?.id == null) {
+        emit.call(AchievementError(error: "User is not logged in."));
+        return;
       }
+      var _achievements =
+          await this.repository.getAchievements(supabase.auth.currentUser!.id);
+      emit.call(AchievementLoaded(achievements: _achievements));
+    } catch (e) {
+      print(e);
+      emit.call(AchievementError(error: e.toString()));
     }
-    emit.call(AchievementLoaded());
   }
 
   FutureOr<void> _onCheckAchievements(
       event, Emitter<AchievementState> emit) async {
-    if (state is AchievementLoaded) {
-      for (var achievement in this.achievements.where(
-            (element) => element.type == event.type,
-          )) {
+    try {
+      if (supabase.auth.currentUser?.id == null ||
+          !(state is AchievementLoaded)) {
+        emit.call(AchievementError(
+            error: "User is not logged in || state is not AchievementLoaded"));
+        return;
+      }
+
+      List<Achievement> achievements =
+          (this.state as AchievementLoaded).achievements;
+      for (var achievement in achievementList.where(
+        (element) => element.type == event.type,
+      )) {
         print("Checking for achievement $achievement...");
         var dataType = achievement.shouldUnlockDataType;
         if (!achievement.isUnlocked &&
             dataType.isType(event.data) &&
             achievement.shouldUnlock(dataType.asType(event.data))) {
           print('Unlocking achievement: ${achievement}');
-          var index = this.achievements.indexOf(achievement);
           achievement.isUnlocked = true;
-          this.achievements[index] = achievement;
+          achievements.add(achievement);
           //FIXME: Desde la linea de abajo a la 61 tendría que hacerlo el repositorio
-          await supabase.from("profileAchievement").insert({
-            'achievement_id': achievement.id,
-            'profile_id': supabase.auth.currentUser?.id
-          });
+          await this.repository.unlockAchievement(achievement);
         }
       }
+    } catch (e) {
+      print(e);
+      emit.call(AchievementError(error: e.toString()));
     }
   }
 }

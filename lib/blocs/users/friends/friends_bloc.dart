@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
+import 'package:habitr_tfg/data/repositories/friends_repository.dart';
 import 'package:meta/meta.dart';
 
 import '../../../utils/constants.dart';
@@ -9,6 +10,7 @@ part 'friends_event.dart';
 part 'friends_state.dart';
 
 class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
+  FriendsRepository repository = FriendsRepository();
   FriendsBloc() : super(FriendsInitial()) {
     on<LoadFriendsEvent>(_onLoadFriends);
     on<AcceptFriendRequestEvent>(_onAcceptFriend);
@@ -21,44 +23,17 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     print('_onLoadFriends');
     List<User> _friends = List<User>.empty(growable: true);
     List<User> _requests = List<User>.empty(growable: true);
-    List<String> _friendRequestIds = List<String>.empty(growable: true);
-    String? ourId;
+
     emit.call(FriendsLoading());
     try {
       //FIXME: Desde la linea de abajo a la 44 tendría que hacerlo el repositorio, y quizas el 50 el repositorio de users
-      if (supabase.auth.currentUser == null) {
-        emit.call(FriendsError(error: 'User is not logged in.'));
-        return;
-      }
-      ourId = supabase.auth.currentUser!.id;
-
-      final friendsResponse =
-          await supabase.from('profiles').select().neq('uuid', ourId);
-
-      var friendRequestResponse =
-          await supabase.from('friendRequest').select().eq('accepted', false);
-
-      for (var row in friendRequestResponse) {
-        if (row['sent_by'] != ourId) _friendRequestIds.add(row['sent_by']);
-        if (row['sent_to'] != ourId) _friendRequestIds.add(row['sent_to']);
-      }
-
-      for (var friend in friendsResponse) {
-        if (!(_friendRequestIds.contains(friend['uuid'])))
-          _friends.add(User.fromJson(friend as Map));
-      }
-      var friendRequestProfileResponse = await supabase
-          .from('profiles')
-          .select()
-          .in_('uuid', _friendRequestIds);
-
-      for (var row in friendRequestProfileResponse) {
-        _requests.add(User.fromJson(row as Map));
-      }
-
+      var _response = await this.repository.getFriendsAndRequests();
+      _friends = _response[0];
+      _requests = _response[1];
       emit.call(FriendsLoaded(friends: _friends, requests: _requests));
     } catch (e) {
       print(e);
+      emit.call(FriendsError(error: e.toString()));
     }
   }
 
@@ -71,8 +46,9 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     if (state is FriendsLoaded) {
       try {
         //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
-        await supabase.from('friendRequest').delete().or(
-            'sent_by.eq.${declinedFriend.id},sent_to.eq.${declinedFriend.id}');
+        await this
+            .repository
+            .replyToFriendRequest(declinedFriend, accept: false);
         newFriendRequests = List.from(
             state.requests!.where((element) => (element != declinedFriend)));
         emit(
@@ -94,8 +70,9 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
       List<User> newFriends = List.from(state.friends!);
       try {
         //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
-        await supabase.from('friendRequest').update({'accepted': true}).or(
-            'sent_by.eq.${acceptedFriend.id},sent_to.eq.${acceptedFriend.id}');
+        await this
+            .repository
+            .replyToFriendRequest(acceptedFriend, accept: true);
         newFriendRequests = List.from(
             state.requests!.where((element) => (element != acceptedFriend)));
         newFriends.add(acceptedFriend);
@@ -115,18 +92,8 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
       List<User> newFriendRequests = List.from(state.friends!);
       try {
         //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio, y quizas la 124 por el repositorio de user.
-        await supabase.from('friendRequest').insert({
-          'sent_by': supabase.auth.currentUser!.id,
-          'sent_to': event.friendId
-        });
-        // We have to do this here rather than passing an User object
-        // due to RLS. We need to have an open friend request with someone so we can see them.
-        var friendResponse = await supabase
-            .from('profiles')
-            .select()
-            .eq('uuid', event.friendId)
-            .single() as Map;
-        User newFriend = User.fromJson(friendResponse);
+        User newFriend =
+            await this.repository.sendFriendRequest(event.friendId);
         print('Sent friend request to ${newFriend.id}');
         newFriendRequests.add(newFriend);
         emit.call(
