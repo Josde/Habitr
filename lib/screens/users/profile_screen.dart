@@ -10,7 +10,7 @@ import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/classes/user.dart';
-import 'friends_screen.dart';
+import 'package:habitr_tfg/screens/friends/friends_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   late final User user;
@@ -153,7 +153,8 @@ class Profile extends StatelessWidget {
                 Text('${_user.name}'),
                 Text('${_user.country?.displayName}'),
                 Text(
-                    '${_user.xp}xp'), //TODO: Add rank when the functionality is done.
+                    'Level ${_user.xp ~/ 250} (${100 * _user.xp / (_user.xp + 125 - ((_user.xp + 125) % 250))}%)'),
+                //https://stackoverflow.com/a/29557629/21787881 lmfao TODO: reformat this
               ],
             )
           ],

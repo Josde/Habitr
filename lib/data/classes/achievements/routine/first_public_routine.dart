@@ -17,7 +17,9 @@ class FirstPublicRoutineAchievement extends Achievement {
   @override
   bool shouldUnlock(covariant List<Routine> routines) {
     for (Routine r in routines) {
+      print(r);
       if (r.isPublic && !isUnlocked) {
+        print('true');
         return true;
       }
     }

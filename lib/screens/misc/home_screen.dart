@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:habitr_tfg/screens/misc/leaderboard_screen.dart';
+import 'package:habitr_tfg/screens/social/leaderboard_screen.dart';
 
-import 'feed_screen.dart';
+import 'package:habitr_tfg/screens/social/feed_screen.dart';
 import 'game_screen.dart';
 
 class HomeScreen extends StatefulWidget {

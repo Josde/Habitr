@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habitr_tfg/data/classes/achievements/all.dart';
+import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 // Source: https://supabase.com/docs/guides/with-flutter#set-up-authrequiredstate
 // Solo importar esto si Supabase.initialize ha sido llamado.

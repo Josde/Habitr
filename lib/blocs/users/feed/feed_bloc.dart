@@ -20,6 +20,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     emit.call(FeedLoading());
     List<Post> posts = List.empty(growable: true);
     try {
+      //FIXME: Desde la linea de abajo a la 29 tendría que hacerlo el repositorio, devolviendo ya toda la lista de mensajes. Además, debería de limitar la paginación.
       var postResponse = await supabase
           .from('message')
           .select('*, messageLikes!inner(*)')
@@ -38,6 +39,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   _onAddPost(AddPostEvent event, Emitter<FeedState> emit) async {
     Post p = event.post;
     try {
+      //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
       Post newPost = Post.fromJson(await supabase
           .from('message')
           .insert({
@@ -62,6 +64,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   _onDeletePost(DeletePostEvent event, Emitter<FeedState> emit) async {
     Post p = event.post;
     try {
+      //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
       await supabase.from('message').delete().eq('id', p.id);
       if (state is FeedLoaded) {
         List<Post> newPosts = List.from((state as FeedLoaded).posts);
@@ -78,6 +81,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (this.state is FeedLoaded) {
       Post p = event.post;
       try {
+        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
         await supabase.from("messageLikes").insert({
           "post_id": p.id,
           "liked_by": supabase.auth.currentSession!.user.id
@@ -98,6 +102,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (this.state is FeedLoaded) {
       Post p = event.post;
       try {
+        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
         await supabase
             .from("messageLikes")
             .delete()

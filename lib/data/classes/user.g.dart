@@ -15,7 +15,8 @@ User _$UserFromJson(Map<dynamic, dynamic> json) => User(
       json['current_streak'] as int? ?? 0,
       json['max_streak'] as int? ?? 0,
       json['is_admin'] as bool,
-    );
+    )..flowers =
+        (json['flowers'] as List<dynamic>).map((e) => e as int).toList();
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'uuid': instance.id,
@@ -26,4 +27,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'current_streak': instance.currentStreakId,
       'max_streak': instance.maxStreakId,
       'is_admin': instance.isAdmin,
+      'flowers': instance.flowers,
     };

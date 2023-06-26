@@ -19,5 +19,5 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'poster_id': instance.posterId,
       'content': instance.text,
       'post_date': instance.date?.toIso8601String(),
-      'likes': instance.likes
+      'likes': instance.likes,
     };

@@ -26,6 +26,8 @@ class User extends Equatable {
   Streak? maxStreak;
   @JsonKey(name: 'is_admin')
   bool isAdmin = false;
+  @JsonKey(name: 'flowers')
+  List<int> flowers = List.filled(16, 0);
   User(this.id, this.name, this.country, this.createdAt, this.xp,
       this.currentStreakId, this.maxStreakId, this.isAdmin);
   factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
@@ -33,6 +35,14 @@ class User extends Equatable {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object?> get props =>
-      [id, name, xp, currentStreak, maxStreak, currentStreakId, maxStreakId];
+  List<Object?> get props => [
+        id,
+        name,
+        xp,
+        currentStreak,
+        maxStreak,
+        currentStreakId,
+        maxStreakId,
+        flowers
+      ];
 }

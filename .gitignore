@@ -119,3 +119,5 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 windows/flutter/generated_plugins.cmake
 windows/flutter/generated_plugin_registrant.cc
+android/unityLibrary/
+unity

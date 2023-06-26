@@ -10,8 +10,8 @@ import 'package:habitr_tfg/blocs/users/feed/feed_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
-import 'package:habitr_tfg/screens/users/login_screen.dart';
-import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
+import 'package:habitr_tfg/screens/auth/login_screen.dart';
+import 'package:habitr_tfg/screens/misc/bottom_nav_bar.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,12 +27,13 @@ Future<void> main() async {
   final String myAnonKey =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6a2F1eWNwd2N0Z3VmamtvZWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDY5MDkyNTUsImV4cCI6MTk2MjQ4NTI1NX0.UBRmXGqk9oqmvL8JMoyJLEnywzsLrn1CtxQlFiGoemw';
   try {
-    Hive.initFlutter('supabase_auth');
     await Supabase.initialize(
         url: myUrl,
         anonKey: myAnonKey,
         debug: true,
-        localStorage: HiveLocalStorage());
+        localStorage:
+            const EmptyLocalStorage() //FIXME: IDK WHY SESSION PERSISTANCE IS BROKEN
+        );
     await Settings.init(cacheProvider: SharePreferenceCache());
     FlutterNativeSplash.remove();
   } catch (error, stacktrace) {

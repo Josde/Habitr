@@ -1,5 +1,4 @@
 import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
-import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/classes/streak.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/utils/typer.dart';

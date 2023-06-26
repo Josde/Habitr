@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
-import 'package:habitr_tfg/screens/users/add_friends_screen.dart';
+import 'add_friends_screen.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';

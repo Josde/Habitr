@@ -1,12 +1,13 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:habitr_tfg/screens/auth/login_screen.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/widgets/rounded_container.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../widgets/bottom_nav_bar.dart';
+import '../misc/bottom_nav_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(title: Text('Password recovery')),
       body: Form(
         key: _formKey,
         child: Column(
@@ -72,20 +74,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             AspectRatio(
               aspectRatio: 5.5, //TODO: Prettify this!
-              child: Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RoundedContainer(
-                      child: GestureDetector(
-                          child: Center(
-                              child: Text(_country == Country.worldWide
-                                  ? "Country"
-                                  : _country.name)),
-                          onTap: () => showCountryPicker(
-                              context: context,
-                              onSelect: (value) =>
-                                  setState(() => _country = value)))),
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RoundedContainer(
+                    child: GestureDetector(
+                        child: Center(
+                            child: Text(_country == Country.worldWide
+                                ? "Country"
+                                : _country.name)),
+                        onTap: () => showCountryPicker(
+                            context: context,
+                            onSelect: (value) =>
+                                setState(() => _country = value)))),
               ),
             ),
             ElevatedButton(
@@ -100,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if (_country == Country.worldWide) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                          content: Text('Remember to pick a country!')),
+                          content: Text('Remember to pick a country.')),
                     );
                     return;
                   }
@@ -118,11 +118,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (result.user != null) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content:
-                              Text("Please verify your e-mail and come back")));
+                              Text("Please verify your e-mail and login")));
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(//temp fix, reformat to bloc later
                               builder: (BuildContext context) {
-                        return BottomNavBar();
+                        return LogInScreen();
                       }));
                     }
                   } on AuthException catch (error) {

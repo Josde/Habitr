@@ -17,7 +17,7 @@ class FirstLevelUpAchievement extends Achievement {
   bool shouldUnlock(covariant List<User> users) {
     User self = users
         .firstWhere((element) => element.id == supabase.auth.currentUser?.id);
-    if (self.xp >= 500 && !isUnlocked) {
+    if (self.xp >= 250 && !isUnlocked) {
       return true;
     }
     return false;

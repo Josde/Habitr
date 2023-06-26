@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
@@ -13,6 +15,7 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
   SelfBloc() : super(SelfInitial()) {
     on<LoadSelfEvent>(_onLoadSelf);
     on<ReloadSelfEvent>(_onReloadSelf);
+    on<ChangeFlowersEvent>(_onChangeFlowers);
   }
 
   void _onLoadSelf(SelfEvent event, Emitter<SelfState> emitter) async {
@@ -23,6 +26,7 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
         emitter.call(SelfError('User is not logged in.'));
         return;
       }
+      //FIXME: Desde la linea de abajo a la 49 tendría que hacerlo el repositorio
       final myselfResponse = await supabase
           .from('profiles')
           .select()
@@ -58,12 +62,31 @@ class SelfBloc extends Bloc<SelfEvent, SelfState> {
         emit.call(SelfError('User is not logged in.'));
         return;
       }
+      //FIXME: Desde la linea de abajo a la 71 tendría que hacerlo el repositorio
       final myselfResponse = await supabase
           .from('profiles')
           .select()
           .eq('uuid', supabase.auth.currentUser!.id)
           .single() as Map;
       var myself = User.fromJson(myselfResponse);
+      emit.call(SelfLoaded(self: myself, lastLoadTime: DateTime.now()));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _onChangeFlowers(
+      ChangeFlowersEvent event, Emitter<SelfState> emit) async {
+    try {
+      //FIXME: Desde la linea de abajo a la 87 tendría que hacerlo el repositorio
+      final updateResponse = await supabase
+          .from("profiles")
+          .update({'flowers': event.newFlowers})
+          .eq('uuid', supabase.auth.currentUser?.id)
+          .select();
+      print("Current: ${state.self!.flowers} Next: ${event.newFlowers}");
+      var myself = state.self;
+      myself!.flowers = event.newFlowers;
       emit.call(SelfLoaded(self: myself, lastLoadTime: DateTime.now()));
     } catch (e) {
       print(e);

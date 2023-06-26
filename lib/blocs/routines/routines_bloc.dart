@@ -24,6 +24,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
 
     List<Routine> _routines = List.empty(growable: true);
     try {
+      //FIXME: Desde la linea 28 a la 42 tendría que hacerlo el repositorio
       if (supabase.auth.currentUser == null) {
         emit.call(RoutinesError(error: 'User is not logged in.'));
         return;
@@ -36,7 +37,8 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
           'notification_days_of_week': response['notification_days_of_week'],
           'notification_time': (response['notification_time']),
           'notification_enabled': response['notification_enabled']
-        }); // Removing this cast will make this snot work
+        } as Map<dynamic,
+            dynamic>); // Removing this cast will make this not work
         Routine r = Routine.fromJson(response['routine'] as Map);
         print(r);
         _routines.add(r);
@@ -55,6 +57,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     final state = this.state;
     Routine r = event.routine;
     if (state is RoutinesLoaded) {
+      //FIXME: Desde la linea 62 a la 86 tendría que hacerlo el repositorio
       try {
         if (supabase.auth.currentUser == null) {
           emit.call(RoutinesError(error: 'User is not logged in.'));
@@ -97,6 +100,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     Routine r = event.routine;
     int? _newRoutineId = r.id;
     if (state is RoutinesLoaded) {
+      //FIXME: Desde la linea 104 a la 12 tendría que hacerlo el repositorio
       try {
         if (supabase.auth.currentUser == null) {
           emit.call(RoutinesError(error: 'User is not logged in.'));
@@ -167,6 +171,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
       DeleteRoutineEvent event, Emitter<RoutinesState> emit) async {
     final state = this.state;
     Routine r = event.routine;
+    //FIXME: Desde la linea de abajo a la 196 tendría que hacerlo el repositorio
     if (state is RoutinesLoaded) {
       try {
         if (supabase.auth.currentUser == null) {
@@ -206,6 +211,7 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     // TODO: Add a date picker before calling this and also insert notification days of week and such.
     Routine r = event.routine;
     if (this.state is RoutinesLoaded) {
+      //FIXME: Desde la linea de abajo a la 2221tendría que hacerlo el repositorio
       try {
         if (supabase.auth.currentUser == null) {
           emit.call(RoutinesError(error: 'User is not logged in.'));

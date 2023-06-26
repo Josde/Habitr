@@ -8,11 +8,11 @@ import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';
 import 'package:habitr_tfg/utils/notifications.dart';
-import '../blocs/routines/routines_bloc.dart';
-import '../data/classes/routine.dart';
-import '../screens/misc/home_screen.dart';
-import '../screens/routine/routine_screen.dart';
-import '../utils/constants.dart';
+import '../../blocs/routines/routines_bloc.dart';
+import '../../data/classes/routine.dart';
+import 'home_screen.dart';
+import '../routine/routine_screen.dart';
+import '../../utils/constants.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class BottomNavBar extends StatefulWidget {

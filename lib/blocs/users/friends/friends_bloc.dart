@@ -25,6 +25,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     String? ourId;
     emit.call(FriendsLoading());
     try {
+      //FIXME: Desde la linea de abajo a la 44 tendría que hacerlo el repositorio, y quizas el 50 el repositorio de users
       if (supabase.auth.currentUser == null) {
         emit.call(FriendsError(error: 'User is not logged in.'));
         return;
@@ -66,8 +67,10 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     var state = this.state;
     var declinedFriend = event.friend;
     List<User> newFriendRequests;
+
     if (state is FriendsLoaded) {
       try {
+        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
         await supabase.from('friendRequest').delete().or(
             'sent_by.eq.${declinedFriend.id},sent_to.eq.${declinedFriend.id}');
         newFriendRequests = List.from(
@@ -90,6 +93,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     if (state is FriendsLoaded) {
       List<User> newFriends = List.from(state.friends!);
       try {
+        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
         await supabase.from('friendRequest').update({'accepted': true}).or(
             'sent_by.eq.${acceptedFriend.id},sent_to.eq.${acceptedFriend.id}');
         newFriendRequests = List.from(
@@ -110,6 +114,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     if (state is FriendsLoaded || state is FriendsError) {
       List<User> newFriendRequests = List.from(state.friends!);
       try {
+        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio, y quizas la 124 por el repositorio de user.
         await supabase.from('friendRequest').insert({
           'sent_by': supabase.auth.currentUser!.id,
           'sent_to': event.friendId

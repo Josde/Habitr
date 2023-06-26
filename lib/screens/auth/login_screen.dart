@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:habitr_tfg/screens/users/sign_up_screen.dart';
+import 'password_recovery_screen.dart';
+import 'sign_up_screen.dart';
 import 'package:habitr_tfg/utils/validator.dart';
 import 'package:habitr_tfg/widgets/rounded_text_form_field.dart';
 import 'package:habitr_tfg/utils/constants.dart';
-import 'package:habitr_tfg/widgets/bottom_nav_bar.dart';
+import 'package:habitr_tfg/screens/misc/bottom_nav_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -129,7 +130,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SignUpScreen()));
@@ -140,11 +141,15 @@ class _LogInScreenState extends State<LogInScreen> {
                     text: "\nOr ",
                   ),
                   TextSpan(
-                    text: "continue as a guest",
+                    text: "did you forget your password?",
                     style: TextStyle(fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print('Clicked guest');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    PasswordRecoveryScreen()));
                       },
                   ),
                 ]),

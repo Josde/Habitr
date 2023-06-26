@@ -18,7 +18,8 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
 
   FutureOr<void> _onLoadAchievements(
       LoadAchievementsEvent event, Emitter<AchievementState> emit) async {
-    // Load isUnlocked for all routines here.
+    // TODO: ??? creo que ya lo hacemos Load isUnlocked for all routines here.
+    //FIXME: Desde la linea de abajo a la 25 tendría que hacerlo el repositorio
     var achievementResponse =
         await supabase.from("profileAchievement").select() as List;
     for (var item in achievementResponse) {
@@ -52,6 +53,7 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
           var index = this.achievements.indexOf(achievement);
           achievement.isUnlocked = true;
           this.achievements[index] = achievement;
+          //FIXME: Desde la linea de abajo a la 61 tendría que hacerlo el repositorio
           await supabase.from("profileAchievement").insert({
             'achievement_id': achievement.id,
             'profile_id': supabase.auth.currentUser?.id

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
-import 'package:habitr_tfg/screens/users/add_friends_qr_scan_screen.dart';
+import 'add_friends_qr_scan_screen.dart';
 import 'package:habitr_tfg/utils/qr.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
