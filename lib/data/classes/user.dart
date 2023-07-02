@@ -1,5 +1,6 @@
 /// {@category Datos}
 /// {@category GestionUsuario}
+/// Clase que representa un usuario.
 library;
 
 import 'package:equatable/equatable.dart';

@@ -1,5 +1,6 @@
 /// {@category BLoC}
 /// {@category GestionSocial}
+/// Paquete que implementa el BLoC del feed (parte social). Para obtener más información, mirar los detalles de las classes Event y State de este paquete.
 library;
 
 import 'package:bloc/bloc.dart';

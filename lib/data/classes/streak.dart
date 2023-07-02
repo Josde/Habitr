@@ -1,4 +1,7 @@
 /// {@category Datos}
+/// Representa una racha de días seguidos en los que se ha cumplido al menos una rutina.
+/// Realmente apenas se opera con este tipo de datos en la aplicación, puesto que se calculan desde el lado de Supabase.
+/// Sólamente se utiliza esta clase para representar el dato en la pantalla de estadísticas.
 library;
 
 import 'package:equatable/equatable.dart';

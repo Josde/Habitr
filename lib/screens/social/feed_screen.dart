@@ -36,7 +36,10 @@ class _FeedScreenState extends State<FeedScreen> {
     if (BlocProvider.of<FeedBloc>(context).state is FeedInitial) {
       BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
     }
-    friends = BlocProvider.of<FriendsBloc>(context).state.friends ?? [];
+    // FIXME: Modificar esto para hacer la comprobacion antes del cast
+    friends = (BlocProvider.of<FriendsBloc>(context).state as FriendsLoaded)
+            .friends ??
+        [];
     self = BlocProvider.of<SelfBloc>(context).state.self!;
   }
 

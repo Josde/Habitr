@@ -1,5 +1,6 @@
 /// {@category BLoC}
 /// {@category GestionRutinas}
+/// Paquete que implementa el BLoC de rutinas. Para obtener más información, mirar los detalles de las classes Event y State de este paquete.
 library;
 
 import 'package:bloc/bloc.dart';

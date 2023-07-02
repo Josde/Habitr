@@ -1,5 +1,8 @@
 /// {@category Datos}
 /// {@category GestionSocial}
+/// Representa un mensaje en la parte social de la aplicación.
+///
+/// Durante el proceso de desarrollo y documentación el término "Post" y el término "Mensaje" fueron usados intercambiablemente, pero ambos se refieren a esta clase.
 library;
 
 import 'package:equatable/equatable.dart';

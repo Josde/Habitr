@@ -1,5 +1,6 @@
 /// {@category Datos}
 /// {@category GestionRutinas}
+/// Representa una rutina que ha sido completada por cierto usuario a cierta hora.
 library;
 
 import 'package:equatable/equatable.dart';

@@ -38,6 +38,8 @@ class NotificationManager {
     return _singleton;
   }
 
+  /// Es el constructor que se utiliza cuando no hay instancia creada del Singleton.
+  /// Se encarga de inicializar la biblioteca de notificaciones usada.
   NotificationManager._internal() {
     this.hasInit = ValueNotifier(false);
     this.hasInit.addListener(() {
@@ -48,6 +50,7 @@ class NotificationManager {
     });
   }
 
+  /// Añade una notificación para una rutina [r] a la cola. Si [process] es verdadero, se procesa la cola. Si no, no.
   void addToQueue(Routine r, {bool process = true}) {
     routines.add(r);
     if (process && this.hasInit.value) {
@@ -55,6 +58,7 @@ class NotificationManager {
     }
   }
 
+  /// Procesa la cola de notificaciones pendientes para crearlas.
   void processQueue() async {
     if (this.hasInit.value) {
       for (Routine r in this.routines) {
@@ -65,6 +69,7 @@ class NotificationManager {
     }
   }
 
+  /// Borra las notificaciones para una rutina [r]
   void removeRoutineNotification(Routine r) async {
     var notificationIds = this.notifications[r.id!];
     if (this.hasInit.value) {
@@ -74,6 +79,9 @@ class NotificationManager {
     }
   }
 
+  /// Programa las notificaciones de una rutina [r] para toda la semana, según las horas elegidas por el usuario.
+  ///
+  /// Retorna una lista de IDs de notificaciones, que se utilizará posteriormente en el caso de que haga falta cancelar una notificación.
   Future<List<int>> scheduleRoutineNotification(Routine r) async {
     List<int> returnIds = List.empty(growable: true);
     if (r.notificationsEnabled && this.hasInit.value) {

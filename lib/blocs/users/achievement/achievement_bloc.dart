@@ -1,5 +1,6 @@
 /// {@category BLoC}
 /// {@category GestionLogros}
+/// Paquete que implementa el BLoC de logros. Para obtener más información, mirar los detalles de las classes Event y State de este paquete.
 library;
 
 import 'dart:async';

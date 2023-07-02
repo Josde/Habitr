@@ -1,5 +1,5 @@
 /// {@category GestionLogros}
-/// {@category Datos}
+/// @nodoc
 library;
 
 import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';

@@ -1,15 +1,17 @@
 part of 'feed_bloc.dart';
 
-/// {@category BLoC}
-/// {@category GestionSocial}
 @immutable
 abstract class FeedEvent extends Equatable {}
 
+/// Evento que desencadena la carga de posts
 class LoadPostsEvent extends FeedEvent {
   @override
   List<Object?> get props => [];
 }
 
+/// Evento que desencadena el añadir un mensaje
+///
+/// Atributos: [post] (el mensaje a añadir)
 class AddPostEvent extends FeedEvent {
   final Post post;
 
@@ -19,6 +21,9 @@ class AddPostEvent extends FeedEvent {
   List<Object?> get props => [post];
 }
 
+/// Evento que desencadena el borrado de un mensaje
+///
+/// Atributos: [post] (el mensaje a borrar)
 class DeletePostEvent extends FeedEvent {
   final Post post;
 
@@ -28,6 +33,9 @@ class DeletePostEvent extends FeedEvent {
   List<Object?> get props => [post];
 }
 
+/// Evento que desencadena darle like a un mensaje
+///
+/// Atributos: [post] (el mensaje al cual darle like)
 class LikePostEvent extends FeedEvent {
   final Post post;
 
@@ -37,6 +45,9 @@ class LikePostEvent extends FeedEvent {
   List<Object?> get props => [post];
 }
 
+/// Evento que desencadena darle like a un mensaje
+///
+/// Atributos: [post] (el mensaje al cual darle like)
 class UnlikePostEvent extends FeedEvent {
   final Post post;
 

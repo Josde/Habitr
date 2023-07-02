@@ -1,5 +1,6 @@
 /// {@category BLoC}
 /// {@category GestionSocial}
+/// Paquete que implementa el BLoC de amigos y peticiones de amistad. Para obtener más información, mirar los detalles de las classes Event y State de este paquete.
 library;
 
 import 'package:bloc/bloc.dart';
@@ -92,7 +93,8 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
   void _onSendFriendRequest(
       SendFriendRequestEvent event, Emitter<FriendsState> emit) async {
     var state = this.state;
-    if (state is FriendsLoaded || state is FriendsError) {
+    if (state is FriendsLoaded) {
+      // TODO: Mirar el null safety de esto
       List<User> newFriendRequests = List.from(state.friends!);
       try {
         //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio, y quizas la 124 por el repositorio de user.

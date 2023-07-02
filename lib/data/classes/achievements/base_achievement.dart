@@ -10,6 +10,8 @@ abstract class Achievement extends Equatable {
   final String name = "";
   final String description = "";
   bool isUnlocked = false;
+
+  /// La ID del logro en la BBDD. Ha de ir hardcodeada en el archivo que define el logro.
   final int id = 0;
   final AchievementType type = AchievementType.Post;
   DateTime? unlockedAt;

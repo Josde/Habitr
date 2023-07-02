@@ -1,11 +1,18 @@
 /// {@category Repositorio}
 /// {@category GestionRutinas}
+/// Repositorio que obtendrá y modificará los datos de las rutinas usando Supabase.
 library;
 
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 
+/// Clase que define el repositorio y sus métodos. Se puede hacer click para obtener una vista de detalle.
+///
+/// Al igual que en otros repositorios, tódos los métodos lanzan excepciones sin capturar, y por tanto han de estar en un bloque try - catch.
 class RoutineRepository {
+  /// Obtiene las rutinas del usuario de la aplicación.
+  ///
+  /// Retorna una lista de Routine.
   Future<List<Routine>> getSelfRoutines() async {
     if (supabase.auth.currentUser == null) {
       throw Exception('User not logged in');
@@ -26,6 +33,9 @@ class RoutineRepository {
     return Future.value(_return);
   }
 
+  /// Añade una rutina [r] a las rutinas del usuario.
+  ///
+  /// Retorna [r] pero actualizando la ID a  que tenga en la BBDD, para poder seguir manipulando el mismo objeto.
   Future<Routine> addRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {
       throw Exception('User is not logged in.');
@@ -55,15 +65,23 @@ class RoutineRepository {
     return Future.value(_return);
   }
 
+  /// Añade una rutina pública [r] a las rutinas del usuario.
+  ///
+  /// Retorna [r] por temas de debugging, aunque en versiones futuras probablemente esto deje de ser así.
   Future<Routine> addPublicRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {
       throw Exception('User is not logged in');
     }
-    Routine _return = await supabase.from('profileRoutine').insert(
-        {'profile_id': supabase.auth.currentUser!.id, 'routine_id': r.id});
+    Routine _return = await supabase.from('profileRoutine').insert({
+      'profile_id': supabase.auth.currentUser!.id,
+      'routine_id': r.id
+    }).select();
     return Future.value(_return);
   }
 
+  /// Funcion que actualiza una rutina [r]
+  ///
+  /// Devuelve [r] con sus modificaciones hechas, aunque igual que en la función anterior esto probablemente deje de ser así en versiones futuras.
   Future<Routine> updateRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {
       throw Exception('User is not logged in');
@@ -112,6 +130,9 @@ class RoutineRepository {
     return _return;
   }
 
+  /// Borra la rutina [r].
+  ///
+  /// No retorna nada.
   Future<void> deleteRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {
       throw Exception('User is not logged in.');

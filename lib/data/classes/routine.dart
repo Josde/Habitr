@@ -1,5 +1,6 @@
 /// {@category Datos}
 /// {@category GestionRutinas}
+/// Representa una rutina, de las que se enseñan en la lista de rutinas normal y en la online.
 library;
 
 import 'package:equatable/equatable.dart';

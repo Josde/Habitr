@@ -138,10 +138,13 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: I could use a BlocBuilder for this but I don't want to add loading spinners for such a miniscule feature.
-    var _friendCount = (BlocProvider.of<FriendsBloc>(context).state
-            is FriendsLoaded)
-        ? BlocProvider.of<FriendsBloc>(context).state.friends!.length.toString()
-        : "";
+    var _friendCount = // Usar repositorio y FutureBuilder para todas estas cosas.
+        (BlocProvider.of<FriendsBloc>(context).state is FriendsLoaded)
+            ? (BlocProvider.of<FriendsBloc>(context).state as FriendsLoaded)
+                .friends!
+                .length
+                .toString()
+            : "";
     return Column(
       children: [
         Row(
