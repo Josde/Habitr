@@ -1,3 +1,6 @@
+/// @nodoc
+library;
+
 export 'base_achievement.dart';
 export 'post/first_post.dart';
 export 'routine/first_routine.dart';

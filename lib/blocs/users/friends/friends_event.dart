@@ -1,5 +1,7 @@
 part of 'friends_bloc.dart';
 
+/// {@category BLoC}
+/// {@category GestionSocial}
 @immutable
 abstract class FriendsEvent extends Equatable {
   const FriendsEvent();

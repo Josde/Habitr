@@ -1,3 +1,7 @@
+/// {@category GestionEstadisticas}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/completion/bloc/routine_completion_bloc.dart';

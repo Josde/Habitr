@@ -1,3 +1,7 @@
+/// {@category GestionAutenticacion}
+/// {@category Vista}
+library;
+
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/screens/auth/login_screen.dart';
@@ -25,7 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text('Password recovery')),
+      appBar: AppBar(title: Text('Register account')),
       body: Form(
         key: _formKey,
         child: Column(

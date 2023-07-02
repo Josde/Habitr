@@ -1,3 +1,7 @@
+/// {@category Vista}
+/// {@category Miscelaneo}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
@@ -32,7 +36,6 @@ class GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
     return BlocBuilder<SelfBloc, SelfState>(builder: (context, state) {
       if ((state is SelfLoaded) || (state is SelfReloading)) {
         var flowers = state.self!.flowers;

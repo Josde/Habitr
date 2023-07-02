@@ -1,3 +1,7 @@
+/// {@category GestionUsuario}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/users/friends/friends_bloc.dart';

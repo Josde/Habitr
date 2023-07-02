@@ -1,3 +1,7 @@
+/// {@category Repositorio}
+/// {@category GestionSocial}
+library;
+
 import 'package:habitr_tfg/data/classes/post.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 

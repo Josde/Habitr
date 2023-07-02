@@ -1,5 +1,7 @@
 part of 'friends_bloc.dart';
 
+/// {@category BLoC}
+/// {@category GestionSocial}
 @immutable
 abstract class FriendsState extends Equatable {
   final List<User>? friends;

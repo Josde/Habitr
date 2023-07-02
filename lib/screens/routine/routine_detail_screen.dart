@@ -1,3 +1,7 @@
+/// {@category GestionRutinas}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';

@@ -1,5 +1,7 @@
 part of 'routines_bloc.dart';
 
+/// {@category BLoC}
+/// {@category GestionRutinas}
 abstract class RoutinesState extends Equatable {
   const RoutinesState({this.routines = const []});
   final List<Routine> routines;

@@ -1,3 +1,7 @@
+/// {@category GestionAutenticacion}
+/// {@category Vista}
+library;
+
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';

@@ -1,3 +1,7 @@
+/// {@category Miscelaneo}
+/// @nodoc
+library;
+
 import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(

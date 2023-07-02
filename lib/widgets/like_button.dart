@@ -1,3 +1,6 @@
+///@nodoc
+library;
+
 import 'package:flutter/material.dart';
 
 // FIXME: REFERENCIA DE CLASE: https://www.youtube.com/watch?v=5k8XFgRtPb4

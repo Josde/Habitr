@@ -1,5 +1,7 @@
 part of 'feed_bloc.dart';
 
+/// {@category BLoC}
+/// {@category GestionSocial}
 @immutable
 abstract class FeedState extends Equatable {}
 

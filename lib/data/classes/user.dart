@@ -1,3 +1,7 @@
+/// {@category Datos}
+/// {@category GestionUsuario}
+library;
+
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/streak.dart';
 import 'package:json_annotation/json_annotation.dart';

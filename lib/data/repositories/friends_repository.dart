@@ -1,7 +1,10 @@
+/// {@category Repositorio}
+/// {@category GestionSocial}
+library;
+
 import 'package:habitr_tfg/data/classes/user.dart';
 import '../../../utils/constants.dart';
 
-// IMPORTANT: Todas las funciones de todas los repositorios requieren ser try / catch-adas.
 class FriendsRepository {
   Future<List<List<User>>> getFriendsAndRequests() async {
     // Dart 3.0 introduce soporte para varios returns a la vez, en vez de usar

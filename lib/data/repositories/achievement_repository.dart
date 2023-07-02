@@ -1,3 +1,7 @@
+/// {@category Repositorio}
+/// {@category GestionLogros}
+library;
+
 import 'package:habitr_tfg/data/classes/achievements/base_achievement.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/utils/constants.dart';

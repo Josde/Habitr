@@ -1,3 +1,7 @@
+/// {@category Miscelaneo}
+/// Métodos para tratar con códigos QR.
+library;
+
 import 'package:uuid/uuid.dart';
 
 String generateQRData(String data) {

@@ -1,3 +1,6 @@
+/// @nodoc
+library;
+
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';

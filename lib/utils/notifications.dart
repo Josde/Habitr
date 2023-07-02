@@ -1,3 +1,7 @@
+/// {@category Miscelaneo}
+
+library;
+
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -7,6 +11,7 @@ import '../data/classes/routine.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+/// Singleton que se encarga de las notificaciones en toda la aplicación.
 class NotificationManager {
   int id = 0;
   ValueNotifier<bool> hasInit = ValueNotifier(false);

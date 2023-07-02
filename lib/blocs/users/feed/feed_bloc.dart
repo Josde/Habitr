@@ -1,3 +1,7 @@
+/// {@category BLoC}
+/// {@category GestionSocial}
+library;
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/post.dart';

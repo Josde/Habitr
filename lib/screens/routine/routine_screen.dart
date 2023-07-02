@@ -1,3 +1,7 @@
+/// {@category GestionRutinas}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';

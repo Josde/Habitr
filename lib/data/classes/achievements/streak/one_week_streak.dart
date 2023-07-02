@@ -1,3 +1,7 @@
+/// {@category GestionLogros}
+/// {@category Datos}
+library;
+
 import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 // ignore: unused_import
 import 'package:habitr_tfg/data/classes/routine.dart';

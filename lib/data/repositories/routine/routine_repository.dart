@@ -1,3 +1,7 @@
+/// {@category Repositorio}
+/// {@category GestionRutinas}
+library;
+
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 

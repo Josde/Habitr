@@ -1,3 +1,6 @@
+///@nodoc
+library;
+
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:json_annotation/json_annotation.dart';
 

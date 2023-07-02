@@ -1,3 +1,7 @@
+/// {@category Miscelaneo}
+/// Clase que provee varios validadores para el texto que introduce el usuario.
+library;
+
 String? textNotEmptyValidator(value) {
   if (value == null || value.isEmpty) {
     return 'Please enter some text';

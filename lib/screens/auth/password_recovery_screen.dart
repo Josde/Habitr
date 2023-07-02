@@ -1,3 +1,7 @@
+/// {@category GestionAutenticacion}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -20,6 +24,9 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text('Password recovery'),
+        ),
         resizeToAvoidBottomInset: false,
         body: Form(
             key: _formKey,

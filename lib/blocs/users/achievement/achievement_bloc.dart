@@ -1,3 +1,7 @@
+/// {@category BLoC}
+/// {@category GestionLogros}
+library;
+
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -18,8 +22,6 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
 
   FutureOr<void> _onLoadAchievements(
       LoadAchievementsEvent event, Emitter<AchievementState> emit) async {
-    // TODO: ??? creo que ya lo hacemos Load isUnlocked for all routines here.
-    //FIXME: Desde la linea de abajo a la 25 tendría que hacerlo el repositorio
     try {
       if (supabase.auth.currentUser?.id == null) {
         emit.call(AchievementError(error: "User is not logged in."));

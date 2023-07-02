@@ -1,3 +1,7 @@
+/// {@category GestionSocial}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitr_tfg/screens/users/profile_screen.dart';

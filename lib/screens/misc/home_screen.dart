@@ -1,3 +1,7 @@
+/// {@category Vista}
+/// {@category Miscelaneo}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:habitr_tfg/screens/social/leaderboard_screen.dart';
 

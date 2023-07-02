@@ -1,5 +1,7 @@
 part of 'self_bloc.dart';
 
+/// {@category BLoC}
+/// {@category GestionUsuario}
 @immutable
 abstract class SelfEvent {}
 
