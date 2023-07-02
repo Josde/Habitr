@@ -1,6 +1,12 @@
+/// {@category GestionRutinas}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/blocs/routines/routines_bloc.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
@@ -19,6 +25,7 @@ class _RoutineRepositoryScreenState extends State<RoutineRepositoryScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Routine Store'),
+          backgroundColor: Theme.of(context).iconTheme.color,
         ),
         body: Center(
             child: FutureBuilder(
@@ -31,17 +38,44 @@ class _RoutineRepositoryScreenState extends State<RoutineRepositoryScreen> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   return Container(
+                    color: Theme.of(context).primaryColorDark,
                     height: 50,
                     child: Row(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(snapshot.data![index].icon ?? ""),
+                        ),
                         Text(snapshot.data![index].name),
                         Spacer(),
                         IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            BlocProvider.of<RoutinesBloc>(context).add(
-                                AddRepositoryRoutineEvent(
-                                    routine: snapshot.data![index]));
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              BlocProvider.of<RoutinesBloc>(context).add(
+                                  AddRepositoryRoutineEvent(
+                                      routine: snapshot.data![index]));
+                              BlocProvider.of<AchievementBloc>(context).add(
+                                  CheckAchievementsEvent(
+                                      data:
+                                          BlocProvider.of<RoutinesBloc>(context)
+                                              .state
+                                              .routines,
+                                      type: AchievementType.Routine));
+                            }),
+                        Builder(
+                          builder: (context) {
+                            if (snapshot.data![index].creatorId ==
+                                supabase.auth.currentUser!.id) {
+                              return IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () =>
+                                    BlocProvider.of<RoutinesBloc>(context).add(
+                                        DeleteRoutineEvent(
+                                            routine: snapshot.data![index])),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
                           },
                         ),
                       ],

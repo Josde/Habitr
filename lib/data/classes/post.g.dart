@@ -11,6 +11,7 @@ Post _$PostFromJson(Map<dynamic, dynamic> json) => Post(
       json['poster_id'] as String?,
       json['content'] as String?,
       DateTime.parse(json['post_date'] as String),
+      json['likes'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'poster_id': instance.posterId,
       'content': instance.text,
       'post_date': instance.date?.toIso8601String(),
+      'likes': instance.likes,
     };

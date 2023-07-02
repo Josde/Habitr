@@ -1,11 +1,17 @@
+/// {@category GestionRutinas}
+/// {@category Vista}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
 import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:habitr_tfg/utils/theming.dart';
 import 'package:habitr_tfg/utils/validator.dart';
-
 import '../../blocs/routines/routines_bloc.dart';
+import '../../utils/constants.dart';
+import 'package:habitr_tfg/blocs/users/achievement/achievement_bloc.dart';
+import 'package:habitr_tfg/data/classes/achievements/achievement_type.dart';
 
 class NewCreateRoutineScreen extends StatefulWidget {
   const NewCreateRoutineScreen({Key? key, this.routine}) : super(key: key);
@@ -16,15 +22,16 @@ class NewCreateRoutineScreen extends StatefulWidget {
 
 class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
   int _index = 0;
+  String? _icon = "";
   ActivityType? _currentType;
   String _routineName = "";
-  int _numberOfNotifications = 3;
   int _timerLength = 0;
-  TimeOfDay? _notificationStartTime = TimeOfDay.now();
+  DateTime? _notificationStartTime = DateTime.now();
   List<bool> _daysOfWeek = List.filled(7, true);
   bool _notificationsEnabled = true;
   bool _isPublic = false;
   int _notificationType = 0;
+  String _creatorId = "";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -32,13 +39,14 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
     if (widget.routine != null) {
       // modo de edición de rutina
       Routine r = widget.routine!;
-      _index = 1;
       _routineName = r.name;
       _currentType = r.type;
       _notificationsEnabled = r.notificationsEnabled;
       _daysOfWeek = r.notificationDaysOfWeek;
       _timerLength = r.timerLength;
-      _notificationStartTime = r.notificationStartTime;
+      _creatorId = r.creatorId;
+      _notificationStartTime = r.notificationTime;
+      _icon = r.icon ?? "";
     }
     super.initState();
   }
@@ -66,15 +74,25 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
       if (this._formKey.currentState!.validate()) {
         this._formKey.currentState!.save();
         Routine nuevaRutina = Routine(_routineName, _notificationStartTime!,
-            _notificationsEnabled, _daysOfWeek, _currentType!, _timerLength);
+            _notificationsEnabled, _daysOfWeek, _currentType!, _timerLength,
+            creatorId: supabase.auth.currentUser!.id,
+            isPublic: _isPublic,
+            icon: _icon);
+        print(nuevaRutina);
         if (widget.routine != null) {
           // Modo de edición
           nuevaRutina.id = widget.routine!.id;
           BlocProvider.of<RoutinesBloc>(context, listen: false)
               .add(UpdateRoutineEvent(routine: nuevaRutina));
+          BlocProvider.of<AchievementBloc>(context).add(CheckAchievementsEvent(
+              data: BlocProvider.of<RoutinesBloc>(context).state.routines,
+              type: AchievementType.Routine));
         } else {
           BlocProvider.of<RoutinesBloc>(context, listen: false)
               .add(CreateRoutineEvent(routine: nuevaRutina));
+          BlocProvider.of<AchievementBloc>(context).add(CheckAchievementsEvent(
+              data: BlocProvider.of<RoutinesBloc>(context).state.routines,
+              type: AchievementType.Routine));
         }
         Navigator.pop(context);
       }
@@ -260,6 +278,21 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
             ),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+              initialValue: '$_icon',
+              validator: (value) {
+                return iconValidator(value?.trim());
+              },
+              onSaved: (value) {
+                this._icon = value ?? '';
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Icon",
+              )),
+        ),
         Visibility(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -314,9 +347,17 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                   Spacer(),
                   ElevatedButton(
                     child: Icon(Icons.access_alarm),
-                    onPressed: () async => {
-                      this._notificationStartTime = await showTimePicker(
-                          context: context, initialTime: TimeOfDay.now())
+                    onPressed: () async {
+                      TimeOfDay? td = await showTimePicker(
+                          context: context, initialTime: TimeOfDay.now());
+                      DateTime now = DateTime.now();
+
+                      this._notificationStartTime = DateTime(
+                          now.year,
+                          now.month,
+                          now.day,
+                          td?.hour ?? now.hour,
+                          td?.minute ?? now.minute);
                     },
                   )
                 ],
@@ -355,24 +396,10 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                           this._notificationType = value ?? 0;
                           switch (this._notificationType) {
                             case 0:
-                              this._daysOfWeek = [
-                                // TODO: prettify this but for now idgaf
-                                true,
-                                true,
-                                true,
-                                true,
-                                true,
-                                true,
-                                true
-                              ];
+                              this._daysOfWeek = List.filled(7, true);
                               break;
                             case 1:
-                              this._daysOfWeek = [
-                                // TODO: prettify this but for now idgaf
-                                false, false, false, false, false,
-                                true,
-                                true
-                              ];
+                              this._daysOfWeek = List.filled(7, false);
                               break;
                             case 2:
                               break;
@@ -432,6 +459,7 @@ class _NewCreateRoutineScreenState extends State<NewCreateRoutineScreen> {
                 activeColor: Theme.of(context).iconTheme.color,
                 onChanged: (bool? value) {
                   setState(() => this._isPublic = value!);
+                  print(value!);
                 },
                 value: this._isPublic,
               )

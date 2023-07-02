@@ -1,3 +1,8 @@
+/// {@category Datos}
+/// {@category GestionRutinas}
+/// Representa una rutina que ha sido completada por cierto usuario a cierta hora.
+library;
+
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,20 +24,6 @@ class RoutineCompletion extends Equatable {
       _$RoutineCompletionFromJson(json);
 
   Map<String, dynamic> toJson() => _$RoutineCompletionToJson(this);
-
-  // RoutineCompletion.fromJson(Map<String, dynamic> json) {
-  //   this.userId = json['userId'];
-  //   this.routineId = json['routineId'];
-  //   this.time = DateTime.parse(json['time']);
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> json = new Map<String, dynamic>();
-  //   json['userId'] = this.userId;
-  //   json['routineId'] = this.routineId;
-  //   json['time'] = time.toString();
-  //   return json;
-  // }
 
   @override
   List<Object?> get props => [userId, routineId, time];

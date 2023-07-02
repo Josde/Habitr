@@ -1,3 +1,5 @@
+/// {@category Miscelaneo}
+/// Clase que representa un Singleton global que nos dirá si estamos usando el tema claro o oscuro de la aplicación.
 import 'package:flutter/material.dart';
 
 class ThemeSingleton extends ChangeNotifier {

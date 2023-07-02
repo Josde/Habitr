@@ -1,14 +1,21 @@
-import 'dart:io';
+/// {@category BLoC}
+/// {@category GestionRutinas}
+/// Paquete que implementa el BLoC de rutinas. Para obtener más información, mirar los detalles de las classes Event y State de este paquete.
+library;
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/repositories/routine/routine_repository.dart';
 import 'package:habitr_tfg/utils/constants.dart';
+import 'package:habitr_tfg/utils/notifications.dart';
 
 part 'routines_event.dart';
 part 'routines_state.dart';
 
 class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
+  NotificationManager nm = NotificationManager();
+  RoutineRepository repository = RoutineRepository();
   RoutinesBloc() : super(RoutinesLoaded(routines: [])) {
     on<LoadRoutinesEvent>(_onLoadRoutines);
     on<CreateRoutineEvent>(_onAddRoutine);
@@ -17,25 +24,23 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     on<AddRepositoryRoutineEvent>(_onAddRepositoryRoutine);
     //on<ReadRoutine>(_onReadRoutine);
   }
-
   void _onLoadRoutines(
       LoadRoutinesEvent event, Emitter<RoutinesState> emit) async {
+    print('_onLoadRoutines');
+
     List<Routine> _routines = List.empty(growable: true);
     try {
-      if (supabase.auth.currentUser == null) {
-        emit.call(RoutinesError(error: 'User is not logged in.'));
-        return;
+      //FIXME: Desde la linea 28 a la 42 tendría que hacerlo el repositorio
+
+      _routines = await this.repository.getSelfRoutines();
+      for (Routine r in _routines) {
+        nm.addToQueue(r, process: false);
       }
-      final routinesResponse = await supabase
-          .from('profileRoutine')
-          .select('*, routine!inner(*)') as List;
-      for (var routine in routinesResponse) {
-        _routines.add(Routine.fromJson(routine['routine'] as Map));
-      }
+      nm.processQueue();
       emit.call(RoutinesLoaded(routines: _routines));
     } catch (e) {
       print(e);
-      emit.call(RoutinesError(error: e.toString()));
+      emit.call(RoutinesError(routines: _routines, error: e.toString()));
     }
   }
 
@@ -44,29 +49,15 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     final state = this.state;
     Routine r = event.routine;
     if (state is RoutinesLoaded) {
+      //FIXME: Desde la linea 62 a la 86 tendría que hacerlo el repositorio
       try {
-        if (supabase.auth.currentUser == null) {
-          emit.call(RoutinesError(error: 'User is not logged in.'));
-          return;
-        }
-        final routineResponse = await supabase
-            .from('routine')
-            .insert({
-              'name': r.name,
-              'type': r.type.index,
-              'timer_length': r.timerLength,
-              'is_public': r.isPublic,
-              'creator_id': supabase.auth.currentUser!.id
-            })
-            .select()
-            .single() as Map;
-        print(routineResponse);
-        r.id = routineResponse['id'];
+        Routine newR = await this.repository.addRoutine(r);
+        nm.addToQueue(r);
         List<Routine> newRoutines = List.from(state.routines)..add(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        emit.call(RoutinesError(error: e.toString()));
+        emit.call(RoutinesError(routines: state.routines, error: e.toString()));
       }
     }
   }
@@ -76,38 +67,26 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     final state = this.state;
     Routine r = event.routine;
     if (state is RoutinesLoaded) {
+      //FIXME: Desde la linea 104 a la 12 tendría que hacerlo el repositorio
       try {
-        if (supabase.auth.currentUser == null) {
-          emit.call(RoutinesError(error: 'User is not logged in.'));
-          return;
-        }
-        final routineResponse = await supabase
-            .from('routine')
-            .update({
-              'name': r.name,
-              'type': r.type.index,
-              'timer_length': r.timerLength,
-              'is_public': r.isPublic,
-              'creator_id': supabase.auth.currentUser!.id
-            })
-            .eq('id', r.id)
-            .select()
-            .single() as Map;
-        print(routineResponse);
-        List<Routine> newRoutines = state.routines;
-        int index = state.routines.indexWhere((Routine r) {
-          return r.id == event.routine.id;
+        Routine _newRoutine = await this.repository.updateRoutine(r);
+        List<Routine> newRoutines = List.from(state.routines);
+        int index = state.routines.indexWhere((Routine routine) {
+          return routine.id == r.id;
         });
+
         if (index == -1) {
           // FAILSAFE
           newRoutines.add(event.routine);
         } else {
           newRoutines[index] = event.routine;
         }
+        nm.removeRoutineNotification(r);
+        nm.addToQueue(_newRoutine);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        RoutinesError(error: e.toString());
+        RoutinesError(routines: state.routines, error: e.toString());
       }
     }
   }
@@ -116,48 +95,36 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
       DeleteRoutineEvent event, Emitter<RoutinesState> emit) async {
     final state = this.state;
     Routine r = event.routine;
+    //FIXME: Desde la linea de abajo a la 196 tendría que hacerlo el repositorio
     if (state is RoutinesLoaded) {
       try {
-        if (supabase.auth.currentUser == null) {
-          emit.call(RoutinesError(error: 'User is not logged in.'));
-          return;
-        }
-        final routineResponse = await supabase
-            .from(
-                'profileRoutine') //TODO: Delete stray routines if no references are left ?
-            .delete()
-            .eq('routine_id', r.id)
-            .select()
-            .single() as Map;
-        print(routineResponse);
-        List<Routine> newRoutines = state.routines.where((routine) {
+        await this.repository.deleteRoutine(r);
+        List<Routine> newRoutines = state.routines.toList().where((routine) {
           return routine.id != r.id;
         }).toList();
+        nm.removeRoutineNotification(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        emit(RoutinesError(error: e.toString()));
+        emit(RoutinesError(routines: state.routines, error: e.toString()));
       }
     }
   }
 
   void _onAddRepositoryRoutine(
       AddRepositoryRoutineEvent event, Emitter<RoutinesState> emit) async {
+    // TODO: Add a date picker before calling this and also insert notification days of week and such.
     Routine r = event.routine;
     if (this.state is RoutinesLoaded) {
+      //FIXME: Desde la linea de abajo a la 2221tendría que hacerlo el repositorio
       try {
-        if (supabase.auth.currentUser == null) {
-          emit.call(RoutinesError(error: 'User is not logged in.'));
-          return;
-        }
-        final routineResponse = await supabase.from('profileRoutine').insert(
-            {'profile_id': supabase.auth.currentUser!.id, 'routine_id': r.id});
+        await this.repository.addPublicRoutine(r);
         List<Routine> newRoutines = List.from(this.state.routines);
         newRoutines.add(r);
         emit(RoutinesLoaded(routines: newRoutines));
       } catch (e) {
         print(e);
-        emit(RoutinesError(error: e.toString()));
+        emit(RoutinesError(routines: state.routines, error: e.toString()));
       }
     }
   }

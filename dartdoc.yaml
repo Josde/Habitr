@@ -1,0 +1,29 @@
+dartdoc:
+  categories:
+    "GestionUsuario":
+      name: Gestion Usuario
+    "GestionSocial":
+      name: Gestion Social
+    "GestionRutinas":
+      name: Gestion Rutinas
+    "GestionLogros":
+      name: Gestion Logros
+    "GestionAutenticacion":
+      name: Gestion Autenticacion
+    "Repositorio":
+      name: Repositorio
+    "BLoC": 
+      name: BLoC
+    "Vista":
+      name: Vista
+    "Miscelaneo":
+      name: "Miscelaneo"
+  categoryOrder: ["Repositorio", "BLoC", "Vista"]
+  nodoc: ['*.g.dart', 'widgets/*']
+  showUndocumentedCategories: true
+  ignore:
+    - ambiguous-doc-reference
+  errors:
+    - unresolved-doc-reference
+  warnings:
+    - tool-error

@@ -1,3 +1,7 @@
+/// {@category Vista}
+/// {@category Miscelaneo}
+library;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +11,7 @@ import 'package:habitr_tfg/blocs/users/self/self_bloc.dart';
 import 'package:habitr_tfg/data/classes/user.dart';
 import 'package:habitr_tfg/data/models/theme_singleton.dart';
 import 'package:habitr_tfg/screens/misc/debug_screen.dart';
-import 'package:habitr_tfg/screens/users/login_screen.dart';
+import 'package:habitr_tfg/screens/auth/login_screen.dart';
 import 'package:habitr_tfg/utils/constants.dart';
 import 'package:habitr_tfg/widgets/loading.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
@@ -92,7 +96,6 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget buildDebug(BuildContext context) {
-    // TODO: Check if this works fine and SizedBox dimension 0 doesnt crash
     if (kDebugMode) {
       return IconButton(
         icon: Icon(Icons.work_rounded),

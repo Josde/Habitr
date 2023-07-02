@@ -1,3 +1,7 @@
+/// {@category Miscelaneo}
+/// Clase que provee varios validadores para el texto que introduce el usuario.
+library;
+
 String? textNotEmptyValidator(value) {
   if (value == null || value.isEmpty) {
     return 'Please enter some text';
@@ -46,4 +50,19 @@ String? passwordValidator(value) {
   } else {
     return 'Must be longer than 8 characters, and contain at least an uppercase letter, an lowercase letter and a symbol.';
   }
+}
+
+String? iconValidator(value) {
+  RegExp regex = RegExp(
+      '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
+  if (value == null || value == "") {
+    return null;
+  }
+  if (value.runes.length > 1) {
+    return 'Please enter only emoji character';
+  }
+  if (!regex.hasMatch(value)) {
+    return 'Only emojis are allowed.';
+  }
+  return null;
 }

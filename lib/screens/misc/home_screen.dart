@@ -1,6 +1,11 @@
-import 'package:flutter/material.dart';
+/// {@category Vista}
+/// {@category Miscelaneo}
+library;
 
-import 'feed_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:habitr_tfg/screens/social/leaderboard_screen.dart';
+
+import 'package:habitr_tfg/screens/social/feed_screen.dart';
 import 'game_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,6 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "Home",
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.leaderboard),
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LeaderboardScreen())),
+          )
+        ],
         backgroundColor: Theme.of(context).iconTheme.color,
       ),
       body: Center(

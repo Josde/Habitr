@@ -1,5 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="usal.jorgecruz.habitr_tfg">
+    <!-- For scan -->
+   <uses-permission android:name="android.permission.CAMERA"/>
+   
+   <!-- Permissions options for the `storage` group -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
    <application
         android:label="Habitr"
         android:icon="@mipmap/ic_launcher">
@@ -10,10 +19,11 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize"
-            android:exported="true">
-            <!-- Next two permissions are for flutter_local_notificaitons -->
+            android:exported="true"
+            android:requestLegacyExternalStorage="true"
             android:showWhenLocked="true"
-            android:turnScreenOn="true"
+            android:turnScreenOn="true">
+            <!-- Last 3 permissions from above are for image_gallery_saver and flutter_local_notificaitons -->
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues

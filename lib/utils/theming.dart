@@ -1,3 +1,7 @@
+/// {@category Miscelaneo}
+/// @nodoc
+library;
+
 import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(
@@ -23,3 +27,9 @@ ThemeData? darkTheme = ThemeData(
 TextStyle leadingText(BuildContext context) {
   return TextStyle(fontSize: 24, fontWeight: FontWeight.w500);
 }
+
+TextStyle leadFont = TextStyle(
+    fontFamily: 'Roboto Mono',
+    fontWeight: FontWeight.w300,
+    fontSize: 48,
+    shadows: [Shadow(blurRadius: 10.0)]);

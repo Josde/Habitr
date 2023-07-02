@@ -1,7 +1,13 @@
+/// {@category Miscelaneo}
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:habitr_tfg/data/classes/achievements/all.dart';
+import 'package:habitr_tfg/data/classes/routine.dart';
+import 'package:habitr_tfg/data/enum/ActivityType.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:habitr_tfg/data/classes/user.dart' as u;
+
 // Source: https://supabase.com/docs/guides/with-flutter#set-up-authrequiredstate
 // Solo importar esto si Supabase.initialize ha sido llamado.
 // es decir, no lo podemos importar hasta que se llame a main() pero si en ficheros que se importen despues de main.
@@ -9,18 +15,19 @@ import 'package:habitr_tfg/data/classes/user.dart' as u;
 final supabase = Supabase.instance.client;
 
 extension ShowSnackBar on BuildContext {
-  void showSnackBar({
-    required String message,
-    Color backgroundColor = Colors.white,
-  }) {
+  void showSnackBar(BuildContext context,
+      {required String message, Color? backgroundColor}) {
+    if (backgroundColor == null)
+      backgroundColor = Theme.of(context).primaryColorDark;
+
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(
       content: Text(message),
       backgroundColor: backgroundColor,
     ));
   }
 
-  void showErrorSnackBar({required String message}) {
-    showSnackBar(message: message, backgroundColor: Colors.red);
+  void showErrorSnackBar(context, {required String message}) {
+    showSnackBar(context, message: message, backgroundColor: Colors.red);
   }
 }
 
@@ -34,3 +41,19 @@ const AndroidNotificationDetails androidPlatformChannelSpecifics =
         ticker: 'ticker');
 const NotificationDetails platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
+
+List<Achievement> achievementList = [
+  // Feed
+  FirstPostAchievement(),
+  // Routine
+  FirstRoutineAchievement(),
+  FirstPublicRoutineAchievement(),
+  // Routine Completion
+  FirstRoutineCompletionAchievement(),
+  HundredCompletionsAchievement(),
+  // Streak
+  OneWeekStreakAchievement(),
+  ThreeWeekStreakAchievement(),
+  // User
+  FirstLevelUpAchievement()
+];
