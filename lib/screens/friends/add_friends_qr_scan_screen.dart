@@ -30,11 +30,13 @@ class _AddFriendsQrScanScreenState extends State<AddFriendsQrScanScreen>
         body: ScanView(
           controller: _controller,
           onCapture: (data) {
-            context.showSnackBar(context, message: data.toString());
             print(data);
             if (isValidQR(data)) {
+              var parsedData = parseQRData(data);
+              context.showSnackBar(context,
+                  message: 'Sent friend request to $parsedData');
               BlocProvider.of<FriendsBloc>(context)
-                  .add(SendFriendRequestEvent(friendId: parseQRData(data)));
+                  .add(SendFriendRequestEvent(friendId: parsedData));
               Navigator.pop(context);
             }
           },
