@@ -26,7 +26,7 @@ public class UIArrowsScript : MonoBehaviour
         Vector3 movement;
         float hardLimitLeft = 35;
         float hardLimitRight = 55;
-        Quaternion rotation;
+
         if (direction < 0 && m_Camera.transform.rotation.eulerAngles.y - 2.5 > hardLimitLeft) {
             movement = new Vector3(0, -2.5f, 0);
             
