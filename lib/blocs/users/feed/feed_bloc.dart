@@ -25,6 +25,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   _onLoadPosts(LoadPostsEvent event, Emitter<FeedState> emit) async {
     emit.call(FeedLoading());
+    print("_onLoadPosts");
     List<Post> posts = List.empty(growable: true);
     try {
       if (supabase.auth.currentUser?.id == null) {

@@ -21,9 +21,10 @@ class PostRepository {
     List<Post> posts = List.empty(growable: true);
     var postResponse = await supabase
         .from('message')
-        .select('*, messageLikes!inner(*)')
+        .select('*, messageLikes(post_id)')
         .order('post_date')
         .range(startAt, limit); //TODO: Test this
+    print(postResponse);
     for (var msg in postResponse) {
       msg['likes'] = msg['messageLikes'].length ?? 0;
       posts.add(Post.fromJson(msg as Map));
