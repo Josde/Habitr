@@ -53,7 +53,9 @@ class GameScreenState extends State<GameScreen> {
             switch (data[0]) {
               case 'ChangeFlower':
                 await showDialog(
-                    context: context, builder: flowerDialogBuilder);
+                    context: context,
+                    builder: flowerDialogBuilder,
+                    useRootNavigator: false);
                 flowers[int.parse(data[1])] = selectedFlower;
                 _controller.postMessage("Scripter", "ChangeFlowers",
                     flowers.toString().replaceAll(RegExp('\\[|\\]'), ''));
@@ -78,6 +80,7 @@ class GameScreenState extends State<GameScreen> {
     ColorFilter grayscale = ColorFilter.mode(Colors.grey, BlendMode.saturation);
     ColorFilter none = ColorFilter.mode(Colors.transparent, BlendMode.lighten);
     ColorFilter selected = ColorFilter.mode(Colors.black, BlendMode.saturation);
+    BuildContext snackbarContext = context;
     List<String> flowers = [
       'Red Flowers',
       'Blue Flowers',
@@ -94,10 +97,9 @@ class GameScreenState extends State<GameScreen> {
         if (unlockedFlowers >= i) {
           selection = i;
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(snackbarContext).showSnackBar(SnackBar(
             elevation: 10.0,
-            content:
-                Text('You need to be level ${i + 1} to unlock ${flowers[i]}'),
+            content: Text('You need to be level ${i} to unlock ${flowers[i]}'),
           ));
         }
       };
@@ -126,33 +128,43 @@ class GameScreenState extends State<GameScreen> {
       buttons.add(button);
     }
 
-    return AlertDialog(
-      actions: [
-        TextButton(
-          child: Text('Cancel'),
-          onPressed: () => Navigator.pop(context),
-        ),
-        TextButton(
-            onPressed: () {
-              setState(() {
-                selectedFlower = selection;
-              });
-              Navigator.pop(context);
-            },
-            child: Text('Confirm'))
-      ],
-      content: SizedBox(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        child: GridView.count(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(8.0),
-            crossAxisCount: 3,
-            children: buttons,
-            semanticChildCount: buttons.length,
-            childAspectRatio: MediaQuery.of(context).size.width /
-                (MediaQuery.of(context).size.height)),
-      ),
+    var _return = ScaffoldMessenger(
+      child: Builder(builder: (context) {
+        snackbarContext =
+            context; // Magia arcana para enseñar un Snackbar sobre un alertdialog
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: AlertDialog(
+            actions: [
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedFlower = selection;
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Text('Confirm'))
+            ],
+            content: SizedBox(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              child: GridView.count(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(8.0),
+                  crossAxisCount: 3,
+                  children: buttons,
+                  semanticChildCount: buttons.length,
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height)),
+            ),
+          ),
+        );
+      }),
     );
+    return _return;
   }
 }

@@ -31,7 +31,6 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
 
     emit.call(FriendsLoading());
     try {
-      //FIXME: Desde la linea de abajo a la 44 tendría que hacerlo el repositorio, y quizas el 50 el repositorio de users
       var _response = await this.repository.getFriendsAndRequests();
       _friends = _response[0];
       _requests = _response[1];
@@ -50,7 +49,6 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
 
     if (state is FriendsLoaded) {
       try {
-        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
         await this
             .repository
             .replyToFriendRequest(declinedFriend, accept: false);
@@ -72,14 +70,14 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     List<User> newFriendRequests;
 
     if (state is FriendsLoaded) {
+      List<User> newRequests = List.from(state.requests!);
       List<User> newFriends = List.from(state.friends!);
       try {
-        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio
         await this
             .repository
             .replyToFriendRequest(acceptedFriend, accept: true);
         newFriendRequests = List.from(
-            state.requests!.where((element) => (element != acceptedFriend)));
+            newRequests.where((element) => (element != acceptedFriend)));
         newFriends.add(acceptedFriend);
         emit(FriendsLoaded(friends: newFriends, requests: newFriendRequests));
       } catch (e) {
@@ -94,16 +92,11 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
       SendFriendRequestEvent event, Emitter<FriendsState> emit) async {
     var state = this.state;
     if (state is FriendsLoaded) {
-      // TODO: Mirar el null safety de esto
-      List<User> newFriendRequests = List.from(state.friends!);
       try {
-        //FIXME: Desde la linea de abajo a la siguiente tendría que hacerlo el repositorio, y quizas la 124 por el repositorio de user.
         User newFriend =
             await this.repository.sendFriendRequest(event.friendId);
-        print('Sent friend request to ${newFriend.id}');
-        newFriendRequests.add(newFriend);
         emit.call(
-            FriendsLoaded(friends: state.friends, requests: newFriendRequests));
+            FriendsLoaded(friends: state.friends, requests: state.requests));
       } catch (e) {
         {
           print(e);

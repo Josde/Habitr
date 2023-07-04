@@ -116,7 +116,6 @@ class RoutinesBloc extends Bloc<RoutinesEvent, RoutinesState> {
     // TODO: Add a date picker before calling this and also insert notification days of week and such.
     Routine r = event.routine;
     if (this.state is RoutinesLoaded) {
-      //FIXME: Desde la linea de abajo a la 2221tendría que hacerlo el repositorio
       try {
         await this.repository.addPublicRoutine(r);
         List<Routine> newRoutines = List.from(this.state.routines);

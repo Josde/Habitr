@@ -37,6 +37,7 @@ class StopwatchRoutineDetailScreen extends StatelessWidget {
               child: Center(
                 child: Text('${routine.name}',
                     style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Roboto Mono',
                         fontWeight: FontWeight.w300,
                         fontSize: 48,

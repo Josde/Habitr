@@ -5,6 +5,8 @@ part of 'routines_bloc.dart';
 abstract class RoutinesState extends Equatable {
   const RoutinesState({this.routines = const []});
   final List<Routine> routines;
+  @override
+  List<Object> get props => [routines];
 }
 
 /// Estado que representa que se han cargado correctamente las rutinas

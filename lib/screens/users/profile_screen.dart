@@ -160,8 +160,7 @@ class Profile extends StatelessWidget {
                 Text('${_user.name}'),
                 Text('${_user.country?.displayName}'),
                 Text(
-                    'Level ${_user.xp ~/ 250} (${100 * _user.xp / (_user.xp + 125 - ((_user.xp + 125) % 250))}%)'),
-                //https://stackoverflow.com/a/29557629/21787881 lmfao TODO: reformat this
+                    'Level ${_user.xp ~/ 250} (${calculateLevelPercent(_user.xp)}%)'),
               ],
             )
           ],
@@ -303,5 +302,14 @@ class Profile extends StatelessWidget {
       lst.add(newAchievement);
     }
     return Future.value(lst);
+  }
+
+  double calculateLevelPercent(int xp) {
+    double _ret = 100 * (xp % 250) / 250;
+    if (!_ret.isFinite) {
+      // creo que ya no hace falta pero por si acaso
+      _ret = 0.0;
+    }
+    return _ret;
   }
 }

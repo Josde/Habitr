@@ -27,7 +27,7 @@ class RoutineCompletionRepository {
     if (supabase.auth.currentUser == null) {
       throw Exception('User is not logged in.');
     }
-    List<RoutineCompletion> _return = List.empty();
+    List<RoutineCompletion> _return = List.empty(growable: true);
     final routineCompletionResponse = await supabase
         .from('routineCompletion')
         .select()

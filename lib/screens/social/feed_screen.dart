@@ -33,7 +33,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    if (BlocProvider.of<FeedBloc>(context).state is FeedInitial) {
+    if (!(BlocProvider.of<FeedBloc>(context).state is FeedLoaded)) {
       BlocProvider.of<FeedBloc>(context).add(LoadPostsEvent());
     }
     // FIXME: Modificar esto para hacer la comprobacion antes del cast
