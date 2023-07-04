@@ -305,10 +305,9 @@ class Profile extends StatelessWidget {
   }
 
   double calculateLevelPercent(int xp) {
-    //https://stackoverflow.com/a/29557629/21787881
-    double _ret = 100 * xp / xp + 125 - ((xp + 125) % 250);
+    double _ret = 100 * (xp % 250) / 250;
     if (!_ret.isFinite) {
-      // solo nos importa el caso de que sea NaN pero mejor curarnos en salud.
+      // creo que ya no hace falta pero por si acaso
       _ret = 0.0;
     }
     return _ret;
