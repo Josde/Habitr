@@ -120,6 +120,7 @@
 </dt>
 <dd>
   Añade una rutina pública <code>r</code> a las rutinas del usuario.
+Retorna <code>r</code> por temas de debugging, aunque en versiones futuras probablemente esto deje de ser así.
   
 
 </dd>
@@ -133,6 +134,7 @@
 </dt>
 <dd>
   Añade una rutina <code>r</code> a las rutinas del usuario.
+Retorna <code>r</code> pero actualizando la ID a  que tenga en la BBDD, para poder seguir manipulando el mismo objeto.
   
 
 </dd>
@@ -146,6 +148,7 @@
 </dt>
 <dd>
   Borra la rutina <code>r</code>.
+No retorna nada.
   
 
 </dd>
@@ -159,6 +162,7 @@
 </dt>
 <dd>
   Obtiene las rutinas del usuario de la aplicación.
+Retorna una lista de Routine.
   
 
 </dd>
@@ -197,7 +201,8 @@
 
 </dt>
 <dd>
-  Funcion que actualiza una rutina <code>r</code>
+  Funcion que actualiza una rutina <code>r</code>.
+Devuelve <code>r</code> con sus modificaciones hechas, aunque igual que en la función anterior esto probablemente deje de ser así en versiones futuras.
   
 
 </dd>

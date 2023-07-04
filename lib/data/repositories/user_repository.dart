@@ -12,7 +12,6 @@ import 'package:habitr_tfg/utils/constants.dart';
 /// Al igual que en otros repositorios, tódos los métodos lanzan excepciones sin capturar, y por tanto han de estar en un bloque try - catch.
 class UserRepository {
   /// Función que obtiene el perfil del usuario que nos representa a nosotros mismos.
-  ///
   /// Retorna un Usuario.
   Future<User> getSelf() async {
     if (supabase.auth.currentUser == null) {
@@ -22,7 +21,6 @@ class UserRepository {
   }
 
   /// Función que obtiene el perfil del usuario con ID [userId]
-  ///
   /// Retorna un usuario.
   Future<User> getUser(String userId) async {
     if (supabase.auth.currentUser == null) {
@@ -53,7 +51,6 @@ class UserRepository {
   }
 
   /// Función que cambia las flores del usuario actual a las marcadas por [flowers].
-  ///
   /// No retorna nada.
   Future<void> changeFlowers(List<int> flowers) async {
     if (supabase.auth.currentUser == null) {

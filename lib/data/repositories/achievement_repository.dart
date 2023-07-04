@@ -12,7 +12,6 @@ import 'package:habitr_tfg/utils/constants.dart';
 /// Al igual que en otros repositorios, tódos los métodos lanzan excepciones sin capturar, y por tanto han de estar en un bloque try - catch.
 class AchievementRepository {
   /// Recupera la lista de logros desbloqueados por el usuario con ID [userId].
-  ///
   /// Retorna la List<Achievement>.
   Future<List<Achievement>> getAchievements(String userId) async {
     if (supabase.auth.currentUser == null) {
@@ -36,7 +35,6 @@ class AchievementRepository {
   }
 
   /// Desbloquea un logro [a] para el usuario actual
-  ///
   /// No retorna nada.
   Future<void> unlockAchievement(Achievement a) async {
     if (supabase.auth.currentUser == null) {

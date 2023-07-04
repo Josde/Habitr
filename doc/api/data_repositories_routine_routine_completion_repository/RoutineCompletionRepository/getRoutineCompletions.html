@@ -66,9 +66,9 @@
     </section>
     
 <section class="desc markdown">
-  <p>Obtiene las rutinas completadas por iun usuario específicando su <code>userId</code>.</p>
-<p>En la versión actual de la aplicación, sólo se utiliza para el usuario de la aplicación y nunca para sus amigos.</p>
-<p>Retorna una lista de RoutineCompletion.</p>
+  <p>Obtiene las rutinas completadas por iun usuario específicando su <code>userId</code>.
+En la versión actual de la aplicación, sólo se utiliza para el usuario de la aplicación y nunca para sus amigos.
+Retorna una lista de RoutineCompletion.</p>
 </section>
 
 
@@ -79,7 +79,7 @@
   if (supabase.auth.currentUser == null) {
     throw Exception(&#39;User is not logged in.&#39;);
   }
-  List&lt;RoutineCompletion&gt; _return = List.empty();
+  List&lt;RoutineCompletion&gt; _return = List.empty(growable: true);
   final routineCompletionResponse = await supabase
       .from(&#39;routineCompletion&#39;)
       .select()

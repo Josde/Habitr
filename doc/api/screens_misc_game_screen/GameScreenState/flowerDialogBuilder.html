@@ -78,6 +78,7 @@
   ColorFilter grayscale = ColorFilter.mode(Colors.grey, BlendMode.saturation);
   ColorFilter none = ColorFilter.mode(Colors.transparent, BlendMode.lighten);
   ColorFilter selected = ColorFilter.mode(Colors.black, BlendMode.saturation);
+  BuildContext snackbarContext = context;
   List&lt;String&gt; flowers = [
     &#39;Red Flowers&#39;,
     &#39;Blue Flowers&#39;,
@@ -94,10 +95,9 @@
       if (unlockedFlowers &gt;= i) {
         selection = i;
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(snackbarContext).showSnackBar(SnackBar(
           elevation: 10.0,
-          content:
-              Text(&#39;You need to be level ${i + 1} to unlock ${flowers[i]}&#39;),
+          content: Text(&#39;You need to be level ${i} to unlock ${flowers[i]}&#39;),
         ));
       }
     };
@@ -126,34 +126,44 @@
     buttons.add(button);
   }
 
-  return AlertDialog(
-    actions: [
-      TextButton(
-        child: Text(&#39;Cancel&#39;),
-        onPressed: () =&gt; Navigator.pop(context),
-      ),
-      TextButton(
-          onPressed: () {
-            setState(() {
-              selectedFlower = selection;
-            });
-            Navigator.pop(context);
-          },
-          child: Text(&#39;Confirm&#39;))
-    ],
-    content: SizedBox(
-      width: double.maxFinite,
-      height: double.maxFinite,
-      child: GridView.count(
-          shrinkWrap: true,
-          padding: EdgeInsets.all(8.0),
-          crossAxisCount: 3,
-          children: buttons,
-          semanticChildCount: buttons.length,
-          childAspectRatio: MediaQuery.of(context).size.width &#47;
-              (MediaQuery.of(context).size.height)),
-    ),
+  var _return = ScaffoldMessenger(
+    child: Builder(builder: (context) {
+      snackbarContext =
+          context; &#47;&#47; Magia arcana para enseñar un Snackbar sobre un alertdialog
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: AlertDialog(
+          actions: [
+            TextButton(
+              child: Text(&#39;Cancel&#39;),
+              onPressed: () =&gt; Navigator.pop(context),
+            ),
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    selectedFlower = selection;
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(&#39;Confirm&#39;))
+          ],
+          content: SizedBox(
+            width: double.maxFinite,
+            height: double.maxFinite,
+            child: GridView.count(
+                shrinkWrap: true,
+                padding: EdgeInsets.all(8.0),
+                crossAxisCount: 3,
+                children: buttons,
+                semanticChildCount: buttons.length,
+                childAspectRatio: MediaQuery.of(context).size.width &#47;
+                    (MediaQuery.of(context).size.height)),
+          ),
+        ),
+      );
+    }),
   );
+  return _return;
 }</code></pre>
 </section>
 

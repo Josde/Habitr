@@ -196,7 +196,9 @@ Widget build(BuildContext context) {
           switch (data[0]) {
             case &#39;ChangeFlower&#39;:
               await showDialog(
-                  context: context, builder: flowerDialogBuilder);
+                  context: context,
+                  builder: flowerDialogBuilder,
+                  useRootNavigator: false);
               flowers[int.parse(data[1])] = selectedFlower;
               _controller.postMessage(&quot;Scripter&quot;, &quot;ChangeFlowers&quot;,
                   flowers.toString().replaceAll(RegExp(&#39;\\[|\\]&#39;), &#39;&#39;));

@@ -135,8 +135,7 @@ Widget build(BuildContext context) {
               Text(&#39;${_user.name}&#39;),
               Text(&#39;${_user.country?.displayName}&#39;),
               Text(
-                  &#39;Level ${_user.xp ~&#47; 250} (${100 * _user.xp &#47; (_user.xp + 125 - ((_user.xp + 125) % 250))}%)&#39;),
-              &#47;&#47;https:&#47;&#47;stackoverflow.com&#47;a&#47;29557629&#47;21787881 lmfao TODO: reformat this
+                  &#39;Level ${_user.xp ~&#47; 250} (${calculateLevelPercent(_user.xp)}%)&#39;),
             ],
           )
         ],
@@ -299,6 +298,7 @@ Widget build(BuildContext context) {
 
         <li class="section-title"><a href="../../screens_users_profile_screen/Profile-class.html#instance-methods">Methods</a></li>
           <li><a href="../../screens_users_profile_screen/Profile/build.html">build</a></li>
+          <li><a href="../../screens_users_profile_screen/Profile/calculateLevelPercent.html">calculateLevelPercent</a></li>
           <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/StatelessWidget/createElement.html">createElement</a></li>
           <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/DiagnosticableTree/debugDescribeChildren.html">debugDescribeChildren</a></li>
           <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/Widget/debugFillProperties.html">debugFillProperties</a></li>

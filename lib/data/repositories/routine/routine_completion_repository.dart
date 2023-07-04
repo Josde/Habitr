@@ -9,7 +9,6 @@ import 'package:habitr_tfg/utils/constants.dart';
 /// Clase que define el repositorio y sus métodos. Se puede hacer click para obtener una vista de detalle.
 class RoutineCompletionRepository {
   /// Obtiene las rutinas que ha completado el usuario que usa la aplicación.
-  ///
   /// Retorna una lista de RoutineCompletion.
   Future<List<RoutineCompletion>> getSelfRoutineCompletions() async {
     if (supabase.auth.currentUser == null) {
@@ -19,9 +18,7 @@ class RoutineCompletionRepository {
   }
 
   /// Obtiene las rutinas completadas por iun usuario específicando su [userId].
-  ///
   /// En la versión actual de la aplicación, sólo se utiliza para el usuario de la aplicación y nunca para sus amigos.
-  ///
   /// Retorna una lista de RoutineCompletion.
   Future<List<RoutineCompletion>> getRoutineCompletions(String userId) async {
     if (supabase.auth.currentUser == null) {

@@ -120,6 +120,7 @@
 </dt>
 <dd>
   Envía un mensaje <code>p</code> a la BBDD.
+Retorna el objeto Post que se ha generado por la BBDD.
   
 
 </dd>
@@ -133,6 +134,7 @@
 </dt>
 <dd>
   Borra el post <code>p</code>.
+No retorna nada.
   
 
 </dd>
@@ -146,6 +148,7 @@
 </dt>
 <dd>
   Le da like al mensaje <code>p</code>. Si <code>unlike</code> es verdadero, hace lo contrario.
+No retorna nada.
   
 
 </dd>
@@ -159,6 +162,8 @@
 </dt>
 <dd>
   Carga los posts del feed del usuario de la aplicación.
+Admite los parámetros <code>limit</code> y <code>startAt</code> para añadir soporte a la paginación, aunque actualmente no se utilizan en la aplicación.
+Retorna una List<post> que representa la lista de mensajes del feed del usuario.</post>
   
 
 </dd>

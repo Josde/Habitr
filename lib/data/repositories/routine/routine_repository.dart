@@ -11,7 +11,6 @@ import 'package:habitr_tfg/utils/constants.dart';
 /// Al igual que en otros repositorios, tódos los métodos lanzan excepciones sin capturar, y por tanto han de estar en un bloque try - catch.
 class RoutineRepository {
   /// Obtiene las rutinas del usuario de la aplicación.
-  ///
   /// Retorna una lista de Routine.
   Future<List<Routine>> getSelfRoutines() async {
     if (supabase.auth.currentUser == null) {
@@ -34,7 +33,6 @@ class RoutineRepository {
   }
 
   /// Añade una rutina [r] a las rutinas del usuario.
-  ///
   /// Retorna [r] pero actualizando la ID a  que tenga en la BBDD, para poder seguir manipulando el mismo objeto.
   Future<Routine> addRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {
@@ -66,7 +64,6 @@ class RoutineRepository {
   }
 
   /// Añade una rutina pública [r] a las rutinas del usuario.
-  ///
   /// Retorna [r] por temas de debugging, aunque en versiones futuras probablemente esto deje de ser así.
   Future<Routine> addPublicRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {
@@ -79,8 +76,7 @@ class RoutineRepository {
     return Future.value(_return);
   }
 
-  /// Funcion que actualiza una rutina [r]
-  ///
+  /// Funcion que actualiza una rutina [r].
   /// Devuelve [r] con sus modificaciones hechas, aunque igual que en la función anterior esto probablemente deje de ser así en versiones futuras.
   Future<Routine> updateRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {
@@ -131,7 +127,6 @@ class RoutineRepository {
   }
 
   /// Borra la rutina [r].
-  ///
   /// No retorna nada.
   Future<void> deleteRoutine(Routine r) async {
     if (supabase.auth.currentUser == null) {

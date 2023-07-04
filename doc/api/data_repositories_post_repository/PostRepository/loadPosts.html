@@ -67,9 +67,9 @@
     </section>
     
 <section class="desc markdown">
-  <p>Carga los posts del feed del usuario de la aplicación.</p>
-<p>Admite los parámetros <code>limit</code> y <code>startAt</code> para añadir soporte a la paginación, aunque actualmente no se utilizan en la aplicación.</p>
-<p>Retorna una List<post> que representa la lista de mensajes del feed del usuario.</post></p>
+  <p>Carga los posts del feed del usuario de la aplicación.
+Admite los parámetros <code>limit</code> y <code>startAt</code> para añadir soporte a la paginación, aunque actualmente no se utilizan en la aplicación.
+Retorna una List<post> que representa la lista de mensajes del feed del usuario.</post></p>
 </section>
 
 
@@ -83,9 +83,10 @@
   List&lt;Post&gt; posts = List.empty(growable: true);
   var postResponse = await supabase
       .from(&#39;message&#39;)
-      .select(&#39;*, messageLikes!inner(*)&#39;)
+      .select(&#39;*, messageLikes(post_id)&#39;)
       .order(&#39;post_date&#39;)
       .range(startAt, limit); &#47;&#47;TODO: Test this
+  print(postResponse);
   for (var msg in postResponse) {
     msg[&#39;likes&#39;] = msg[&#39;messageLikes&#39;].length ?? 0;
     posts.add(Post.fromJson(msg as Map));
