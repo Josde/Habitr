@@ -28,7 +28,6 @@
 		<string>Main</string>
 		<key>NSCameraUsageDescription</key>
 		<string>This app uses your camera to add friends through QRs.</string>
-
 		<key>io.flutter.embedded_views_preview</key>
 		<string>YES</string>
 		<key>CFBundleURLTypes</key>
