@@ -69,6 +69,7 @@ class _TimerRoutineDetailScreenState extends State<TimerRoutineDetailScreen> {
               child: Center(
                 child: Text('${widget.routine.name}',
                     style: TextStyle(
+                        color: Colors.white,
                         fontFamily: 'Roboto Mono',
                         fontWeight: FontWeight.w300,
                         fontSize: 48,
