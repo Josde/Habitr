@@ -160,8 +160,7 @@ class Profile extends StatelessWidget {
                 Text('${_user.name}'),
                 Text('${_user.country?.displayName}'),
                 Text(
-                    'Level ${_user.xp ~/ 250} (${100 * _user.xp / (_user.xp + 125 - ((_user.xp + 125) % 250))}%)'),
-                //https://stackoverflow.com/a/29557629/21787881 lmfao TODO: reformat this
+                    'Level ${_user.xp ~/ 250} (${calculateLevelPercent(_user.xp)}%)'),
               ],
             )
           ],
@@ -303,5 +302,15 @@ class Profile extends StatelessWidget {
       lst.add(newAchievement);
     }
     return Future.value(lst);
+  }
+
+  double calculateLevelPercent(int xp) {
+    //https://stackoverflow.com/a/29557629/21787881
+    double _ret = 100 * xp / xp + 125 - ((xp + 125) % 250);
+    if (!_ret.isFinite) {
+      // solo nos importa el caso de que sea NaN pero mejor curarnos en salud.
+      _ret = 0.0;
+    }
+    return _ret;
   }
 }
