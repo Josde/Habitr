@@ -30,13 +30,7 @@ Future<void> main() async {
   final String myAnonKey =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6a2F1eWNwd2N0Z3VmamtvZWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDY5MDkyNTUsImV4cCI6MTk2MjQ4NTI1NX0.UBRmXGqk9oqmvL8JMoyJLEnywzsLrn1CtxQlFiGoemw';
   try {
-    await Supabase.initialize(
-        url: myUrl,
-        anonKey: myAnonKey,
-        debug: true,
-        localStorage:
-            const EmptyLocalStorage() //FIXME: IDK WHY SESSION PERSISTANCE IS BROKEN
-        );
+    await Supabase.initialize(url: myUrl, anonKey: myAnonKey);
     await Settings.init(cacheProvider: SharePreferenceCache());
     FlutterNativeSplash.remove();
   } catch (error, stacktrace) {
